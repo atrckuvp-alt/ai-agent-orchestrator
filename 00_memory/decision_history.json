@@ -1,0 +1,1504 @@
+{
+  "decisions": [
+    {
+      "run_id": "20260520233442",
+      "created_at": "2026-05-20T23:34:42",
+      "category": "coding_analysis",
+      "model_name": "Qwen: Qwen3 Coder 480B A35B (free)",
+      "model_id": "qwen/qwen3-coder:free",
+      "decision": "REJECT",
+      "benchmark_score": 0,
+      "total_score": 84
+    },
+    {
+      "run_id": "20260520233442",
+      "created_at": "2026-05-20T23:34:42",
+      "category": "research_reasoning",
+      "model_name": "Baidu Qianfan: CoBuddy (free)",
+      "model_id": "baidu/cobuddy:free",
+      "decision": "REPLACE_AFTER_APPROVAL",
+      "benchmark_score": 10,
+      "total_score": 94
+    },
+    {
+      "run_id": "20260520233442",
+      "created_at": "2026-05-20T23:34:42",
+      "category": "coding_analysis",
+      "model_name": "Qwen: Qwen3 Coder 480B A35B (free)",
+      "model_id": "qwen/qwen3-coder:free",
+      "decision": "REJECT",
+      "benchmark_score": 0,
+      "total_score": 84
+    },
+    {
+      "run_id": "20260520233442",
+      "created_at": "2026-05-20T23:34:42",
+      "category": "research_reasoning",
+      "model_name": "Baidu Qianfan: CoBuddy (free)",
+      "model_id": "baidu/cobuddy:free",
+      "decision": "REPLACE_AFTER_APPROVAL",
+      "benchmark_score": 10,
+      "total_score": 94
+    },
+    {
+      "run_id": "20260521000850",
+      "created_at": "2026-05-21T00:08:50",
+      "category": "coding_analysis",
+      "model_name": "Qwen: Qwen3 Coder 480B A35B (free)",
+      "model_id": "qwen/qwen3-coder:free",
+      "decision": "REJECT",
+      "benchmark_score": 0,
+      "total_score": 84
+    },
+    {
+      "run_id": "20260521000850",
+      "created_at": "2026-05-21T00:08:50",
+      "category": "research_reasoning",
+      "model_name": "Baidu Qianfan: CoBuddy (free)",
+      "model_id": "baidu/cobuddy:free",
+      "decision": "REPLACE_AFTER_APPROVAL",
+      "benchmark_score": 10,
+      "total_score": 94
+    },
+    {
+      "run_id": "20260521000850",
+      "created_at": "2026-05-21T00:08:50",
+      "category": "coding_analysis",
+      "model_name": "Qwen: Qwen3 Coder 480B A35B (free)",
+      "model_id": "qwen/qwen3-coder:free",
+      "decision": "REJECT",
+      "benchmark_score": 0,
+      "total_score": 84
+    },
+    {
+      "run_id": "20260521000850",
+      "created_at": "2026-05-21T00:08:50",
+      "category": "research_reasoning",
+      "model_name": "Baidu Qianfan: CoBuddy (free)",
+      "model_id": "baidu/cobuddy:free",
+      "decision": "REPLACE_AFTER_APPROVAL",
+      "benchmark_score": 10,
+      "total_score": 94
+    },
+    {
+      "run_id": "20260521000850",
+      "created_at": "2026-05-21T00:08:50",
+      "category": "coding_analysis",
+      "model_name": "Qwen: Qwen3 Coder 480B A35B (free)",
+      "model_id": "qwen/qwen3-coder:free",
+      "decision": "REJECT",
+      "benchmark_score": 0,
+      "total_score": 84
+    },
+    {
+      "run_id": "20260521000850",
+      "created_at": "2026-05-21T00:08:50",
+      "category": "research_reasoning",
+      "model_name": "Baidu Qianfan: CoBuddy (free)",
+      "model_id": "baidu/cobuddy:free",
+      "decision": "REPLACE_AFTER_APPROVAL",
+      "benchmark_score": 10,
+      "total_score": 94
+    },
+    {
+      "run_id": "20260521001649",
+      "created_at": "2026-05-21T00:16:49",
+      "category": "coding_analysis",
+      "model_name": "Qwen: Qwen3 Coder 480B A35B (free)",
+      "model_id": "qwen/qwen3-coder:free",
+      "decision": "REJECT",
+      "benchmark_score": 0,
+      "total_score": 84
+    },
+    {
+      "run_id": "20260521001649",
+      "created_at": "2026-05-21T00:16:49",
+      "category": "research_reasoning",
+      "model_name": "Baidu Qianfan: CoBuddy (free)",
+      "model_id": "baidu/cobuddy:free",
+      "decision": "REPLACE_AFTER_APPROVAL",
+      "benchmark_score": 10,
+      "total_score": 94
+    },
+    {
+      "run_id": "20260521001649",
+      "created_at": "2026-05-21T00:16:49",
+      "category": "coding_analysis",
+      "model_name": "Qwen: Qwen3 Coder 480B A35B (free)",
+      "model_id": "qwen/qwen3-coder:free",
+      "decision": "REJECT",
+      "benchmark_score": 0,
+      "total_score": 84
+    },
+    {
+      "run_id": "20260521001649",
+      "created_at": "2026-05-21T00:16:49",
+      "category": "research_reasoning",
+      "model_name": "Baidu Qianfan: CoBuddy (free)",
+      "model_id": "baidu/cobuddy:free",
+      "decision": "REPLACE_AFTER_APPROVAL",
+      "benchmark_score": 10,
+      "total_score": 94
+    },
+    {
+      "run_id": "20260521001649",
+      "created_at": "2026-05-21T00:16:49",
+      "category": "coding_analysis",
+      "model_name": "Qwen: Qwen3 Coder 480B A35B (free)",
+      "model_id": "qwen/qwen3-coder:free",
+      "decision": "REJECT",
+      "benchmark_score": 0,
+      "total_score": 84
+    },
+    {
+      "run_id": "20260521001649",
+      "created_at": "2026-05-21T00:16:49",
+      "category": "research_reasoning",
+      "model_name": "Baidu Qianfan: CoBuddy (free)",
+      "model_id": "baidu/cobuddy:free",
+      "decision": "REPLACE_AFTER_APPROVAL",
+      "benchmark_score": 10,
+      "total_score": 94
+    },
+    {
+      "run_id": "20260522201331",
+      "created_at": "2026-05-22T20:13:31",
+      "category": "coding_analysis",
+      "model_name": "Qwen: Qwen3 Coder 480B A35B (free)",
+      "model_id": "qwen/qwen3-coder:free",
+      "decision": "REJECT",
+      "benchmark_score": 0,
+      "total_score": 84
+    },
+    {
+      "run_id": "20260522201331",
+      "created_at": "2026-05-22T20:13:31",
+      "category": "research_reasoning",
+      "model_name": "Baidu Qianfan: CoBuddy (free)",
+      "model_id": "baidu/cobuddy:free",
+      "decision": "REPLACE_AFTER_APPROVAL",
+      "benchmark_score": 10,
+      "total_score": 94
+    },
+    {
+      "run_id": "20260522201331",
+      "created_at": "2026-05-22T20:13:31",
+      "category": "coding_analysis",
+      "model_name": "Qwen: Qwen3 Coder 480B A35B (free)",
+      "model_id": "qwen/qwen3-coder:free",
+      "decision": "REJECT",
+      "benchmark_score": 0,
+      "total_score": 84
+    },
+    {
+      "run_id": "20260522201331",
+      "created_at": "2026-05-22T20:13:31",
+      "category": "research_reasoning",
+      "model_name": "Baidu Qianfan: CoBuddy (free)",
+      "model_id": "baidu/cobuddy:free",
+      "decision": "REPLACE_AFTER_APPROVAL",
+      "benchmark_score": 10,
+      "total_score": 94
+    },
+    {
+      "run_id": "20260522201331",
+      "created_at": "2026-05-22T20:13:31",
+      "category": "coding_analysis",
+      "model_name": "Qwen: Qwen3 Coder 480B A35B (free)",
+      "model_id": "qwen/qwen3-coder:free",
+      "decision": "REJECT",
+      "benchmark_score": 0,
+      "total_score": 84
+    },
+    {
+      "run_id": "20260522201331",
+      "created_at": "2026-05-22T20:13:31",
+      "category": "research_reasoning",
+      "model_name": "Baidu Qianfan: CoBuddy (free)",
+      "model_id": "baidu/cobuddy:free",
+      "decision": "REPLACE_AFTER_APPROVAL",
+      "benchmark_score": 10,
+      "total_score": 94
+    },
+    {
+      "run_id": "20260522215518",
+      "created_at": "2026-05-22T21:55:18",
+      "category": "coding_analysis",
+      "model_name": "Qwen: Qwen3 Coder 480B A35B (free)",
+      "model_id": "qwen/qwen3-coder:free",
+      "decision": "REJECT",
+      "benchmark_score": 0,
+      "total_score": 84
+    },
+    {
+      "run_id": "20260522215518",
+      "created_at": "2026-05-22T21:55:18",
+      "category": "research_reasoning",
+      "model_name": "Baidu Qianfan: CoBuddy (free)",
+      "model_id": "baidu/cobuddy:free",
+      "decision": "REPLACE_AFTER_APPROVAL",
+      "benchmark_score": 10,
+      "total_score": 94
+    },
+    {
+      "run_id": "20260522215518",
+      "created_at": "2026-05-22T21:55:18",
+      "category": "coding_analysis",
+      "model_name": "Qwen: Qwen3 Coder 480B A35B (free)",
+      "model_id": "qwen/qwen3-coder:free",
+      "decision": "REJECT",
+      "benchmark_score": 0,
+      "total_score": 84
+    },
+    {
+      "run_id": "20260522215518",
+      "created_at": "2026-05-22T21:55:18",
+      "category": "research_reasoning",
+      "model_name": "Baidu Qianfan: CoBuddy (free)",
+      "model_id": "baidu/cobuddy:free",
+      "decision": "REPLACE_AFTER_APPROVAL",
+      "benchmark_score": 10,
+      "total_score": 94
+    },
+    {
+      "run_id": "20260522215518",
+      "created_at": "2026-05-22T21:55:18",
+      "category": "coding_analysis",
+      "model_name": "Qwen: Qwen3 Coder 480B A35B (free)",
+      "model_id": "qwen/qwen3-coder:free",
+      "decision": "REJECT",
+      "benchmark_score": 0,
+      "total_score": 84
+    },
+    {
+      "run_id": "20260522215518",
+      "created_at": "2026-05-22T21:55:18",
+      "category": "research_reasoning",
+      "model_name": "Baidu Qianfan: CoBuddy (free)",
+      "model_id": "baidu/cobuddy:free",
+      "decision": "REPLACE_AFTER_APPROVAL",
+      "benchmark_score": 10,
+      "total_score": 94
+    },
+    {
+      "run_id": "20260522230136",
+      "created_at": "2026-05-22T23:01:36",
+      "category": "coding_analysis",
+      "model_name": "Qwen: Qwen3 Coder 480B A35B (free)",
+      "model_id": "qwen/qwen3-coder:free",
+      "decision": "REJECT",
+      "benchmark_score": 0,
+      "total_score": 84
+    },
+    {
+      "run_id": "20260522230136",
+      "created_at": "2026-05-22T23:01:36",
+      "category": "research_reasoning",
+      "model_name": "Baidu Qianfan: CoBuddy (free)",
+      "model_id": "baidu/cobuddy:free",
+      "decision": "REPLACE_AFTER_APPROVAL",
+      "benchmark_score": 10,
+      "total_score": 94
+    },
+    {
+      "run_id": "20260522230136",
+      "created_at": "2026-05-22T23:01:36",
+      "category": "coding_analysis",
+      "model_name": "Qwen: Qwen3 Coder 480B A35B (free)",
+      "model_id": "qwen/qwen3-coder:free",
+      "decision": "REJECT",
+      "benchmark_score": 0,
+      "total_score": 84
+    },
+    {
+      "run_id": "20260522230136",
+      "created_at": "2026-05-22T23:01:36",
+      "category": "research_reasoning",
+      "model_name": "Baidu Qianfan: CoBuddy (free)",
+      "model_id": "baidu/cobuddy:free",
+      "decision": "REPLACE_AFTER_APPROVAL",
+      "benchmark_score": 10,
+      "total_score": 94
+    },
+    {
+      "run_id": "20260522230136",
+      "created_at": "2026-05-22T23:01:36",
+      "category": "coding_analysis",
+      "model_name": "Qwen: Qwen3 Coder 480B A35B (free)",
+      "model_id": "qwen/qwen3-coder:free",
+      "decision": "REJECT",
+      "benchmark_score": 0,
+      "total_score": 84
+    },
+    {
+      "run_id": "20260522230136",
+      "created_at": "2026-05-22T23:01:36",
+      "category": "research_reasoning",
+      "model_name": "Baidu Qianfan: CoBuddy (free)",
+      "model_id": "baidu/cobuddy:free",
+      "decision": "REPLACE_AFTER_APPROVAL",
+      "benchmark_score": 10,
+      "total_score": 94
+    },
+    {
+      "run_id": "20260523160734",
+      "created_at": "2026-05-23T16:07:34",
+      "category": "coding_analysis",
+      "model_name": "Qwen: Qwen3 Coder 480B A35B (free)",
+      "model_id": "qwen/qwen3-coder:free",
+      "decision": "REJECT",
+      "benchmark_score": 0,
+      "total_score": 84
+    },
+    {
+      "run_id": "20260523160734",
+      "created_at": "2026-05-23T16:07:34",
+      "category": "research_reasoning",
+      "model_name": "Baidu Qianfan: CoBuddy (free)",
+      "model_id": "baidu/cobuddy:free",
+      "decision": "REPLACE_AFTER_APPROVAL",
+      "benchmark_score": 10,
+      "total_score": 94
+    },
+    {
+      "run_id": "20260523160734",
+      "created_at": "2026-05-23T16:07:34",
+      "category": "coding_analysis",
+      "model_name": "Qwen: Qwen3 Coder 480B A35B (free)",
+      "model_id": "qwen/qwen3-coder:free",
+      "decision": "REJECT",
+      "benchmark_score": 0,
+      "total_score": 84
+    },
+    {
+      "run_id": "20260523160734",
+      "created_at": "2026-05-23T16:07:34",
+      "category": "research_reasoning",
+      "model_name": "Baidu Qianfan: CoBuddy (free)",
+      "model_id": "baidu/cobuddy:free",
+      "decision": "REPLACE_AFTER_APPROVAL",
+      "benchmark_score": 10,
+      "total_score": 94
+    },
+    {
+      "run_id": "20260523160734",
+      "created_at": "2026-05-23T16:07:34",
+      "category": "coding_analysis",
+      "model_name": "Qwen: Qwen3 Coder 480B A35B (free)",
+      "model_id": "qwen/qwen3-coder:free",
+      "decision": "REJECT",
+      "benchmark_score": 0,
+      "total_score": 84
+    },
+    {
+      "run_id": "20260523160734",
+      "created_at": "2026-05-23T16:07:34",
+      "category": "research_reasoning",
+      "model_name": "Baidu Qianfan: CoBuddy (free)",
+      "model_id": "baidu/cobuddy:free",
+      "decision": "REPLACE_AFTER_APPROVAL",
+      "benchmark_score": 10,
+      "total_score": 94
+    },
+    {
+      "run_id": "20260523162214",
+      "created_at": "2026-05-23T16:22:14",
+      "category": "coding_analysis",
+      "model_name": "Qwen: Qwen3 Coder 480B A35B (free)",
+      "model_id": "qwen/qwen3-coder:free",
+      "decision": "REJECT",
+      "benchmark_score": 0,
+      "total_score": 84
+    },
+    {
+      "run_id": "20260523162214",
+      "created_at": "2026-05-23T16:22:14",
+      "category": "research_reasoning",
+      "model_name": "Baidu Qianfan: CoBuddy (free)",
+      "model_id": "baidu/cobuddy:free",
+      "decision": "REPLACE_AFTER_APPROVAL",
+      "benchmark_score": 10,
+      "total_score": 94
+    },
+    {
+      "run_id": "20260523162214",
+      "created_at": "2026-05-23T16:22:14",
+      "category": "coding_analysis",
+      "model_name": "Qwen: Qwen3 Coder 480B A35B (free)",
+      "model_id": "qwen/qwen3-coder:free",
+      "decision": "REJECT",
+      "benchmark_score": 0,
+      "total_score": 84
+    },
+    {
+      "run_id": "20260523162214",
+      "created_at": "2026-05-23T16:22:14",
+      "category": "research_reasoning",
+      "model_name": "Baidu Qianfan: CoBuddy (free)",
+      "model_id": "baidu/cobuddy:free",
+      "decision": "REPLACE_AFTER_APPROVAL",
+      "benchmark_score": 10,
+      "total_score": 94
+    },
+    {
+      "run_id": "20260523162214",
+      "created_at": "2026-05-23T16:22:14",
+      "category": "coding_analysis",
+      "model_name": "Qwen: Qwen3 Coder 480B A35B (free)",
+      "model_id": "qwen/qwen3-coder:free",
+      "decision": "REJECT",
+      "benchmark_score": 0,
+      "total_score": 84
+    },
+    {
+      "run_id": "20260523162214",
+      "created_at": "2026-05-23T16:22:14",
+      "category": "research_reasoning",
+      "model_name": "Baidu Qianfan: CoBuddy (free)",
+      "model_id": "baidu/cobuddy:free",
+      "decision": "REPLACE_AFTER_APPROVAL",
+      "benchmark_score": 10,
+      "total_score": 94
+    },
+    {
+      "run_id": "20260523225115",
+      "created_at": "2026-05-23T22:51:15",
+      "category": "coding_analysis",
+      "model_name": "Qwen: Qwen3 Coder 480B A35B (free)",
+      "model_id": "qwen/qwen3-coder:free",
+      "decision": "REJECT",
+      "benchmark_score": 0,
+      "total_score": 84
+    },
+    {
+      "run_id": "20260523225115",
+      "created_at": "2026-05-23T22:51:15",
+      "category": "research_reasoning",
+      "model_name": "Baidu Qianfan: CoBuddy (free)",
+      "model_id": "baidu/cobuddy:free",
+      "decision": "REPLACE_AFTER_APPROVAL",
+      "benchmark_score": 10,
+      "total_score": 94
+    },
+    {
+      "run_id": "20260523225115",
+      "created_at": "2026-05-23T22:51:15",
+      "category": "coding_analysis",
+      "model_name": "Qwen: Qwen3 Coder 480B A35B (free)",
+      "model_id": "qwen/qwen3-coder:free",
+      "decision": "REJECT",
+      "benchmark_score": 0,
+      "total_score": 84
+    },
+    {
+      "run_id": "20260523225115",
+      "created_at": "2026-05-23T22:51:15",
+      "category": "research_reasoning",
+      "model_name": "Baidu Qianfan: CoBuddy (free)",
+      "model_id": "baidu/cobuddy:free",
+      "decision": "REPLACE_AFTER_APPROVAL",
+      "benchmark_score": 10,
+      "total_score": 94
+    },
+    {
+      "run_id": "20260523225115",
+      "created_at": "2026-05-23T22:51:15",
+      "category": "coding_analysis",
+      "model_name": "Qwen: Qwen3 Coder 480B A35B (free)",
+      "model_id": "qwen/qwen3-coder:free",
+      "decision": "REJECT",
+      "benchmark_score": 0,
+      "total_score": 84
+    },
+    {
+      "run_id": "20260523225115",
+      "created_at": "2026-05-23T22:51:15",
+      "category": "research_reasoning",
+      "model_name": "Baidu Qianfan: CoBuddy (free)",
+      "model_id": "baidu/cobuddy:free",
+      "decision": "REPLACE_AFTER_APPROVAL",
+      "benchmark_score": 10,
+      "total_score": 94
+    },
+    {
+      "run_id": "20260523235729",
+      "created_at": "2026-05-23T23:57:29",
+      "category": "coding_analysis",
+      "model_name": "Qwen: Qwen3 Coder 480B A35B (free)",
+      "model_id": "qwen/qwen3-coder:free",
+      "decision": "REJECT",
+      "benchmark_score": 0,
+      "total_score": 84
+    },
+    {
+      "run_id": "20260523235729",
+      "created_at": "2026-05-23T23:57:29",
+      "category": "research_reasoning",
+      "model_name": "Baidu Qianfan: CoBuddy (free)",
+      "model_id": "baidu/cobuddy:free",
+      "decision": "REPLACE_AFTER_APPROVAL",
+      "benchmark_score": 10,
+      "total_score": 94
+    },
+    {
+      "run_id": "20260523235729",
+      "created_at": "2026-05-23T23:57:29",
+      "category": "coding_analysis",
+      "model_name": "Qwen: Qwen3 Coder 480B A35B (free)",
+      "model_id": "qwen/qwen3-coder:free",
+      "decision": "REJECT",
+      "benchmark_score": 0,
+      "total_score": 84
+    },
+    {
+      "run_id": "20260523235729",
+      "created_at": "2026-05-23T23:57:29",
+      "category": "research_reasoning",
+      "model_name": "Baidu Qianfan: CoBuddy (free)",
+      "model_id": "baidu/cobuddy:free",
+      "decision": "REPLACE_AFTER_APPROVAL",
+      "benchmark_score": 10,
+      "total_score": 94
+    },
+    {
+      "run_id": "20260523235729",
+      "created_at": "2026-05-23T23:57:29",
+      "category": "coding_analysis",
+      "model_name": "Qwen: Qwen3 Coder 480B A35B (free)",
+      "model_id": "qwen/qwen3-coder:free",
+      "decision": "REJECT",
+      "benchmark_score": 0,
+      "total_score": 84
+    },
+    {
+      "run_id": "20260523235729",
+      "created_at": "2026-05-23T23:57:29",
+      "category": "research_reasoning",
+      "model_name": "Baidu Qianfan: CoBuddy (free)",
+      "model_id": "baidu/cobuddy:free",
+      "decision": "REPLACE_AFTER_APPROVAL",
+      "benchmark_score": 10,
+      "total_score": 94
+    },
+    {
+      "run_id": "20260524003401",
+      "created_at": "2026-05-24T00:34:01",
+      "category": "coding_analysis",
+      "model_name": "Qwen: Qwen3 Coder 480B A35B (free)",
+      "model_id": "qwen/qwen3-coder:free",
+      "decision": "REJECT",
+      "benchmark_score": 0,
+      "total_score": 84
+    },
+    {
+      "run_id": "20260524003401",
+      "created_at": "2026-05-24T00:34:01",
+      "category": "research_reasoning",
+      "model_name": "Baidu Qianfan: CoBuddy (free)",
+      "model_id": "baidu/cobuddy:free",
+      "decision": "REPLACE_AFTER_APPROVAL",
+      "benchmark_score": 10,
+      "total_score": 94
+    },
+    {
+      "run_id": "20260524003401",
+      "created_at": "2026-05-24T00:34:01",
+      "category": "coding_analysis",
+      "model_name": "Qwen: Qwen3 Coder 480B A35B (free)",
+      "model_id": "qwen/qwen3-coder:free",
+      "decision": "REJECT",
+      "benchmark_score": 0,
+      "total_score": 84
+    },
+    {
+      "run_id": "20260524003401",
+      "created_at": "2026-05-24T00:34:01",
+      "category": "research_reasoning",
+      "model_name": "Baidu Qianfan: CoBuddy (free)",
+      "model_id": "baidu/cobuddy:free",
+      "decision": "REPLACE_AFTER_APPROVAL",
+      "benchmark_score": 10,
+      "total_score": 94
+    },
+    {
+      "run_id": "20260524003401",
+      "created_at": "2026-05-24T00:34:01",
+      "category": "coding_analysis",
+      "model_name": "Qwen: Qwen3 Coder 480B A35B (free)",
+      "model_id": "qwen/qwen3-coder:free",
+      "decision": "REJECT",
+      "benchmark_score": 0,
+      "total_score": 84
+    },
+    {
+      "run_id": "20260524003401",
+      "created_at": "2026-05-24T00:34:01",
+      "category": "research_reasoning",
+      "model_name": "Baidu Qianfan: CoBuddy (free)",
+      "model_id": "baidu/cobuddy:free",
+      "decision": "REPLACE_AFTER_APPROVAL",
+      "benchmark_score": 10,
+      "total_score": 94
+    },
+    {
+      "run_id": "20260524184308",
+      "created_at": "2026-05-24T18:43:08",
+      "category": "coding_analysis",
+      "model_name": "Qwen: Qwen3 Coder 480B A35B (free)",
+      "model_id": "qwen/qwen3-coder:free",
+      "decision": "REJECT",
+      "benchmark_score": 0,
+      "total_score": 84
+    },
+    {
+      "run_id": "20260524184308",
+      "created_at": "2026-05-24T18:43:08",
+      "category": "research_reasoning",
+      "model_name": "Baidu Qianfan: CoBuddy (free)",
+      "model_id": "baidu/cobuddy:free",
+      "decision": "REPLACE_AFTER_APPROVAL",
+      "benchmark_score": 10,
+      "total_score": 94
+    },
+    {
+      "run_id": "20260524184308",
+      "created_at": "2026-05-24T18:43:08",
+      "category": "coding_analysis",
+      "model_name": "Qwen: Qwen3 Coder 480B A35B (free)",
+      "model_id": "qwen/qwen3-coder:free",
+      "decision": "REJECT",
+      "benchmark_score": 0,
+      "total_score": 84
+    },
+    {
+      "run_id": "20260524184308",
+      "created_at": "2026-05-24T18:43:08",
+      "category": "research_reasoning",
+      "model_name": "Baidu Qianfan: CoBuddy (free)",
+      "model_id": "baidu/cobuddy:free",
+      "decision": "REPLACE_AFTER_APPROVAL",
+      "benchmark_score": 10,
+      "total_score": 94
+    },
+    {
+      "run_id": "20260524184308",
+      "created_at": "2026-05-24T18:43:08",
+      "category": "coding_analysis",
+      "model_name": "Qwen: Qwen3 Coder 480B A35B (free)",
+      "model_id": "qwen/qwen3-coder:free",
+      "decision": "REJECT",
+      "benchmark_score": 0,
+      "total_score": 84
+    },
+    {
+      "run_id": "20260524184308",
+      "created_at": "2026-05-24T18:43:08",
+      "category": "research_reasoning",
+      "model_name": "Baidu Qianfan: CoBuddy (free)",
+      "model_id": "baidu/cobuddy:free",
+      "decision": "REPLACE_AFTER_APPROVAL",
+      "benchmark_score": 10,
+      "total_score": 94
+    },
+    {
+      "run_id": "20260524185129",
+      "created_at": "2026-05-24T18:51:29",
+      "category": "coding_analysis",
+      "model_name": "Qwen: Qwen3 Coder 480B A35B (free)",
+      "model_id": "qwen/qwen3-coder:free",
+      "decision": "REJECT",
+      "benchmark_score": 0,
+      "total_score": 84
+    },
+    {
+      "run_id": "20260524185129",
+      "created_at": "2026-05-24T18:51:29",
+      "category": "research_reasoning",
+      "model_name": "Baidu Qianfan: CoBuddy (free)",
+      "model_id": "baidu/cobuddy:free",
+      "decision": "REPLACE_AFTER_APPROVAL",
+      "benchmark_score": 10,
+      "total_score": 94
+    },
+    {
+      "run_id": "20260524185129",
+      "created_at": "2026-05-24T18:51:29",
+      "category": "coding_analysis",
+      "model_name": "Qwen: Qwen3 Coder 480B A35B (free)",
+      "model_id": "qwen/qwen3-coder:free",
+      "decision": "REJECT",
+      "benchmark_score": 0,
+      "total_score": 84
+    },
+    {
+      "run_id": "20260524185129",
+      "created_at": "2026-05-24T18:51:29",
+      "category": "research_reasoning",
+      "model_name": "Baidu Qianfan: CoBuddy (free)",
+      "model_id": "baidu/cobuddy:free",
+      "decision": "REPLACE_AFTER_APPROVAL",
+      "benchmark_score": 10,
+      "total_score": 94
+    },
+    {
+      "run_id": "20260524185129",
+      "created_at": "2026-05-24T18:51:29",
+      "category": "coding_analysis",
+      "model_name": "Qwen: Qwen3 Coder 480B A35B (free)",
+      "model_id": "qwen/qwen3-coder:free",
+      "decision": "REJECT",
+      "benchmark_score": 0,
+      "total_score": 84
+    },
+    {
+      "run_id": "20260524185129",
+      "created_at": "2026-05-24T18:51:29",
+      "category": "research_reasoning",
+      "model_name": "Baidu Qianfan: CoBuddy (free)",
+      "model_id": "baidu/cobuddy:free",
+      "decision": "REPLACE_AFTER_APPROVAL",
+      "benchmark_score": 10,
+      "total_score": 94
+    },
+    {
+      "run_id": "20260524190415",
+      "created_at": "2026-05-24T19:04:15",
+      "category": "coding_analysis",
+      "model_name": "Qwen: Qwen3 Coder 480B A35B (free)",
+      "model_id": "qwen/qwen3-coder:free",
+      "decision": "REJECT",
+      "benchmark_score": 0,
+      "total_score": 84
+    },
+    {
+      "run_id": "20260524190415",
+      "created_at": "2026-05-24T19:04:15",
+      "category": "research_reasoning",
+      "model_name": "Baidu Qianfan: CoBuddy (free)",
+      "model_id": "baidu/cobuddy:free",
+      "decision": "REPLACE_AFTER_APPROVAL",
+      "benchmark_score": 10,
+      "total_score": 94
+    },
+    {
+      "run_id": "20260524190415",
+      "created_at": "2026-05-24T19:04:15",
+      "category": "coding_analysis",
+      "model_name": "Qwen: Qwen3 Coder 480B A35B (free)",
+      "model_id": "qwen/qwen3-coder:free",
+      "decision": "REJECT",
+      "benchmark_score": 0,
+      "total_score": 84
+    },
+    {
+      "run_id": "20260524190415",
+      "created_at": "2026-05-24T19:04:15",
+      "category": "research_reasoning",
+      "model_name": "Baidu Qianfan: CoBuddy (free)",
+      "model_id": "baidu/cobuddy:free",
+      "decision": "REPLACE_AFTER_APPROVAL",
+      "benchmark_score": 10,
+      "total_score": 94
+    },
+    {
+      "run_id": "20260524190415",
+      "created_at": "2026-05-24T19:04:15",
+      "category": "coding_analysis",
+      "model_name": "Qwen: Qwen3 Coder 480B A35B (free)",
+      "model_id": "qwen/qwen3-coder:free",
+      "decision": "REJECT",
+      "benchmark_score": 0,
+      "total_score": 84
+    },
+    {
+      "run_id": "20260524190415",
+      "created_at": "2026-05-24T19:04:15",
+      "category": "research_reasoning",
+      "model_name": "Baidu Qianfan: CoBuddy (free)",
+      "model_id": "baidu/cobuddy:free",
+      "decision": "REPLACE_AFTER_APPROVAL",
+      "benchmark_score": 10,
+      "total_score": 94
+    },
+    {
+      "run_id": "20260524190637",
+      "created_at": "2026-05-24T19:06:37",
+      "category": "coding_analysis",
+      "model_name": "Qwen: Qwen3 Coder 480B A35B (free)",
+      "model_id": "qwen/qwen3-coder:free",
+      "decision": "REJECT",
+      "benchmark_score": 0,
+      "total_score": 84
+    },
+    {
+      "run_id": "20260524190637",
+      "created_at": "2026-05-24T19:06:37",
+      "category": "research_reasoning",
+      "model_name": "Baidu Qianfan: CoBuddy (free)",
+      "model_id": "baidu/cobuddy:free",
+      "decision": "REPLACE_AFTER_APPROVAL",
+      "benchmark_score": 10,
+      "total_score": 94
+    },
+    {
+      "run_id": "20260524190637",
+      "created_at": "2026-05-24T19:06:37",
+      "category": "coding_analysis",
+      "model_name": "Qwen: Qwen3 Coder 480B A35B (free)",
+      "model_id": "qwen/qwen3-coder:free",
+      "decision": "REJECT",
+      "benchmark_score": 0,
+      "total_score": 84
+    },
+    {
+      "run_id": "20260524190637",
+      "created_at": "2026-05-24T19:06:37",
+      "category": "research_reasoning",
+      "model_name": "Baidu Qianfan: CoBuddy (free)",
+      "model_id": "baidu/cobuddy:free",
+      "decision": "REPLACE_AFTER_APPROVAL",
+      "benchmark_score": 10,
+      "total_score": 94
+    },
+    {
+      "run_id": "20260524190637",
+      "created_at": "2026-05-24T19:06:37",
+      "category": "coding_analysis",
+      "model_name": "Qwen: Qwen3 Coder 480B A35B (free)",
+      "model_id": "qwen/qwen3-coder:free",
+      "decision": "REJECT",
+      "benchmark_score": 0,
+      "total_score": 84
+    },
+    {
+      "run_id": "20260524190637",
+      "created_at": "2026-05-24T19:06:37",
+      "category": "research_reasoning",
+      "model_name": "Baidu Qianfan: CoBuddy (free)",
+      "model_id": "baidu/cobuddy:free",
+      "decision": "REPLACE_AFTER_APPROVAL",
+      "benchmark_score": 10,
+      "total_score": 94
+    },
+    {
+      "run_id": "20260525000213",
+      "created_at": "2026-05-25T00:02:13",
+      "category": "coding_analysis",
+      "model_name": "Qwen: Qwen3 Coder 480B A35B (free)",
+      "model_id": "qwen/qwen3-coder:free",
+      "decision": "REJECT",
+      "benchmark_score": 0,
+      "total_score": 84
+    },
+    {
+      "run_id": "20260525000213",
+      "created_at": "2026-05-25T00:02:13",
+      "category": "research_reasoning",
+      "model_name": "Baidu Qianfan: CoBuddy (free)",
+      "model_id": "baidu/cobuddy:free",
+      "decision": "REPLACE_AFTER_APPROVAL",
+      "benchmark_score": 10,
+      "total_score": 94
+    },
+    {
+      "run_id": "20260525000213",
+      "created_at": "2026-05-25T00:02:13",
+      "category": "coding_analysis",
+      "model_name": "Qwen: Qwen3 Coder 480B A35B (free)",
+      "model_id": "qwen/qwen3-coder:free",
+      "decision": "REJECT",
+      "benchmark_score": 0,
+      "total_score": 84
+    },
+    {
+      "run_id": "20260525000213",
+      "created_at": "2026-05-25T00:02:13",
+      "category": "research_reasoning",
+      "model_name": "Baidu Qianfan: CoBuddy (free)",
+      "model_id": "baidu/cobuddy:free",
+      "decision": "REPLACE_AFTER_APPROVAL",
+      "benchmark_score": 10,
+      "total_score": 94
+    },
+    {
+      "run_id": "20260525000213",
+      "created_at": "2026-05-25T00:02:13",
+      "category": "coding_analysis",
+      "model_name": "Qwen: Qwen3 Coder 480B A35B (free)",
+      "model_id": "qwen/qwen3-coder:free",
+      "decision": "REJECT",
+      "benchmark_score": 0,
+      "total_score": 84
+    },
+    {
+      "run_id": "20260525000213",
+      "created_at": "2026-05-25T00:02:13",
+      "category": "research_reasoning",
+      "model_name": "Baidu Qianfan: CoBuddy (free)",
+      "model_id": "baidu/cobuddy:free",
+      "decision": "REPLACE_AFTER_APPROVAL",
+      "benchmark_score": 10,
+      "total_score": 94
+    },
+    {
+      "run_id": "20260525002251",
+      "created_at": "2026-05-25T00:22:51",
+      "category": "coding_analysis",
+      "model_name": "Qwen: Qwen3 Coder 480B A35B (free)",
+      "model_id": "qwen/qwen3-coder:free",
+      "decision": "REJECT",
+      "benchmark_score": 0,
+      "total_score": 84
+    },
+    {
+      "run_id": "20260525002251",
+      "created_at": "2026-05-25T00:22:51",
+      "category": "research_reasoning",
+      "model_name": "Baidu Qianfan: CoBuddy (free)",
+      "model_id": "baidu/cobuddy:free",
+      "decision": "REPLACE_AFTER_APPROVAL",
+      "benchmark_score": 10,
+      "total_score": 94
+    },
+    {
+      "run_id": "20260525002251",
+      "created_at": "2026-05-25T00:22:51",
+      "category": "coding_analysis",
+      "model_name": "Qwen: Qwen3 Coder 480B A35B (free)",
+      "model_id": "qwen/qwen3-coder:free",
+      "decision": "REJECT",
+      "benchmark_score": 0,
+      "total_score": 84
+    },
+    {
+      "run_id": "20260525002251",
+      "created_at": "2026-05-25T00:22:51",
+      "category": "research_reasoning",
+      "model_name": "Baidu Qianfan: CoBuddy (free)",
+      "model_id": "baidu/cobuddy:free",
+      "decision": "REPLACE_AFTER_APPROVAL",
+      "benchmark_score": 10,
+      "total_score": 94
+    },
+    {
+      "run_id": "20260525002251",
+      "created_at": "2026-05-25T00:22:51",
+      "category": "coding_analysis",
+      "model_name": "Qwen: Qwen3 Coder 480B A35B (free)",
+      "model_id": "qwen/qwen3-coder:free",
+      "decision": "REJECT",
+      "benchmark_score": 0,
+      "total_score": 84
+    },
+    {
+      "run_id": "20260525002251",
+      "created_at": "2026-05-25T00:22:51",
+      "category": "research_reasoning",
+      "model_name": "Baidu Qianfan: CoBuddy (free)",
+      "model_id": "baidu/cobuddy:free",
+      "decision": "REPLACE_AFTER_APPROVAL",
+      "benchmark_score": 10,
+      "total_score": 94
+    },
+    {
+      "run_id": "20260525004522",
+      "created_at": "2026-05-25T00:45:22",
+      "category": "coding_analysis",
+      "model_name": "Qwen: Qwen3 Coder 480B A35B (free)",
+      "model_id": "qwen/qwen3-coder:free",
+      "decision": "REJECT",
+      "benchmark_score": 0,
+      "total_score": 84
+    },
+    {
+      "run_id": "20260525004522",
+      "created_at": "2026-05-25T00:45:22",
+      "category": "research_reasoning",
+      "model_name": "Baidu Qianfan: CoBuddy (free)",
+      "model_id": "baidu/cobuddy:free",
+      "decision": "REPLACE_AFTER_APPROVAL",
+      "benchmark_score": 10,
+      "total_score": 94
+    },
+    {
+      "run_id": "20260525004522",
+      "created_at": "2026-05-25T00:45:22",
+      "category": "coding_analysis",
+      "model_name": "Qwen: Qwen3 Coder 480B A35B (free)",
+      "model_id": "qwen/qwen3-coder:free",
+      "decision": "REJECT",
+      "benchmark_score": 0,
+      "total_score": 84
+    },
+    {
+      "run_id": "20260525004522",
+      "created_at": "2026-05-25T00:45:22",
+      "category": "coding_analysis",
+      "model_name": "Qwen: Qwen3 Coder 480B A35B (free)",
+      "model_id": "qwen/qwen3-coder:free",
+      "decision": "REJECT",
+      "benchmark_score": 0,
+      "total_score": 84
+    },
+    {
+      "run_id": "20260525004522",
+      "created_at": "2026-05-25T00:45:22",
+      "category": "research_reasoning",
+      "model_name": "Baidu Qianfan: CoBuddy (free)",
+      "model_id": "baidu/cobuddy:free",
+      "decision": "REPLACE_AFTER_APPROVAL",
+      "benchmark_score": 10,
+      "total_score": 94
+    },
+    {
+      "run_id": "20260525113030",
+      "created_at": "2026-05-25T11:30:30",
+      "category": "coding_analysis",
+      "model_name": "Qwen: Qwen3 Coder 480B A35B (free)",
+      "model_id": "qwen/qwen3-coder:free",
+      "decision": "REJECT",
+      "benchmark_score": 0,
+      "total_score": 84
+    },
+    {
+      "run_id": "20260525113030",
+      "created_at": "2026-05-25T11:30:30",
+      "category": "research_reasoning",
+      "model_name": "Baidu Qianfan: CoBuddy (free)",
+      "model_id": "baidu/cobuddy:free",
+      "decision": "REPLACE_AFTER_APPROVAL",
+      "benchmark_score": 10,
+      "total_score": 94
+    },
+    {
+      "run_id": "20260525113030",
+      "created_at": "2026-05-25T11:30:30",
+      "category": "coding_analysis",
+      "model_name": "Qwen: Qwen3 Coder 480B A35B (free)",
+      "model_id": "qwen/qwen3-coder:free",
+      "decision": "REJECT",
+      "benchmark_score": 0,
+      "total_score": 84
+    },
+    {
+      "run_id": "20260525113030",
+      "created_at": "2026-05-25T11:30:30",
+      "category": "coding_analysis",
+      "model_name": "Qwen: Qwen3 Coder 480B A35B (free)",
+      "model_id": "qwen/qwen3-coder:free",
+      "decision": "REJECT",
+      "benchmark_score": 0,
+      "total_score": 84
+    },
+    {
+      "run_id": "20260525113030",
+      "created_at": "2026-05-25T11:30:30",
+      "category": "research_reasoning",
+      "model_name": "Baidu Qianfan: CoBuddy (free)",
+      "model_id": "baidu/cobuddy:free",
+      "decision": "REPLACE_AFTER_APPROVAL",
+      "benchmark_score": 10,
+      "total_score": 94
+    },
+    {
+      "run_id": "20260525215718",
+      "created_at": "2026-05-25T21:57:18",
+      "category": "coding_analysis",
+      "model_name": "Qwen: Qwen3 Coder 480B A35B (free)",
+      "model_id": "qwen/qwen3-coder:free",
+      "decision": "REJECT",
+      "benchmark_score": 0,
+      "total_score": 84
+    },
+    {
+      "run_id": "20260525215718",
+      "created_at": "2026-05-25T21:57:18",
+      "category": "research_reasoning",
+      "model_name": "Baidu Qianfan: CoBuddy (free)",
+      "model_id": "baidu/cobuddy:free",
+      "decision": "REPLACE_AFTER_APPROVAL",
+      "benchmark_score": 10,
+      "total_score": 94
+    },
+    {
+      "run_id": "20260525215718",
+      "created_at": "2026-05-25T21:57:18",
+      "category": "coding_analysis",
+      "model_name": "Qwen: Qwen3 Coder 480B A35B (free)",
+      "model_id": "qwen/qwen3-coder:free",
+      "decision": "REJECT",
+      "benchmark_score": 0,
+      "total_score": 84
+    },
+    {
+      "run_id": "20260525215718",
+      "created_at": "2026-05-25T21:57:18",
+      "category": "coding_analysis",
+      "model_name": "Qwen: Qwen3 Coder 480B A35B (free)",
+      "model_id": "qwen/qwen3-coder:free",
+      "decision": "REJECT",
+      "benchmark_score": 0,
+      "total_score": 84
+    },
+    {
+      "run_id": "20260525215718",
+      "created_at": "2026-05-25T21:57:18",
+      "category": "research_reasoning",
+      "model_name": "Baidu Qianfan: CoBuddy (free)",
+      "model_id": "baidu/cobuddy:free",
+      "decision": "REPLACE_AFTER_APPROVAL",
+      "benchmark_score": 10,
+      "total_score": 94
+    },
+    {
+      "run_id": "20260525220959",
+      "created_at": "2026-05-25T22:09:59",
+      "category": "coding_analysis",
+      "model_name": "Qwen: Qwen3 Coder 480B A35B (free)",
+      "model_id": "qwen/qwen3-coder:free",
+      "decision": "REJECT",
+      "benchmark_score": 0,
+      "total_score": 84
+    },
+    {
+      "run_id": "20260525220959",
+      "created_at": "2026-05-25T22:09:59",
+      "category": "research_reasoning",
+      "model_name": "Baidu Qianfan: CoBuddy (free)",
+      "model_id": "baidu/cobuddy:free",
+      "decision": "REPLACE_AFTER_APPROVAL",
+      "benchmark_score": 10,
+      "total_score": 94
+    },
+    {
+      "run_id": "20260525220959",
+      "created_at": "2026-05-25T22:09:59",
+      "category": "coding_analysis",
+      "model_name": "Qwen: Qwen3 Coder 480B A35B (free)",
+      "model_id": "qwen/qwen3-coder:free",
+      "decision": "REJECT",
+      "benchmark_score": 0,
+      "total_score": 84
+    },
+    {
+      "run_id": "20260525220959",
+      "created_at": "2026-05-25T22:09:59",
+      "category": "coding_analysis",
+      "model_name": "Qwen: Qwen3 Coder 480B A35B (free)",
+      "model_id": "qwen/qwen3-coder:free",
+      "decision": "REJECT",
+      "benchmark_score": 0,
+      "total_score": 84
+    },
+    {
+      "run_id": "20260525220959",
+      "created_at": "2026-05-25T22:09:59",
+      "category": "research_reasoning",
+      "model_name": "Baidu Qianfan: CoBuddy (free)",
+      "model_id": "baidu/cobuddy:free",
+      "decision": "REPLACE_AFTER_APPROVAL",
+      "benchmark_score": 10,
+      "total_score": 94
+    },
+    {
+      "run_id": "20260525223356",
+      "created_at": "2026-05-25T22:33:56",
+      "category": "coding_analysis",
+      "model_name": "Qwen: Qwen3 Coder 480B A35B (free)",
+      "model_id": "qwen/qwen3-coder:free",
+      "decision": "REJECT",
+      "benchmark_score": 0,
+      "total_score": 84
+    },
+    {
+      "run_id": "20260525223356",
+      "created_at": "2026-05-25T22:33:56",
+      "category": "research_reasoning",
+      "model_name": "Baidu Qianfan: CoBuddy (free)",
+      "model_id": "baidu/cobuddy:free",
+      "decision": "REPLACE_AFTER_APPROVAL",
+      "benchmark_score": 10,
+      "total_score": 94
+    },
+    {
+      "run_id": "20260525223356",
+      "created_at": "2026-05-25T22:33:56",
+      "category": "coding_analysis",
+      "model_name": "Qwen: Qwen3 Coder 480B A35B (free)",
+      "model_id": "qwen/qwen3-coder:free",
+      "decision": "REJECT",
+      "benchmark_score": 0,
+      "total_score": 84
+    },
+    {
+      "run_id": "20260525223356",
+      "created_at": "2026-05-25T22:33:56",
+      "category": "coding_analysis",
+      "model_name": "Qwen: Qwen3 Coder 480B A35B (free)",
+      "model_id": "qwen/qwen3-coder:free",
+      "decision": "REJECT",
+      "benchmark_score": 0,
+      "total_score": 84
+    },
+    {
+      "run_id": "20260525223356",
+      "created_at": "2026-05-25T22:33:56",
+      "category": "research_reasoning",
+      "model_name": "Baidu Qianfan: CoBuddy (free)",
+      "model_id": "baidu/cobuddy:free",
+      "decision": "REPLACE_AFTER_APPROVAL",
+      "benchmark_score": 10,
+      "total_score": 94
+    },
+    {
+      "run_id": "20260525223929",
+      "created_at": "2026-05-25T22:39:29",
+      "category": "coding_analysis",
+      "model_name": "Qwen: Qwen3 Coder 480B A35B (free)",
+      "model_id": "qwen/qwen3-coder:free",
+      "decision": "REJECT",
+      "benchmark_score": 0,
+      "total_score": 84
+    },
+    {
+      "run_id": "20260525223929",
+      "created_at": "2026-05-25T22:39:29",
+      "category": "research_reasoning",
+      "model_name": "Baidu Qianfan: CoBuddy (free)",
+      "model_id": "baidu/cobuddy:free",
+      "decision": "REPLACE_AFTER_APPROVAL",
+      "benchmark_score": 10,
+      "total_score": 94
+    },
+    {
+      "run_id": "20260525223929",
+      "created_at": "2026-05-25T22:39:29",
+      "category": "coding_analysis",
+      "model_name": "Qwen: Qwen3 Coder 480B A35B (free)",
+      "model_id": "qwen/qwen3-coder:free",
+      "decision": "REJECT",
+      "benchmark_score": 0,
+      "total_score": 84
+    },
+    {
+      "run_id": "20260525223929",
+      "created_at": "2026-05-25T22:39:29",
+      "category": "coding_analysis",
+      "model_name": "Qwen: Qwen3 Coder 480B A35B (free)",
+      "model_id": "qwen/qwen3-coder:free",
+      "decision": "REJECT",
+      "benchmark_score": 0,
+      "total_score": 84
+    },
+    {
+      "run_id": "20260525223929",
+      "created_at": "2026-05-25T22:39:29",
+      "category": "research_reasoning",
+      "model_name": "Baidu Qianfan: CoBuddy (free)",
+      "model_id": "baidu/cobuddy:free",
+      "decision": "REPLACE_AFTER_APPROVAL",
+      "benchmark_score": 10,
+      "total_score": 94
+    },
+    {
+      "run_id": "20260526192229",
+      "created_at": "2026-05-26T19:22:29",
+      "category": "coding_analysis",
+      "model_name": "Qwen: Qwen3 Coder 480B A35B (free)",
+      "model_id": "qwen/qwen3-coder:free",
+      "decision": "REJECT",
+      "benchmark_score": 0,
+      "total_score": 84
+    },
+    {
+      "run_id": "20260526192229",
+      "created_at": "2026-05-26T19:22:29",
+      "category": "research_reasoning",
+      "model_name": "Baidu Qianfan: CoBuddy (free)",
+      "model_id": "baidu/cobuddy:free",
+      "decision": "REPLACE_AFTER_APPROVAL",
+      "benchmark_score": 10,
+      "total_score": 94
+    },
+    {
+      "run_id": "20260526193254",
+      "created_at": "2026-05-26T19:32:54",
+      "category": "coding_analysis",
+      "model_name": "Qwen: Qwen3 Coder 480B A35B (free)",
+      "model_id": "qwen/qwen3-coder:free",
+      "decision": "REJECT",
+      "benchmark_score": 0,
+      "total_score": 84
+    },
+    {
+      "run_id": "20260526193254",
+      "created_at": "2026-05-26T19:32:54",
+      "category": "research_reasoning",
+      "model_name": "Baidu Qianfan: CoBuddy (free)",
+      "model_id": "baidu/cobuddy:free",
+      "decision": "REPLACE_AFTER_APPROVAL",
+      "benchmark_score": 10,
+      "total_score": 94
+    },
+    {
+      "run_id": "20260526193808",
+      "created_at": "2026-05-26T19:38:08",
+      "category": "coding_analysis",
+      "model_name": "Qwen: Qwen3 Coder 480B A35B (free)",
+      "model_id": "qwen/qwen3-coder:free",
+      "decision": "REJECT",
+      "benchmark_score": 0,
+      "total_score": 84
+    },
+    {
+      "run_id": "20260526193808",
+      "created_at": "2026-05-26T19:38:08",
+      "category": "research_reasoning",
+      "model_name": "Baidu Qianfan: CoBuddy (free)",
+      "model_id": "baidu/cobuddy:free",
+      "decision": "REPLACE_AFTER_APPROVAL",
+      "benchmark_score": 10,
+      "total_score": 94
+    },
+    {
+      "run_id": "20260526194325",
+      "created_at": "2026-05-26T19:43:25",
+      "category": "coding_analysis",
+      "model_name": "Qwen: Qwen3 Coder 480B A35B (free)",
+      "model_id": "qwen/qwen3-coder:free",
+      "decision": "REJECT",
+      "benchmark_score": 0,
+      "total_score": 84
+    },
+    {
+      "run_id": "20260526194325",
+      "created_at": "2026-05-26T19:43:25",
+      "category": "research_reasoning",
+      "model_name": "Baidu Qianfan: CoBuddy (free)",
+      "model_id": "baidu/cobuddy:free",
+      "decision": "REPLACE_AFTER_APPROVAL",
+      "benchmark_score": 10,
+      "total_score": 94
+    },
+    {
+      "run_id": "20260526214717",
+      "created_at": "2026-05-26T21:47:17",
+      "category": "coding_analysis",
+      "model_name": "Qwen: Qwen3 Coder 480B A35B (free)",
+      "model_id": "qwen/qwen3-coder:free",
+      "decision": "REJECT",
+      "benchmark_score": 0,
+      "total_score": 84
+    },
+    {
+      "run_id": "20260526214717",
+      "created_at": "2026-05-26T21:47:17",
+      "category": "research_reasoning",
+      "model_name": "Baidu Qianfan: CoBuddy (free)",
+      "model_id": "baidu/cobuddy:free",
+      "decision": "REPLACE_AFTER_APPROVAL",
+      "benchmark_score": 10,
+      "total_score": 94
+    },
+    {
+      "run_id": "20260526215629",
+      "created_at": "2026-05-26T21:56:29",
+      "category": "coding_analysis",
+      "model_name": "Qwen: Qwen3 Coder 480B A35B (free)",
+      "model_id": "qwen/qwen3-coder:free",
+      "decision": "REJECT",
+      "benchmark_score": 0,
+      "total_score": 84
+    },
+    {
+      "run_id": "20260526215629",
+      "created_at": "2026-05-26T21:56:29",
+      "category": "research_reasoning",
+      "model_name": "Baidu Qianfan: CoBuddy (free)",
+      "model_id": "baidu/cobuddy:free",
+      "decision": "REPLACE_AFTER_APPROVAL",
+      "benchmark_score": 10,
+      "total_score": 94
+    },
+    {
+      "run_id": "20260527174925",
+      "created_at": "2026-05-27T17:49:25",
+      "category": "coding_analysis",
+      "model_name": "Qwen: Qwen3 Coder 480B A35B (free)",
+      "model_id": "qwen/qwen3-coder:free",
+      "decision": "REJECT",
+      "benchmark_score": 0,
+      "total_score": 84
+    },
+    {
+      "run_id": "20260527174925",
+      "created_at": "2026-05-27T17:49:25",
+      "category": "research_reasoning",
+      "model_name": "Baidu Qianfan: CoBuddy (free)",
+      "model_id": "baidu/cobuddy:free",
+      "decision": "REPLACE_AFTER_APPROVAL",
+      "benchmark_score": 10,
+      "total_score": 94
+    },
+    {
+      "run_id": "20260527175422",
+      "created_at": "2026-05-27T17:54:22",
+      "category": "coding_analysis",
+      "model_name": "Qwen: Qwen3 Coder 480B A35B (free)",
+      "model_id": "qwen/qwen3-coder:free",
+      "decision": "REJECT",
+      "benchmark_score": 0,
+      "total_score": 84
+    },
+    {
+      "run_id": "20260527175422",
+      "created_at": "2026-05-27T17:54:22",
+      "category": "research_reasoning",
+      "model_name": "Baidu Qianfan: CoBuddy (free)",
+      "model_id": "baidu/cobuddy:free",
+      "decision": "REPLACE_AFTER_APPROVAL",
+      "benchmark_score": 10,
+      "total_score": 94
+    },
+    {
+      "run_id": "20260527175903",
+      "created_at": "2026-05-27T17:59:03",
+      "category": "coding_analysis",
+      "model_name": "Qwen: Qwen3 Coder 480B A35B (free)",
+      "model_id": "qwen/qwen3-coder:free",
+      "decision": "REJECT",
+      "benchmark_score": 0,
+      "total_score": 84
+    },
+    {
+      "run_id": "20260527175903",
+      "created_at": "2026-05-27T17:59:03",
+      "category": "research_reasoning",
+      "model_name": "Baidu Qianfan: CoBuddy (free)",
+      "model_id": "baidu/cobuddy:free",
+      "decision": "REPLACE_AFTER_APPROVAL",
+      "benchmark_score": 10,
+      "total_score": 94
+    },
+    {
+      "run_id": "20260528174122",
+      "created_at": "2026-05-28T17:41:22",
+      "category": "coding_analysis",
+      "model_name": "Qwen: Qwen3 Coder 480B A35B (free)",
+      "model_id": "qwen/qwen3-coder:free",
+      "decision": "REJECT",
+      "benchmark_score": 0,
+      "total_score": 84
+    },
+    {
+      "run_id": "20260528174122",
+      "created_at": "2026-05-28T17:41:22",
+      "category": "research_reasoning",
+      "model_name": "Baidu Qianfan: CoBuddy (free)",
+      "model_id": "baidu/cobuddy:free",
+      "decision": "REPLACE_AFTER_APPROVAL",
+      "benchmark_score": 10,
+      "total_score": 94
+    }
+  ]
+}

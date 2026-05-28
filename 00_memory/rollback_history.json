@@ -1,0 +1,10 @@
+{
+  "rollbacks": [
+    {
+      "timestamp": "2026-05-26T22:12:11.514408",
+      "model": null,
+      "reason": "benchmark score below threshold",
+      "score": 0
+    }
+  ]
+}

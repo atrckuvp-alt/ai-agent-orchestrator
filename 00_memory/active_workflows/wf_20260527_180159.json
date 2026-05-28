@@ -1,0 +1,14 @@
+{
+  "workflow_id": "wf_20260527_180159",
+  "created_at": "2026-05-27T18:01:59.886009",
+  "objective": "วิเคราห์โมเดล ai สำหรับธุรกิจ",
+  "team_type": "full_stack_team",
+  "mode": "mock",
+  "status": "failed",
+  "agents": [
+    "research_agent",
+    "coding_agent",
+    "orchestrator"
+  ],
+  "error": "'NoneType' object has no attribute 'strip'"
+}

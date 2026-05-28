@@ -1,0 +1,15 @@
+{
+  "workflow_id": "wf_20260527_175807",
+  "created_at": "2026-05-27T17:58:07.837916",
+  "objective": "วิเคราห์โมเดล ai สำหรับธุรกิจ",
+  "team_type": "full_stack_team",
+  "mode": "mock",
+  "status": "completed",
+  "agents": [
+    "research_agent",
+    "coding_agent",
+    "orchestrator"
+  ],
+  "report_path": "03_reports\\ai_model_research_report_2026-05-27_17-59-02.md",
+  "result": "success"
+}

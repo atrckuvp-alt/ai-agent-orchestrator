@@ -1,0 +1,23 @@
+{
+  "orchestrator": {
+    "model": "openrouter/free",
+    "provider": "OpenRouter",
+    "mode": "free-tier"
+  },
+  "coding_agent": {
+    "model": "openrouter/free",
+    "provider": "OpenRouter",
+    "mode": "free-tier"
+  },
+  "research_agent": {
+    "model": "Baidu Qianfan: CoBuddy (free)",
+    "provider": "OpenRouter",
+    "mode": "free-tier"
+  },
+  "rules": {
+    "prefer_free_models": true,
+    "prefer_open_source": true,
+    "require_human_approval_before_switch": true,
+    "fallback_model": "openrouter/free"
+  }
+}

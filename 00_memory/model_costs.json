@@ -1,0 +1,22 @@
+{
+  "models": {
+    "openrouter/free": {
+      "cost_per_million": 0.0,
+      "tier": "free",
+      "latency_rating": "medium",
+      "reliability": 0.85
+    },
+    "baidu/qianfan:free": {
+      "cost_per_million": 0.0,
+      "tier": "free",
+      "latency_rating": "fast",
+      "reliability": 0.78
+    },
+    "qwen/qwen2.5-coder": {
+      "cost_per_million": 0.2,
+      "tier": "low",
+      "latency_rating": "fast",
+      "reliability": 0.92
+    }
+  }
+}

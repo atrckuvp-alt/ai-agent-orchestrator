@@ -1,0 +1,38 @@
+{
+  "models": {
+    "openrouter/free": {
+      "success_count": 6,
+      "failure_count": 0,
+      "total_duration": 114.44828399999999,
+      "total_tokens": 0,
+      "avg_latency": 19.074713999999997,
+      "failure_rate": 0.0,
+      "quality_score": 0,
+      "last_used": "2026-05-27T17:59:02.853246",
+      "status": "active"
+    },
+    "baidu/cobuddy:free": {
+      "success_count": 0,
+      "failure_count": 0,
+      "total_duration": 0.0,
+      "total_tokens": 0,
+      "avg_latency": 0.0,
+      "failure_rate": 0.0,
+      "quality_score": 0,
+      "last_used": null,
+      "status": "active"
+    },
+    "deepseek/deepseek-r1": {
+      "success_count": 3,
+      "failure_count": 0,
+      "total_duration": 112.86336200000001,
+      "total_tokens": 0,
+      "avg_latency": 37.62112066666667,
+      "failure_rate": 0.0,
+      "quality_score": 0,
+      "last_used": "2026-05-27T17:58:41.110957",
+      "status": "active"
+    }
+  },
+  "last_updated": "2026-05-27T17:59:02.853265"
+}

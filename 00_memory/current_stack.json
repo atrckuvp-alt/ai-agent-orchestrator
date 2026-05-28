@@ -1,0 +1,22 @@
+{
+  "version": "1.0",
+  "last_updated": "2026-05-24T19:05:39",
+  "categories": {
+    "coding_analysis": {
+      "current_model": "Qwen Coder family",
+      "provider": "approved from MVP report",
+      "reason_using": "Score 78 vs baseline 70; improvement 11.43%",
+      "status": "active",
+      "approved_by": "human",
+      "approved_at": "2026-05-19T22:38:22"
+    },
+    "research_reasoning": {
+      "current_model": "Baidu Qianfan: CoBuddy (free)",
+      "provider": "approved from MVP report",
+      "reason_using": "REPLACE_AFTER_APPROVAL",
+      "status": "active",
+      "approved_by": "human",
+      "approved_at": "2026-05-24T19:05:39"
+    }
+  }
+}

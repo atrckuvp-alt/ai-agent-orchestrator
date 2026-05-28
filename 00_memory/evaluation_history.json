@@ -1,0 +1,2522 @@
+{
+  "runs": [
+    {
+      "run_id": "20260519144541",
+      "created_at": "2026-05-19T14:45:41",
+      "report_path": "03_reports/ai_model_research_report_2026-05-19_14-45-41.md",
+      "recommendations": {
+        "coding_analysis": {
+          "current_baseline_score": 70,
+          "best_candidate": {
+            "name": "Qwen Coder family",
+            "provider": "OpenRouter / Hugging Face / local",
+            "category": "coding_analysis",
+            "open_source_status": "open-weight family, verify license per exact model",
+            "free_tier_status": "may be available via free/provider tiers; verify during live run",
+            "strengths": [
+              "strong coding focus",
+              "good multilingual capability",
+              "good candidate for code assistant workflow"
+            ],
+            "weaknesses": [
+              "free availability can change",
+              "exact license depends on model",
+              "may require routing provider"
+            ],
+            "best_use_case": "coding assistant, refactor, code explanation",
+            "risk": "provider/rate-limit changes",
+            "migration_difficulty": "medium",
+            "scores": {
+              "quality": 25,
+              "free_tier": 15,
+              "api": 12,
+              "open_source": 12,
+              "stability": 7,
+              "migration": 7
+            },
+            "total_score": 78
+          },
+          "improvement_percent": 11.43,
+          "decision": "TEST_FIRST"
+        },
+        "research_reasoning": {
+          "current_baseline_score": 70,
+          "best_candidate": {
+            "name": "DeepSeek R1 family",
+            "provider": "OpenRouter / Hugging Face / provider API",
+            "category": "research_reasoning",
+            "open_source_status": "open-weight family, verify exact model/license",
+            "free_tier_status": "verify current free/provider tier",
+            "strengths": [
+              "strong reasoning",
+              "good analysis workflow",
+              "useful for comparison tasks"
+            ],
+            "weaknesses": [
+              "can be verbose",
+              "provider availability can change",
+              "needs citation discipline"
+            ],
+            "best_use_case": "reasoning-heavy research analysis",
+            "risk": "hallucination if not source-grounded",
+            "migration_difficulty": "medium",
+            "scores": {
+              "quality": 27,
+              "free_tier": 14,
+              "api": 12,
+              "open_source": 12,
+              "stability": 7,
+              "migration": 7
+            },
+            "total_score": 79
+          },
+          "improvement_percent": 12.86,
+          "decision": "TEST_FIRST"
+        }
+      }
+    },
+    {
+      "run_id": "20260519222415",
+      "created_at": "2026-05-19T22:24:15",
+      "report_path": "03_reports\\ai_model_research_report_2026-05-19_22-24-15.md",
+      "recommendations": {
+        "coding_analysis": {
+          "current_baseline_score": 70,
+          "best_candidate": {
+            "name": "Qwen Coder family",
+            "provider": "OpenRouter / Hugging Face / local",
+            "category": "coding_analysis",
+            "open_source_status": "open-weight family, verify license per exact model",
+            "free_tier_status": "may be available via free/provider tiers; verify during live run",
+            "strengths": [
+              "strong coding focus",
+              "good multilingual capability",
+              "good candidate for code assistant workflow"
+            ],
+            "weaknesses": [
+              "free availability can change",
+              "exact license depends on model",
+              "may require routing provider"
+            ],
+            "best_use_case": "coding assistant, refactor, code explanation",
+            "risk": "provider/rate-limit changes",
+            "migration_difficulty": "medium",
+            "scores": {
+              "quality": 25,
+              "free_tier": 15,
+              "api": 12,
+              "open_source": 12,
+              "stability": 7,
+              "migration": 7
+            },
+            "total_score": 78
+          },
+          "improvement_percent": 11.43,
+          "decision": "TEST_FIRST"
+        },
+        "research_reasoning": {
+          "current_baseline_score": 70,
+          "best_candidate": {
+            "name": "DeepSeek R1 family",
+            "provider": "OpenRouter / Hugging Face / provider API",
+            "category": "research_reasoning",
+            "open_source_status": "open-weight family, verify exact model/license",
+            "free_tier_status": "verify current free/provider tier",
+            "strengths": [
+              "strong reasoning",
+              "good analysis workflow",
+              "useful for comparison tasks"
+            ],
+            "weaknesses": [
+              "can be verbose",
+              "provider availability can change",
+              "needs citation discipline"
+            ],
+            "best_use_case": "reasoning-heavy research analysis",
+            "risk": "hallucination if not source-grounded",
+            "migration_difficulty": "medium",
+            "scores": {
+              "quality": 27,
+              "free_tier": 14,
+              "api": 12,
+              "open_source": 12,
+              "stability": 7,
+              "migration": 7
+            },
+            "total_score": 79
+          },
+          "improvement_percent": 12.86,
+          "decision": "TEST_FIRST"
+        }
+      }
+    },
+    {
+      "run_id": "20260519224020",
+      "created_at": "2026-05-19T22:40:20",
+      "report_path": "03_reports\\ai_model_research_report_2026-05-19_22-40-20.md",
+      "recommendations": {
+        "coding_analysis": {
+          "current_baseline_score": 70,
+          "best_candidate": {
+            "name": "Qwen Coder family",
+            "provider": "OpenRouter / Hugging Face / local",
+            "category": "coding_analysis",
+            "open_source_status": "open-weight family, verify license per exact model",
+            "free_tier_status": "may be available via free/provider tiers; verify during live run",
+            "strengths": [
+              "strong coding focus",
+              "good multilingual capability",
+              "good candidate for code assistant workflow"
+            ],
+            "weaknesses": [
+              "free availability can change",
+              "exact license depends on model",
+              "may require routing provider"
+            ],
+            "best_use_case": "coding assistant, refactor, code explanation",
+            "risk": "provider/rate-limit changes",
+            "migration_difficulty": "medium",
+            "scores": {
+              "quality": 25,
+              "free_tier": 15,
+              "api": 12,
+              "open_source": 12,
+              "stability": 7,
+              "migration": 7
+            },
+            "total_score": 78
+          },
+          "improvement_percent": 11.43,
+          "decision": "TEST_FIRST"
+        },
+        "research_reasoning": {
+          "current_baseline_score": 70,
+          "best_candidate": {
+            "name": "DeepSeek R1 family",
+            "provider": "OpenRouter / Hugging Face / provider API",
+            "category": "research_reasoning",
+            "open_source_status": "open-weight family, verify exact model/license",
+            "free_tier_status": "verify current free/provider tier",
+            "strengths": [
+              "strong reasoning",
+              "good analysis workflow",
+              "useful for comparison tasks"
+            ],
+            "weaknesses": [
+              "can be verbose",
+              "provider availability can change",
+              "needs citation discipline"
+            ],
+            "best_use_case": "reasoning-heavy research analysis",
+            "risk": "hallucination if not source-grounded",
+            "migration_difficulty": "medium",
+            "scores": {
+              "quality": 27,
+              "free_tier": 14,
+              "api": 12,
+              "open_source": 12,
+              "stability": 7,
+              "migration": 7
+            },
+            "total_score": 79
+          },
+          "improvement_percent": 12.86,
+          "decision": "TEST_FIRST"
+        }
+      }
+    },
+    {
+      "run_id": "20260520003419",
+      "created_at": "2026-05-20T00:34:19",
+      "report_path": "03_reports\\ai_model_research_report_2026-05-20_00-34-18.md",
+      "recommendations": {
+        "coding_analysis": {
+          "current_baseline_score": 70,
+          "best_candidate": {
+            "name": "Qwen Coder family",
+            "provider": "OpenRouter / Hugging Face / local",
+            "category": "coding_analysis",
+            "open_source_status": "open-weight family, verify license per exact model",
+            "free_tier_status": "may be available via free/provider tiers; verify during live run",
+            "strengths": [
+              "strong coding focus",
+              "good multilingual capability",
+              "good candidate for code assistant workflow"
+            ],
+            "weaknesses": [
+              "free availability can change",
+              "exact license depends on model",
+              "may require routing provider"
+            ],
+            "best_use_case": "coding assistant, refactor, code explanation",
+            "risk": "provider/rate-limit changes",
+            "migration_difficulty": "medium",
+            "scores": {
+              "quality": 25,
+              "free_tier": 15,
+              "api": 12,
+              "open_source": 12,
+              "stability": 7,
+              "migration": 7
+            },
+            "total_score": 78
+          },
+          "improvement_percent": 11.43,
+          "decision": "TEST_FIRST"
+        },
+        "research_reasoning": {
+          "current_baseline_score": 70,
+          "best_candidate": {
+            "name": "DeepSeek R1 family",
+            "provider": "OpenRouter / Hugging Face / provider API",
+            "category": "research_reasoning",
+            "open_source_status": "open-weight family, verify exact model/license",
+            "free_tier_status": "verify current free/provider tier",
+            "strengths": [
+              "strong reasoning",
+              "good analysis workflow",
+              "useful for comparison tasks"
+            ],
+            "weaknesses": [
+              "can be verbose",
+              "provider availability can change",
+              "needs citation discipline"
+            ],
+            "best_use_case": "reasoning-heavy research analysis",
+            "risk": "hallucination if not source-grounded",
+            "migration_difficulty": "medium",
+            "scores": {
+              "quality": 27,
+              "free_tier": 14,
+              "api": 12,
+              "open_source": 12,
+              "stability": 7,
+              "migration": 7
+            },
+            "total_score": 79
+          },
+          "improvement_percent": 12.86,
+          "decision": "TEST_FIRST"
+        }
+      }
+    },
+    {
+      "run_id": "20260520003856",
+      "created_at": "2026-05-20T00:38:56",
+      "report_path": "03_reports\\ai_model_research_report_2026-05-20_00-38-55.md",
+      "recommendations": {
+        "coding_analysis": {
+          "current_baseline_score": 70,
+          "best_candidate": {
+            "name": "Qwen Coder family",
+            "provider": "OpenRouter / Hugging Face / local",
+            "category": "coding_analysis",
+            "open_source_status": "open-weight family, verify license per exact model",
+            "free_tier_status": "may be available via free/provider tiers; verify during live run",
+            "strengths": [
+              "strong coding focus",
+              "good multilingual capability",
+              "good candidate for code assistant workflow"
+            ],
+            "weaknesses": [
+              "free availability can change",
+              "exact license depends on model",
+              "may require routing provider"
+            ],
+            "best_use_case": "coding assistant, refactor, code explanation",
+            "risk": "provider/rate-limit changes",
+            "migration_difficulty": "medium",
+            "scores": {
+              "quality": 25,
+              "free_tier": 15,
+              "api": 12,
+              "open_source": 12,
+              "stability": 7,
+              "migration": 7
+            },
+            "total_score": 78
+          },
+          "improvement_percent": 11.43,
+          "decision": "TEST_FIRST"
+        },
+        "research_reasoning": {
+          "current_baseline_score": 70,
+          "best_candidate": {
+            "name": "DeepSeek R1 family",
+            "provider": "OpenRouter / Hugging Face / provider API",
+            "category": "research_reasoning",
+            "open_source_status": "open-weight family, verify exact model/license",
+            "free_tier_status": "verify current free/provider tier",
+            "strengths": [
+              "strong reasoning",
+              "good analysis workflow",
+              "useful for comparison tasks"
+            ],
+            "weaknesses": [
+              "can be verbose",
+              "provider availability can change",
+              "needs citation discipline"
+            ],
+            "best_use_case": "reasoning-heavy research analysis",
+            "risk": "hallucination if not source-grounded",
+            "migration_difficulty": "medium",
+            "scores": {
+              "quality": 27,
+              "free_tier": 14,
+              "api": 12,
+              "open_source": 12,
+              "stability": 7,
+              "migration": 7
+            },
+            "total_score": 79
+          },
+          "improvement_percent": 12.86,
+          "decision": "TEST_FIRST"
+        }
+      }
+    },
+    {
+      "run_id": "20260520004938",
+      "created_at": "2026-05-20T00:49:38",
+      "report_path": "03_reports\\ai_model_research_report_2026-05-20_00-49-38.md",
+      "recommendations": {
+        "coding_analysis": {
+          "current_baseline_score": 70,
+          "best_candidate": {
+            "name": "Qwen Coder family",
+            "provider": "OpenRouter / Hugging Face / local",
+            "category": "coding_analysis",
+            "open_source_status": "open-weight family, verify license per exact model",
+            "free_tier_status": "may be available via free/provider tiers; verify during live run",
+            "strengths": [
+              "strong coding focus",
+              "good multilingual capability",
+              "good candidate for code assistant workflow"
+            ],
+            "weaknesses": [
+              "free availability can change",
+              "exact license depends on model",
+              "may require routing provider"
+            ],
+            "best_use_case": "coding assistant, refactor, code explanation",
+            "risk": "provider/rate-limit changes",
+            "migration_difficulty": "medium",
+            "scores": {
+              "quality": 25,
+              "free_tier": 15,
+              "api": 12,
+              "open_source": 12,
+              "stability": 7,
+              "migration": 7
+            },
+            "total_score": 78
+          },
+          "improvement_percent": 11.43,
+          "decision": "TEST_FIRST"
+        },
+        "research_reasoning": {
+          "current_baseline_score": 70,
+          "best_candidate": {
+            "name": "DeepSeek R1 family",
+            "provider": "OpenRouter / Hugging Face / provider API",
+            "category": "research_reasoning",
+            "open_source_status": "open-weight family, verify exact model/license",
+            "free_tier_status": "verify current free/provider tier",
+            "strengths": [
+              "strong reasoning",
+              "good analysis workflow",
+              "useful for comparison tasks"
+            ],
+            "weaknesses": [
+              "can be verbose",
+              "provider availability can change",
+              "needs citation discipline"
+            ],
+            "best_use_case": "reasoning-heavy research analysis",
+            "risk": "hallucination if not source-grounded",
+            "migration_difficulty": "medium",
+            "scores": {
+              "quality": 27,
+              "free_tier": 14,
+              "api": 12,
+              "open_source": 12,
+              "stability": 7,
+              "migration": 7
+            },
+            "total_score": 79
+          },
+          "improvement_percent": 12.86,
+          "decision": "TEST_FIRST"
+        }
+      }
+    },
+    {
+      "run_id": "20260520015348",
+      "created_at": "2026-05-20T01:53:48",
+      "report_path": "03_reports\\ai_model_research_report_2026-05-20_01-53-48.md",
+      "recommendations": {
+        "coding_analysis": {
+          "current_baseline_score": 70,
+          "best_candidate": {
+            "name": "Qwen: Qwen3 Coder 480B A35B (free)",
+            "model_id": "qwen/qwen3-coder:free",
+            "provider": "OpenRouter",
+            "category": "coding_analysis",
+            "open_source_status": "verify exact license",
+            "free_tier_status": "verify current free-tier",
+            "strengths": [
+              "live discovered model",
+              "available via API",
+              "candidate for testing"
+            ],
+            "weaknesses": [
+              "license must be verified",
+              "availability may change",
+              "needs benchmark testing"
+            ],
+            "best_use_case": "dynamic evaluation",
+            "risk": "provider/rate-limit changes",
+            "migration_difficulty": "medium",
+            "scores": {
+              "quality": 30,
+              "free_tier": 15,
+              "api": 15,
+              "open_source": 10,
+              "stability": 7,
+              "migration": 7
+            },
+            "total_score": 84
+          },
+          "improvement_percent": 20.0,
+          "decision": "REPLACE_AFTER_APPROVAL"
+        },
+        "research_reasoning": {
+          "current_baseline_score": 70,
+          "best_candidate": {
+            "name": "Baidu Qianfan: CoBuddy (free)",
+            "model_id": "baidu/cobuddy:free",
+            "provider": "OpenRouter",
+            "category": "research_reasoning",
+            "open_source_status": "verify exact license",
+            "free_tier_status": "verify current free-tier",
+            "strengths": [
+              "live discovered model",
+              "available via API",
+              "candidate for testing"
+            ],
+            "weaknesses": [
+              "license must be verified",
+              "availability may change",
+              "needs benchmark testing"
+            ],
+            "best_use_case": "dynamic evaluation",
+            "risk": "provider/rate-limit changes",
+            "migration_difficulty": "medium",
+            "scores": {
+              "quality": 30,
+              "free_tier": 15,
+              "api": 15,
+              "open_source": 10,
+              "stability": 7,
+              "migration": 7
+            },
+            "total_score": 84
+          },
+          "improvement_percent": 20.0,
+          "decision": "REPLACE_AFTER_APPROVAL"
+        }
+      }
+    },
+    {
+      "run_id": "20260520192338",
+      "created_at": "2026-05-20T19:23:38",
+      "report_path": "03_reports\\ai_model_research_report_2026-05-20_19-23-38.md",
+      "recommendations": {
+        "coding_analysis": {
+          "current_baseline_score": 70,
+          "best_candidate": {
+            "name": "Qwen: Qwen3 Coder 480B A35B (free)",
+            "model_id": "qwen/qwen3-coder:free",
+            "provider": "OpenRouter",
+            "category": "coding_analysis",
+            "open_source_status": "verify exact license",
+            "free_tier_status": "verify current free-tier",
+            "strengths": [
+              "live discovered model",
+              "available via API",
+              "candidate for testing"
+            ],
+            "weaknesses": [
+              "license must be verified",
+              "availability may change",
+              "needs benchmark testing"
+            ],
+            "best_use_case": "dynamic evaluation",
+            "risk": "provider/rate-limit changes",
+            "migration_difficulty": "medium",
+            "scores": {
+              "quality": 30,
+              "free_tier": 15,
+              "api": 15,
+              "open_source": 10,
+              "stability": 7,
+              "migration": 7
+            },
+            "total_score": 84
+          },
+          "improvement_percent": 20.0,
+          "decision": "REPLACE_AFTER_APPROVAL"
+        },
+        "research_reasoning": {
+          "current_baseline_score": 70,
+          "best_candidate": {
+            "name": "Baidu Qianfan: CoBuddy (free)",
+            "model_id": "baidu/cobuddy:free",
+            "provider": "OpenRouter",
+            "category": "research_reasoning",
+            "open_source_status": "verify exact license",
+            "free_tier_status": "verify current free-tier",
+            "strengths": [
+              "live discovered model",
+              "available via API",
+              "candidate for testing"
+            ],
+            "weaknesses": [
+              "license must be verified",
+              "availability may change",
+              "needs benchmark testing"
+            ],
+            "best_use_case": "dynamic evaluation",
+            "risk": "provider/rate-limit changes",
+            "migration_difficulty": "medium",
+            "scores": {
+              "quality": 30,
+              "free_tier": 15,
+              "api": 15,
+              "open_source": 10,
+              "stability": 7,
+              "migration": 7
+            },
+            "total_score": 84
+          },
+          "improvement_percent": 20.0,
+          "decision": "REPLACE_AFTER_APPROVAL"
+        }
+      }
+    },
+    {
+      "run_id": "20260520193857",
+      "created_at": "2026-05-20T19:38:57",
+      "report_path": "03_reports\\ai_model_research_report_2026-05-20_19-38-57.md",
+      "recommendations": {
+        "coding_analysis": {
+          "current_baseline_score": 70,
+          "best_candidate": {
+            "name": "Qwen: Qwen3 Coder 480B A35B (free)",
+            "model_id": "qwen/qwen3-coder:free",
+            "provider": "OpenRouter",
+            "category": "coding_analysis",
+            "open_source_status": "verify exact license",
+            "free_tier_status": "verify current free-tier",
+            "strengths": [
+              "live discovered model",
+              "available via API",
+              "candidate for testing"
+            ],
+            "weaknesses": [
+              "license must be verified",
+              "availability may change",
+              "needs benchmark testing"
+            ],
+            "best_use_case": "dynamic evaluation",
+            "risk": "provider/rate-limit changes",
+            "migration_difficulty": "medium",
+            "scores": {
+              "quality": 30,
+              "free_tier": 15,
+              "api": 15,
+              "open_source": 10,
+              "stability": 7,
+              "migration": 7
+            },
+            "total_score": 84,
+            "benchmark": {
+              "success": false,
+              "error": "{\"error\":{\"message\":\"Provider returned error\",\"code\":429,\"metadata\":{\"raw\":\"qwen/qwen3-coder:free is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations\",\"provider_name\":\"Venice\",\"is_byok\":false,\"retry_after_seconds\":15,\"retry_after_seconds_raw\":14.2,\"headers\":{\"Retry-After\":\"15\"}}},\"user_id\":\"user_3DwvHydeNrDpCeQHaaFQqY8fBNH\"}"
+            },
+            "benchmark_score": 0
+          },
+          "improvement_percent": 20.0,
+          "decision": "REPLACE_AFTER_APPROVAL"
+        },
+        "research_reasoning": {
+          "current_baseline_score": 70,
+          "best_candidate": {
+            "name": "Baidu Qianfan: CoBuddy (free)",
+            "model_id": "baidu/cobuddy:free",
+            "provider": "OpenRouter",
+            "category": "research_reasoning",
+            "open_source_status": "verify exact license",
+            "free_tier_status": "verify current free-tier",
+            "strengths": [
+              "live discovered model",
+              "available via API",
+              "candidate for testing"
+            ],
+            "weaknesses": [
+              "license must be verified",
+              "availability may change",
+              "needs benchmark testing"
+            ],
+            "best_use_case": "dynamic evaluation",
+            "risk": "provider/rate-limit changes",
+            "migration_difficulty": "medium",
+            "scores": {
+              "quality": 30,
+              "free_tier": 15,
+              "api": 15,
+              "open_source": 10,
+              "stability": 7,
+              "migration": 7
+            },
+            "total_score": 94,
+            "benchmark": {
+              "success": true,
+              "content": "# Open-Source vs. Closed-Source AI Models\n\n## Open-Source Models\n\n**Strengths**\n1. **Transparency & Auditability** — Code and weights are publicly available, allowing researchers and developers to inspect, verify, and understand how the model works.\n2. **Customizability** — Users can fine-tune, retrain, and modify the model for specific tasks, domains, or hardware constraints.\n3. **Community-driven Innovation** — A broad community of contributors can quickly identify bugs, improve performance, and extend capabilities.\n\n**Weaknesses**\n1. **Resource Intensity** — Training or fine-tuning large open models often requires significant computational power and expertise that many organizations lack.\n2. **Quality Inconsistency** — Because anyone can release a model, quality and safety standards can vary widely across projects.\n3. **Security Risks** — Public weights can be misused for malicious purposes (e.g., generating disinformation or bypassing safety measures).\n\n---\n\n## Closed-Source Models\n\n**Strengths**\n1. **Polished Performance** — Typically backed by large teams with substantial funding, resulting in strong baseline performance and reliability.\n2. **Safety & Governance** — Companies can implement usage policies, content filters, and responsible deployment guardrails more centrally.\n3. **Ease of Use** — Often provided via accessible APIs with documentation and support, lowering the barrier to entry.\n\n**Weaknesses**\n1. **Lack of Transparency** — Users cannot inspect the model's inner workings, making it harder to trust or audit its outputs.\n2. **Vendor Lock-in & Cost** — Reliance on a single provider and per-token or subscription pricing can create long-term financial and technical dependency.\n3. **Limited Customization** — Users generally cannot fine-tune or modify the model to their specific needs, restricting flexibility.\n\n---\n\n## Summary\n\n| Aspect | Open-Source | Closed-Source |\n|---|---|---|\n| Control | High | Low |\n| Accessibility | Variable | Generally easy |\n| Trust/Transparency | High | Low |\n| Safety oversight | Distributed | Centralized |\n| Cost | Variable (often free) | Ongoing fees |\n\nThe best choice often depends on the use case — organizations needing deep control and customization tend to favor open-source, while those prioritizing convenience and consistency may prefer closed-source."
+            },
+            "benchmark_score": 10
+          },
+          "improvement_percent": 34.29,
+          "decision": "REPLACE_AFTER_APPROVAL"
+        }
+      }
+    },
+    {
+      "run_id": "20260520201751",
+      "created_at": "2026-05-20T20:17:51",
+      "report_path": "03_reports\\ai_model_research_report_2026-05-20_20-17-51.md",
+      "recommendations": {
+        "coding_analysis": {
+          "current_baseline_score": 70,
+          "best_candidate": {
+            "name": "Qwen: Qwen3 Coder 480B A35B (free)",
+            "model_id": "qwen/qwen3-coder:free",
+            "provider": "OpenRouter",
+            "category": "coding_analysis",
+            "open_source_status": "verify exact license",
+            "free_tier_status": "verify current free-tier",
+            "strengths": [
+              "live discovered model",
+              "available via API",
+              "candidate for testing"
+            ],
+            "weaknesses": [
+              "license must be verified",
+              "availability may change",
+              "needs benchmark testing"
+            ],
+            "best_use_case": "dynamic evaluation",
+            "risk": "provider/rate-limit changes",
+            "migration_difficulty": "medium",
+            "scores": {
+              "quality": 30,
+              "free_tier": 15,
+              "api": 15,
+              "open_source": 10,
+              "stability": 7,
+              "migration": 7
+            },
+            "total_score": 84,
+            "benchmark": {
+              "success": false,
+              "error": "{\"error\":{\"message\":\"Provider returned error\",\"code\":429,\"metadata\":{\"raw\":\"qwen/qwen3-coder:free is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations\",\"provider_name\":\"Venice\",\"is_byok\":false,\"retry_after_seconds\":5,\"retry_after_seconds_raw\":4.847,\"headers\":{\"Retry-After\":\"5\"}}},\"user_id\":\"user_3DwvHydeNrDpCeQHaaFQqY8fBNH\"}"
+            },
+            "benchmark_score": 0
+          },
+          "improvement_percent": 20.0,
+          "decision": "REPLACE_AFTER_APPROVAL"
+        },
+        "research_reasoning": {
+          "current_baseline_score": 70,
+          "best_candidate": {
+            "name": "Baidu Qianfan: CoBuddy (free)",
+            "model_id": "baidu/cobuddy:free",
+            "provider": "OpenRouter",
+            "category": "research_reasoning",
+            "open_source_status": "verify exact license",
+            "free_tier_status": "verify current free-tier",
+            "strengths": [
+              "live discovered model",
+              "available via API",
+              "candidate for testing"
+            ],
+            "weaknesses": [
+              "license must be verified",
+              "availability may change",
+              "needs benchmark testing"
+            ],
+            "best_use_case": "dynamic evaluation",
+            "risk": "provider/rate-limit changes",
+            "migration_difficulty": "medium",
+            "scores": {
+              "quality": 30,
+              "free_tier": 15,
+              "api": 15,
+              "open_source": 10,
+              "stability": 7,
+              "migration": 7
+            },
+            "total_score": 94,
+            "benchmark": {
+              "success": true,
+              "content": "# Open-Source vs. Closed-Source AI Models\n\n## Open-Source AI Models\n*(e.g., LLaMA, Mistral, Falcon, BLOOM)*\n\n**Strengths**\n1. **Transparency & Auditability** — Code, weights, and training data (often) are publicly available, allowing researchers to inspect, reproduce, and verify claims.\n2. **Customizability** — Developers can fine-tune, retrain, or modify models for specific domains, languages, or use cases without relying on a vendor.\n3. **Community Innovation** — A global community can contribute improvements, identify bugs, and build extensions rapidly, often outpacing a single company's roadmap.\n\n**Weaknesses**\n1. **Resource Intensity** — Running and fine-tuning large models requires significant compute, which can be a barrier for smaller organizations.\n2. **Less Polished Safety Guardrails** — Without centralized moderation, models may lack robust safeguards, raising risks around bias, misuse, or harmful output.\n3. **Fragmented Support** — Quality of documentation, updates, and technical support varies widely; users may be left troubleshooting on their own.\n\n---\n\n## Closed-Source AI Models\n*(e.g., GPT-4, Claude, Gemini, Gemini)*\n\n**Strengths**\n1. **High Performance & Consistency** — Typically benefit from large-scale investment in training data, infrastructure, and RLHF, delivering strong baseline quality.\n2. **Built-In Safety & Compliance** — Vendors invest in content filtering, bias mitigation, and alignment, reducing the burden on end users.\n3. **Ease of Use** — Well-documented APIs, reliable uptime, and customer support make integration straightforward for most applications.\n\n**Weaknesses**\n1. **Black-Box Nature** — Users cannot inspect weights, training data, or decision-making processes, limiting trust and reproducibility.\n2. **Vendor Lock-In & Cost** — Reliance on a single provider creates dependency; pricing can be unpredictable, especially at scale.\n3. **Limited Customization** — Fine-tuning options are often restricted or require separate agreements, and users cannot freely modify the model's behavior.\n\n---\n\n## Quick Summary\n\n| Dimension | Open-Source | Closed-Source |\n|---|---|---|\n| Transparency | ✅ High | ❌ Low |\n| Performance | ✅ Competitive (growing) | ✅ Typically top-tier |\n| Customization | ✅ Full control | ❌ Limited |\n| Safety Guardrails | ❌ Variable | ✅ Built-in |\n| Cost to Run | ❌ High compute | ✅ Pay-per-use / API |\n| Vendor Lock-In | ❌ None | ✅ High risk |\n\nThe best choice often depends on the use case: open-source excels when control and transparency matter, while closed-source shines when reliability, safety, and out-of-the-box performance are priorities."
+            },
+            "benchmark_score": 10
+          },
+          "improvement_percent": 34.29,
+          "decision": "REPLACE_AFTER_APPROVAL"
+        }
+      }
+    },
+    {
+      "run_id": "20260520204217",
+      "created_at": "2026-05-20T20:42:17",
+      "report_path": "03_reports\\ai_model_research_report_2026-05-20_20-42-17.md",
+      "recommendations": {
+        "coding_analysis": {
+          "current_baseline_score": 70,
+          "best_candidate": {
+            "name": "Qwen: Qwen3 Coder 480B A35B (free)",
+            "model_id": "qwen/qwen3-coder:free",
+            "provider": "OpenRouter",
+            "category": "coding_analysis",
+            "open_source_status": "verify exact license",
+            "free_tier_status": "verify current free-tier",
+            "strengths": [
+              "live discovered model",
+              "available via API",
+              "candidate for testing"
+            ],
+            "weaknesses": [
+              "license must be verified",
+              "availability may change",
+              "needs benchmark testing"
+            ],
+            "best_use_case": "dynamic evaluation",
+            "risk": "provider/rate-limit changes",
+            "migration_difficulty": "medium",
+            "scores": {
+              "quality": 30,
+              "free_tier": 15,
+              "api": 15,
+              "open_source": 10,
+              "stability": 7,
+              "migration": 7
+            },
+            "total_score": 84,
+            "benchmark": {
+              "success": false,
+              "error": "{\"error\":{\"message\":\"Provider returned error\",\"code\":429,\"metadata\":{\"raw\":\"qwen/qwen3-coder:free is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations\",\"provider_name\":\"Venice\",\"is_byok\":false}},\"user_id\":\"user_3DwvHydeNrDpCeQHaaFQqY8fBNH\"}"
+            },
+            "benchmark_score": 0
+          },
+          "improvement_percent": 20.0,
+          "decision": "REPLACE_AFTER_APPROVAL"
+        },
+        "research_reasoning": {
+          "current_baseline_score": 70,
+          "best_candidate": {
+            "name": "Baidu Qianfan: CoBuddy (free)",
+            "model_id": "baidu/cobuddy:free",
+            "provider": "OpenRouter",
+            "category": "research_reasoning",
+            "open_source_status": "verify exact license",
+            "free_tier_status": "verify current free-tier",
+            "strengths": [
+              "live discovered model",
+              "available via API",
+              "candidate for testing"
+            ],
+            "weaknesses": [
+              "license must be verified",
+              "availability may change",
+              "needs benchmark testing"
+            ],
+            "best_use_case": "dynamic evaluation",
+            "risk": "provider/rate-limit changes",
+            "migration_difficulty": "medium",
+            "scores": {
+              "quality": 30,
+              "free_tier": 15,
+              "api": 15,
+              "open_source": 10,
+              "stability": 7,
+              "migration": 7
+            },
+            "total_score": 94,
+            "benchmark": {
+              "success": true,
+              "content": "# Open-Source vs. Closed-Source AI Models\n\n## Open-Source Models\n*Examples: LLaMA, Mistral, Falcon, BLOOM*\n\n**Strengths**\n1. **Transparency & Auditability** — Code, weights, and training data are publicly available, allowing researchers and developers to inspect, verify, and understand how the model works.\n2. **Customization & Flexibility** — Users can fine-tune, retrain, or modify the model for specific domains, languages, or use cases without relying on a vendor.\n3. **Cost Efficiency** — No per-token licensing fees; organizations can run models on their own hardware, reducing long-term dependency on a provider.\n\n**Weaknesses**\n1. **Resource Intensive** — Training and fine-tuning large models requires significant compute, storage, and expertise that many organizations lack.\n2. **Quality Gaps** — While improving rapidly, open models often lag behind the frontier closed-source models in reasoning, safety, and general capability.\n3. **Security & Safety Risks** — Public weights can be misused (e.g., for disinformation or malware), and there is no centralized safety guardrail or accountability mechanism.\n\n---\n\n## Closed-Source Models\n*Examples: GPT-4, Claude, Gemini, PaLM*\n\n**Strengths**\n1. **High Performance** — Benefit from massive proprietary datasets, state-of-the-art infrastructure, and continuous investment, often leading the benchmarks.\n2. **Safety & Compliance** — Built-in moderation, usage policies, and consistent updates help manage harmful outputs and meet regulatory requirements.\n3. **Ease of Use** — Offer polished APIs, documentation, and support, lowering the barrier to entry for non-technical users.\n\n**Weaknesses**\n1. **Lack of Transparency** — Inner workings, training data, and evaluation methods are proprietary, making it difficult to audit for bias or errors.\n2. **Vendor Lock-in & Cost** — Reliance on a single provider, potential price changes, and restricted access to weights limit portability and long-term cost control.\n3. **Limited Customization** — Users generally cannot fine-tune the model or modify behavior beyond prompt engineering, restricting niche or specialized applications.\n\n---\n\n## Summary\n\n| | Open-Source | Closed-Source |\n|---|---|---|\n| **Best for** | Customization, research, self-hosting | Out-of-the-box performance, safety, ease of use |\n| **Main trade-off** | Control & transparency vs. resource cost | Convenience & capability vs. opacity & lock-in |\n\nThe choice often depends on the project's priorities: **transparency and autonomy** favor open-source, while **state-of-the-art capability and managed safety** favor closed-source."
+            },
+            "benchmark_score": 10
+          },
+          "improvement_percent": 34.29,
+          "decision": "REPLACE_AFTER_APPROVAL"
+        }
+      }
+    },
+    {
+      "run_id": "20260520210516",
+      "created_at": "2026-05-20T21:05:16",
+      "report_path": "03_reports\\ai_model_research_report_2026-05-20_21-05-16.md",
+      "recommendations": {
+        "coding_analysis": {
+          "current_baseline_score": 70,
+          "best_candidate": {
+            "name": "Qwen: Qwen3 Coder 480B A35B (free)",
+            "model_id": "qwen/qwen3-coder:free",
+            "provider": "OpenRouter",
+            "category": "coding_analysis",
+            "open_source_status": "verify exact license",
+            "free_tier_status": "verify current free-tier",
+            "strengths": [
+              "live discovered model",
+              "available via API",
+              "candidate for testing"
+            ],
+            "weaknesses": [
+              "license must be verified",
+              "availability may change",
+              "needs benchmark testing"
+            ],
+            "best_use_case": "dynamic evaluation",
+            "risk": "provider/rate-limit changes",
+            "migration_difficulty": "medium",
+            "scores": {
+              "quality": 30,
+              "free_tier": 15,
+              "api": 15,
+              "open_source": 10,
+              "stability": 7,
+              "migration": 7
+            },
+            "total_score": 84,
+            "benchmark": {
+              "success": false,
+              "error": "{\"error\":{\"message\":\"Provider returned error\",\"code\":429,\"metadata\":{\"raw\":\"qwen/qwen3-coder:free is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations\",\"provider_name\":\"Venice\",\"is_byok\":false,\"retry_after_seconds\":16,\"retry_after_seconds_raw\":15.34,\"headers\":{\"Retry-After\":\"16\"}}},\"user_id\":\"user_3DwvHydeNrDpCeQHaaFQqY8fBNH\"}"
+            },
+            "benchmark_score": 0
+          },
+          "improvement_percent": 20.0,
+          "decision": "REPLACE_AFTER_APPROVAL"
+        },
+        "research_reasoning": {
+          "current_baseline_score": 70,
+          "best_candidate": {
+            "name": "Baidu Qianfan: CoBuddy (free)",
+            "model_id": "baidu/cobuddy:free",
+            "provider": "OpenRouter",
+            "category": "research_reasoning",
+            "open_source_status": "verify exact license",
+            "free_tier_status": "verify current free-tier",
+            "strengths": [
+              "live discovered model",
+              "available via API",
+              "candidate for testing"
+            ],
+            "weaknesses": [
+              "license must be verified",
+              "availability may change",
+              "needs benchmark testing"
+            ],
+            "best_use_case": "dynamic evaluation",
+            "risk": "provider/rate-limit changes",
+            "migration_difficulty": "medium",
+            "scores": {
+              "quality": 30,
+              "free_tier": 15,
+              "api": 15,
+              "open_source": 10,
+              "stability": 7,
+              "migration": 7
+            },
+            "total_score": 94,
+            "benchmark": {
+              "success": true,
+              "content": "# Open-Source vs. Closed-Source AI Models\n\n## Open-Source AI Models\n*(e.g., LLaMA, Mistral, Falcon, BLOOM)*\n\n**Strengths**\n1. **Transparency & Auditing** – Code, weights, and training data (when available) can be inspected, allowing researchers to verify claims, identify biases, and ensure safety.\n2. **Customization & Flexibility** – Developers can fine-tune, distill, or modify models for specific domains, hardware constraints, or edge deployment without licensing restrictions.\n3. **Community-Driven Improvement** – A broad contributor base can rapidly fix bugs, add features, and experiment with novel architectures, often outpacing single-company roadmaps.\n\n**Weaknesses**\n1. **Resource Intensity** – Training and fine-tuning large models requires significant compute, which can be a barrier for individuals and smaller organizations.\n2. **Inconsistent Quality & Support** – Models may lack rigorous benchmarks, documentation, or dedicated maintenance, leading to fragmentation and risk of outdated or poorly maintained releases.\n3. **Security & Misuse Risk** – Open weights can be downloaded and deployed by bad actors for harmful purposes (e.g., generating disinformation or malware) with limited accountability.\n\n---\n\n## Closed-Source AI Models\n*(e.g., GPT-4, Claude, Gemini, Cohere)*\n\n**Strengths**\n1. **High Performance & Scale** – Companies can invest heavily in compute, data curation, and RLHF/constitutional AI techniques, often producing top-tier results on benchmarks.\n2. **Reliability & Support** – Users receive regular updates, API stability, documentation, and professional customer support.\n3. **Safety & Alignment Controls** – Providers can enforce usage policies, content filters, and ethical guidelines at the infrastructure level.\n\n**Weaknesses**\n1. **Lack of Transparency** – Proprietary training data, architecture details, and evaluation methods are hidden, making it difficult to assess bias, accuracy, or hidden capabilities.\n2. **Vendor Lock-In & Cost** – Reliance on a single provider limits portability, and API costs can scale unpredictably with usage.\n3. **Limited Customization** – Users typically cannot fine-tune weights or inspect internals, restricting the ability to adapt the model to niche or sensitive use cases.\n\n---\n\n## Summary Table\n\n| Dimension | Open-Source | Closed-Source |\n|---|---|---|\n| Transparency | ✅ High | ❌ Low |\n| Performance | ⚠️ Variable | ✅ Generally top-tier |\n| Customization | ✅ Full control | ❌ Restricted |\n| Safety guardrails | ❌ Self-responsibility | ✅ Provider-enforced |\n| Cost to deploy | ⚠️ High compute cost | ⚠️ Ongoing API fees |\n| Community innovation | ✅ Rapid iteration | ❌ Dependent on vendor |\n\nThe best choice often depends on the use case: **open-source** excels when transparency and control are priorities, while **closed-source** tends to offer stronger out-of-the-box performance and accountability infrastructure."
+            },
+            "benchmark_score": 10
+          },
+          "improvement_percent": 34.29,
+          "decision": "REPLACE_AFTER_APPROVAL"
+        }
+      }
+    },
+    {
+      "run_id": "20260520212206",
+      "created_at": "2026-05-20T21:22:06",
+      "report_path": "03_reports\\ai_model_research_report_2026-05-20_21-22-06.md",
+      "recommendations": {
+        "coding_analysis": {
+          "current_baseline_score": 70,
+          "best_candidate": {
+            "name": "Qwen: Qwen3 Coder 480B A35B (free)",
+            "model_id": "qwen/qwen3-coder:free",
+            "provider": "OpenRouter",
+            "category": "coding_analysis",
+            "open_source_status": "verify exact license",
+            "free_tier_status": "verify current free-tier",
+            "strengths": [
+              "live discovered model",
+              "available via API",
+              "candidate for testing"
+            ],
+            "weaknesses": [
+              "license must be verified",
+              "availability may change",
+              "needs benchmark testing"
+            ],
+            "best_use_case": "dynamic evaluation",
+            "risk": "provider/rate-limit changes",
+            "migration_difficulty": "medium",
+            "scores": {
+              "quality": 30,
+              "free_tier": 15,
+              "api": 15,
+              "open_source": 10,
+              "stability": 7,
+              "migration": 7
+            },
+            "total_score": 84,
+            "benchmark": {
+              "success": false,
+              "error": "{\"error\":{\"message\":\"Provider returned error\",\"code\":429,\"metadata\":{\"raw\":\"qwen/qwen3-coder:free is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations\",\"provider_name\":\"Venice\",\"is_byok\":false,\"retry_after_seconds\":21,\"retry_after_seconds_raw\":21,\"headers\":{\"Retry-After\":\"21\"}}},\"user_id\":\"user_3DwvHydeNrDpCeQHaaFQqY8fBNH\"}"
+            },
+            "benchmark_score": 0
+          },
+          "improvement_percent": 20.0,
+          "decision": "REPLACE_AFTER_APPROVAL"
+        },
+        "research_reasoning": {
+          "current_baseline_score": 70,
+          "best_candidate": {
+            "name": "Baidu Qianfan: CoBuddy (free)",
+            "model_id": "baidu/cobuddy:free",
+            "provider": "OpenRouter",
+            "category": "research_reasoning",
+            "open_source_status": "verify exact license",
+            "free_tier_status": "verify current free-tier",
+            "strengths": [
+              "live discovered model",
+              "available via API",
+              "candidate for testing"
+            ],
+            "weaknesses": [
+              "license must be verified",
+              "availability may change",
+              "needs benchmark testing"
+            ],
+            "best_use_case": "dynamic evaluation",
+            "risk": "provider/rate-limit changes",
+            "migration_difficulty": "medium",
+            "scores": {
+              "quality": 30,
+              "free_tier": 15,
+              "api": 15,
+              "open_source": 10,
+              "stability": 7,
+              "migration": 7
+            },
+            "total_score": 94,
+            "benchmark": {
+              "success": true,
+              "content": "# Open-Source vs. Closed-Source AI Models\n\n## Open-Source AI Models\n*Examples: LLaMA, Mistral, Falcon, BLOOM*\n\n### Strengths\n1. **Transparency & Auditability** — Code, weights, and training data (often) are publicly available, allowing researchers and developers to inspect, verify, and understand how the model works.\n2. **Customizability** — Users can fine-tune, retrain, or modify the model for specific domains, languages, or use cases without restrictions.\n3. **Community Innovation** — A broad community of contributors can rapidly iterate, share improvements, and create derivative models, fostering faster progress.\n\n### Weaknesses\n1. **Resource Intensity** — Running and fine-tuning large open models often requires significant compute, storage, and technical expertise that smaller teams may lack.\n2. **Inconsistent Quality & Support** — Models may be released with limited testing, uneven documentation, and no formal support guarantee.\n3. **Safety & Misuse Concerns** — Open weights can be downloaded and misused for harmful purposes with fewer safeguards compared to closed platforms.\n\n---\n\n## Closed-Source AI Models\n*Examples: GPT-4, Claude, Gemini, proprietary models from companies like OpenAI, Anthropic, Google*\n\n### Strengths\n1. **Polished Performance** — Typically undergo extensive benchmarking, red-teaming, and optimization, often leading to higher baseline quality and reliability.\n2. **Ease of Use** — Offer user-friendly APIs and services, lowering the barrier to entry for non-technical users.\n3. **Safety & Governance** — Built-in content filters, usage policies, and accountability mechanisms can reduce harmful outputs.\n\n### Weaknesses\n1. **Opacity** — The model architecture, training data, and decision-making process are hidden, making it difficult to audit for bias or errors.\n2. **Vendor Lock-in & Cost** — Users depend on a single provider's pricing, terms of service, and roadmap; costs can scale unpredictably.\n3. **Limited Customization** — Fine-tuning options are often restricted, and users cannot fully adapt the model to niche or sensitive use cases.\n\n---\n\n## Summary\n\n| Aspect | Open-Source | Closed-Source |\n|---|---|---|\n| **Control** | High | Low |\n| **Ease of Access** | Moderate (technical barrier) | High |\n| **Transparency** | Full | Limited |\n| **Safety Guardrails** | Relies on community | Built-in by provider |\n| **Customization** | Full | Partial |\n\nBoth paradigms serve different needs — open-source excels in research and flexibility, while closed-source offers convenience and polished, managed experiences."
+            },
+            "benchmark_score": 10
+          },
+          "improvement_percent": 34.29,
+          "decision": "REPLACE_AFTER_APPROVAL"
+        }
+      }
+    },
+    {
+      "run_id": "20260520221247",
+      "created_at": "2026-05-20T22:12:47",
+      "report_path": "03_reports\\ai_model_research_report_2026-05-20_22-12-47.md",
+      "recommendations": {
+        "coding_analysis": {
+          "current_baseline_score": 70,
+          "best_candidate": {
+            "name": "Qwen: Qwen3 Coder 480B A35B (free)",
+            "model_id": "qwen/qwen3-coder:free",
+            "provider": "OpenRouter",
+            "category": "coding_analysis",
+            "open_source_status": "verify exact license",
+            "free_tier_status": "verify current free-tier",
+            "strengths": [
+              "live discovered model",
+              "available via API",
+              "candidate for testing"
+            ],
+            "weaknesses": [
+              "license must be verified",
+              "availability may change",
+              "needs benchmark testing"
+            ],
+            "best_use_case": "dynamic evaluation",
+            "risk": "provider/rate-limit changes",
+            "migration_difficulty": "medium",
+            "scores": {
+              "quality": 30,
+              "free_tier": 15,
+              "api": 15,
+              "open_source": 10,
+              "stability": 7,
+              "migration": 7
+            },
+            "total_score": 84,
+            "benchmark": {
+              "success": false,
+              "error": "{\"error\":{\"message\":\"Provider returned error\",\"code\":429,\"metadata\":{\"raw\":\"qwen/qwen3-coder:free is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations\",\"provider_name\":\"Venice\",\"is_byok\":false}},\"user_id\":\"user_3DwvHydeNrDpCeQHaaFQqY8fBNH\"}"
+            },
+            "benchmark_score": 0
+          },
+          "improvement_percent": 20.0,
+          "decision": "REPLACE_AFTER_APPROVAL"
+        },
+        "research_reasoning": {
+          "current_baseline_score": 70,
+          "best_candidate": {
+            "name": "Baidu Qianfan: CoBuddy (free)",
+            "model_id": "baidu/cobuddy:free",
+            "provider": "OpenRouter",
+            "category": "research_reasoning",
+            "open_source_status": "verify exact license",
+            "free_tier_status": "verify current free-tier",
+            "strengths": [
+              "live discovered model",
+              "available via API",
+              "candidate for testing"
+            ],
+            "weaknesses": [
+              "license must be verified",
+              "availability may change",
+              "needs benchmark testing"
+            ],
+            "best_use_case": "dynamic evaluation",
+            "risk": "provider/rate-limit changes",
+            "migration_difficulty": "medium",
+            "scores": {
+              "quality": 30,
+              "free_tier": 15,
+              "api": 15,
+              "open_source": 10,
+              "stability": 7,
+              "migration": 7
+            },
+            "total_score": 94,
+            "benchmark": {
+              "success": true,
+              "content": "# Open-Source vs. Closed-Source AI Models\n\n## Open-Source Models\n\n**Strengths**\n1. **Transparency & Auditability** – The code, weights, and training data (when available) can be inspected, allowing researchers and users to verify claims, spot biases, and understand how the model works.\n2. **Customizability** – Users can fine-tune, retrain, or modify the model for specific domains, languages, or tasks without waiting for a vendor to add features.\n3. **Lower Barrier to Entry** – Free access and permissive licenses enable individuals, startups, and academic labs to experiment and build without hefty subscription costs.\n\n**Weaknesses**\n1. **Resource Intensity** – Running and fine-tuning large open models often requires significant hardware (GPUs/TPUs), which can be prohibitively expensive for smaller teams.\n2. **Less Polished Safety & Alignment** – Because anyone can modify the model, there are fewer built-in guardrails, leading to potential misuse or inconsistent quality control.\n3. **Fragmented Support** – Documentation, community support, and ongoing maintenance can be inconsistent, and updates depend on the commitment of volunteer contributors.\n\n---\n\n## Closed-Source Models\n\n**Strengths**\n1. **Consistent Performance & Safety** – Vendors invest heavily in alignment, content filtering, and benchmark testing, delivering a more predictable and well-moderated user experience.\n2. **Ease of Use** – Closed models are typically offered via user-friendly APIs or platforms, requiring no local hardware or deep ML expertise to get started.\n3. **Continuous Improvement** – Dedicated engineering teams provide regular updates, new capabilities, and better performance over time without user involvement.\n\n**Weaknesses**\n1. **Lack of Transparency** – The model's inner workings, training data, and decision-making process are proprietary, making it difficult to audit for bias, errors, or hidden agendas.\n2. **Vendor Lock-In & Cost** – Users depend on the provider for access, pricing can be unpredictable, and switching to a different vendor (or running locally) may be difficult or expensive.\n3. **Limited Customization** – Closed models generally don't allow fine-tuning or modification, so users must adapt their workflows to the model's constraints rather than the other way around.\n\n---\n\n**In summary**: Open-source models excel in transparency, flexibility, and accessibility but can be harder to run safely and reliably. Closed-source models offer polished, easy-to-use experiences with strong safety guarantees but sacrifice transparency and user control."
+            },
+            "benchmark_score": 10
+          },
+          "improvement_percent": 34.29,
+          "decision": "REPLACE_AFTER_APPROVAL"
+        }
+      }
+    },
+    {
+      "run_id": "20260520222027",
+      "created_at": "2026-05-20T22:20:27",
+      "report_path": "03_reports\\ai_model_research_report_2026-05-20_22-20-27.md",
+      "recommendations": {
+        "coding_analysis": {
+          "current_baseline_score": 70,
+          "best_candidate": {
+            "name": "Qwen: Qwen3 Coder 480B A35B (free)",
+            "model_id": "qwen/qwen3-coder:free",
+            "provider": "OpenRouter",
+            "category": "coding_analysis",
+            "open_source_status": "verify exact license",
+            "free_tier_status": "verify current free-tier",
+            "strengths": [
+              "live discovered model",
+              "available via API",
+              "candidate for testing"
+            ],
+            "weaknesses": [
+              "license must be verified",
+              "availability may change",
+              "needs benchmark testing"
+            ],
+            "best_use_case": "dynamic evaluation",
+            "risk": "provider/rate-limit changes",
+            "migration_difficulty": "medium",
+            "scores": {
+              "quality": 30,
+              "free_tier": 15,
+              "api": 15,
+              "open_source": 10,
+              "stability": 7,
+              "migration": 7
+            },
+            "total_score": 84,
+            "benchmark": {
+              "success": false,
+              "error": "{\"error\":{\"message\":\"Provider returned error\",\"code\":429,\"metadata\":{\"raw\":\"qwen/qwen3-coder:free is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations\",\"provider_name\":\"Venice\",\"is_byok\":false}},\"user_id\":\"user_3DwvHydeNrDpCeQHaaFQqY8fBNH\"}"
+            },
+            "benchmark_score": 0
+          },
+          "improvement_percent": 20.0,
+          "decision": "REPLACE_AFTER_APPROVAL"
+        },
+        "research_reasoning": {
+          "current_baseline_score": 70,
+          "best_candidate": {
+            "name": "Baidu Qianfan: CoBuddy (free)",
+            "model_id": "baidu/cobuddy:free",
+            "provider": "OpenRouter",
+            "category": "research_reasoning",
+            "open_source_status": "verify exact license",
+            "free_tier_status": "verify current free-tier",
+            "strengths": [
+              "live discovered model",
+              "available via API",
+              "candidate for testing"
+            ],
+            "weaknesses": [
+              "license must be verified",
+              "availability may change",
+              "needs benchmark testing"
+            ],
+            "best_use_case": "dynamic evaluation",
+            "risk": "provider/rate-limit changes",
+            "migration_difficulty": "medium",
+            "scores": {
+              "quality": 30,
+              "free_tier": 15,
+              "api": 15,
+              "open_source": 10,
+              "stability": 7,
+              "migration": 7
+            },
+            "total_score": 94,
+            "benchmark": {
+              "success": true,
+              "content": "# Open-Source vs. Closed-Source AI Models\n\n## Open-Source AI Models\n*(e.g., LLaMA, Mistral, BLOOM, Falcon)*\n\n**Strengths**\n1. **Transparency & Audibility** — Code, weights, and training data documentation are publicly available, allowing researchers to inspect, verify, and debug model behavior.\n2. **Customizability & Fine-tuning** — Users can adapt the model to specific domains, languages, or tasks without waiting for a vendor's roadmap.\n3. **Community-Driven Innovation** — A global community of contributors can rapidly iterate, share improvements, and replicate results, often at lower cost.\n\n**Weaknesses**\n1. **Resource Intensity** — Running and fine-tuning large open models often requires significant hardware (GPUs/TPUs), which can be a barrier for smaller organizations.\n2. **Variable Quality & Support** — Models may lack consistent benchmarking, documentation, or long-term maintenance; updates depend on volunteer effort.\n3. **Security & Safety Risks** — Public availability means malicious actors can more easily study or weaponize a model's capabilities.\n\n---\n\n## Closed-Source AI Models\n*(e.g., GPT-4, Claude, Gemini, PaLM)*\n\n**Strengths**\n1. **Polished Performance** — Typically backed by large-scale curated training pipelines and rigorous evaluation, leading to strong general-purpose performance out of the box.\n2. **Ease of Use & Reliability** — Offer stable APIs, consistent uptime, and dedicated support, lowering the technical barrier for most users.\n3. **Safety & Alignment Controls** — Providers can implement guardrails, content filtering, and compliance features more centrally and consistently.\n\n**Weaknesses**\n1. **Lack of Transparency** — Proprietary weights, undisclosed training data, and opaque architectures make it hard to audit for biases, errors, or hidden behaviors.\n2. **Vendor Lock-in & Cost** — Users depend on a single provider's pricing, terms, and product roadmap; costs can scale unpredictably with usage.\n3. **Limited Customization** — Fine-tuning options are often restricted or unavailable, making it harder to adapt the model to niche or specialized requirements.\n\n---\n\n**Summary**: Open-source models excel in transparency and flexibility but demand more technical resources and carry higher safety risks. Closed-source models offer polished, easy-to-consume products but sacrifice transparency and can create dependence on a single vendor."
+            },
+            "benchmark_score": 10
+          },
+          "improvement_percent": 34.29,
+          "decision": "REPLACE_AFTER_APPROVAL"
+        }
+      }
+    },
+    {
+      "run_id": "20260520222822",
+      "created_at": "2026-05-20T22:28:22",
+      "report_path": "03_reports\\ai_model_research_report_2026-05-20_22-28-22.md",
+      "recommendations": {
+        "coding_analysis": {
+          "current_baseline_score": 70,
+          "best_candidate": {
+            "name": "Qwen: Qwen3 Coder 480B A35B (free)",
+            "model_id": "qwen/qwen3-coder:free",
+            "provider": "OpenRouter",
+            "category": "coding_analysis",
+            "open_source_status": "verify exact license",
+            "free_tier_status": "verify current free-tier",
+            "strengths": [
+              "live discovered model",
+              "available via API",
+              "candidate for testing"
+            ],
+            "weaknesses": [
+              "license must be verified",
+              "availability may change",
+              "needs benchmark testing"
+            ],
+            "best_use_case": "dynamic evaluation",
+            "risk": "provider/rate-limit changes",
+            "migration_difficulty": "medium",
+            "scores": {
+              "quality": 30,
+              "free_tier": 15,
+              "api": 15,
+              "open_source": 10,
+              "stability": 7,
+              "migration": 7
+            },
+            "total_score": 84,
+            "benchmark": {
+              "success": false,
+              "error": "{\"error\":{\"message\":\"Provider returned error\",\"code\":429,\"metadata\":{\"raw\":\"qwen/qwen3-coder:free is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations\",\"provider_name\":\"Venice\",\"is_byok\":false,\"retry_after_seconds\":52,\"retry_after_seconds_raw\":52,\"headers\":{\"Retry-After\":\"52\"}}},\"user_id\":\"user_3DwvHydeNrDpCeQHaaFQqY8fBNH\"}"
+            },
+            "benchmark_score": 0
+          },
+          "improvement_percent": 20.0,
+          "decision": "REPLACE_AFTER_APPROVAL"
+        },
+        "research_reasoning": {
+          "current_baseline_score": 70,
+          "best_candidate": {
+            "name": "Baidu Qianfan: CoBuddy (free)",
+            "model_id": "baidu/cobuddy:free",
+            "provider": "OpenRouter",
+            "category": "research_reasoning",
+            "open_source_status": "verify exact license",
+            "free_tier_status": "verify current free-tier",
+            "strengths": [
+              "live discovered model",
+              "available via API",
+              "candidate for testing"
+            ],
+            "weaknesses": [
+              "license must be verified",
+              "availability may change",
+              "needs benchmark testing"
+            ],
+            "best_use_case": "dynamic evaluation",
+            "risk": "provider/rate-limit changes",
+            "migration_difficulty": "medium",
+            "scores": {
+              "quality": 30,
+              "free_tier": 15,
+              "api": 15,
+              "open_source": 10,
+              "stability": 7,
+              "migration": 7
+            },
+            "total_score": 94,
+            "benchmark": {
+              "success": true,
+              "content": "# Open-Source vs. Closed-Source AI Models\n\n## Open-Source AI Models\n*(e.g., LLaMA, Mistral, Falcon, BLOOM)*\n\n### Strengths\n1. **Transparency & Auditing** — The code and weights are publicly available, allowing researchers and developers to inspect, verify, and understand how the model works.\n2. **Customization & Flexibility** — Users can fine-tune, retrain, or modify the model for specific use cases, languages, or domains without restriction.\n3. **Community-Driven Innovation** — A global community of contributors can improve the model, find and fix bugs, and build extensions, often at a faster pace than internal teams alone.\n\n### Weaknesses\n1. **Resource Intensive** — Running and fine-tuning large models often requires significant hardware (GPUs, memory), which can be a barrier for smaller organizations.\n2. **Inconsistent Quality & Safety** — Without centralized governance, models may lack rigorous safety testing, leading to biases, toxic outputs, or security vulnerabilities.\n3. **Less Polished User Experience** — Documentation, support, and tooling may be fragmented or lag behind, making adoption harder for non-technical users.\n\n---\n\n## Closed-Source AI Models\n*(e.g., GPT-4, Claude, Gemini, Copilot)*\n\n### Strengths\n1. **High Performance & Reliability** — Often backed by large-scale infrastructure and extensive training data, delivering strong general-purpose performance and consistency.\n2. **Safety & Compliance** — Companies invest heavily in alignment, content filtering, and regulatory compliance, reducing the risk of harmful outputs.\n3. **Ease of Use** — Typically come with polished APIs, documentation, and support, lowering the barrier to adoption for businesses and individuals.\n\n### Weaknesses\n1. **Lack of Transparency** — The inner workings, training data, and decision-making processes are hidden, making it difficult to audit for biases or errors.\n2. **Vendor Lock-In & Dependence** — Users rely on a single provider's roadmap, pricing, and availability, with limited ability to modify or self-host the model.\n3. **Cost & Accessibility** — Advanced capabilities are often gated behind paywalls or usage-based pricing, which can be expensive at scale and restrict access for smaller players.\n\n---\n\n## Summary\n\n| | Open-Source | Closed-Source |\n|---|---|---|\n| **Best for** | Research, customization, control | Production-ready performance, ease of use |\n| **Key trade-off** | Freedom vs. responsibility | Convenience vs. opacity |\n\nNeither approach is universally superior — the best choice depends on your priorities around transparency, cost, performance, and control."
+            },
+            "benchmark_score": 10
+          },
+          "improvement_percent": 34.29,
+          "decision": "REPLACE_AFTER_APPROVAL"
+        }
+      }
+    },
+    {
+      "run_id": "20260520224820",
+      "created_at": "2026-05-20T22:48:20",
+      "report_path": "03_reports\\ai_model_research_report_2026-05-20_22-48-20.md",
+      "recommendations": {
+        "coding_analysis": {
+          "current_baseline_score": 70,
+          "best_candidate": {
+            "name": "Qwen: Qwen3 Coder 480B A35B (free)",
+            "model_id": "qwen/qwen3-coder:free",
+            "provider": "OpenRouter",
+            "category": "coding_analysis",
+            "open_source_status": "verify exact license",
+            "free_tier_status": "verify current free-tier",
+            "strengths": [
+              "live discovered model",
+              "available via API",
+              "candidate for testing"
+            ],
+            "weaknesses": [
+              "license must be verified",
+              "availability may change",
+              "needs benchmark testing"
+            ],
+            "best_use_case": "dynamic evaluation",
+            "risk": "provider/rate-limit changes",
+            "migration_difficulty": "medium",
+            "scores": {
+              "quality": 30,
+              "free_tier": 15,
+              "api": 15,
+              "open_source": 10,
+              "stability": 7,
+              "migration": 7
+            },
+            "total_score": 84,
+            "benchmark": {
+              "success": false,
+              "error": "{\"error\":{\"message\":\"Provider returned error\",\"code\":429,\"metadata\":{\"raw\":\"qwen/qwen3-coder:free is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations\",\"provider_name\":\"Venice\",\"is_byok\":false,\"retry_after_seconds\":12,\"retry_after_seconds_raw\":11.406,\"headers\":{\"Retry-After\":\"12\"}}},\"user_id\":\"user_3DwvHydeNrDpCeQHaaFQqY8fBNH\"}"
+            },
+            "benchmark_score": 0
+          },
+          "improvement_percent": 20.0,
+          "decision": "REPLACE_AFTER_APPROVAL"
+        },
+        "research_reasoning": {
+          "current_baseline_score": 70,
+          "best_candidate": {
+            "name": "Baidu Qianfan: CoBuddy (free)",
+            "model_id": "baidu/cobuddy:free",
+            "provider": "OpenRouter",
+            "category": "research_reasoning",
+            "open_source_status": "verify exact license",
+            "free_tier_status": "verify current free-tier",
+            "strengths": [
+              "live discovered model",
+              "available via API",
+              "candidate for testing"
+            ],
+            "weaknesses": [
+              "license must be verified",
+              "availability may change",
+              "needs benchmark testing"
+            ],
+            "best_use_case": "dynamic evaluation",
+            "risk": "provider/rate-limit changes",
+            "migration_difficulty": "medium",
+            "scores": {
+              "quality": 30,
+              "free_tier": 15,
+              "api": 15,
+              "open_source": 10,
+              "stability": 7,
+              "migration": 7
+            },
+            "total_score": 94,
+            "benchmark": {
+              "success": true,
+              "content": "# Open-Source vs. Closed-Source AI Models\n\n## Open-Source AI Models\n*(e.g., LLaMA, Mistral, BLOOM, Falcon)*\n\n### Strengths\n1. **Transparency & Auditing** – The model weights, code, and training data (when shared) allow researchers to inspect, verify, and understand how decisions are made, reducing the risk of hidden biases or undisclosed risks.\n2. **Customization & Flexibility** – Developers can fine-tune, retrain, or modify the model for specific domains, hardware, or use cases without relying on a vendor's roadmap.\n3. **Community-Driven Innovation** – A global community of contributors can rapidly improve the model, experiment with techniques, and share knowledge, often accelerating progress.\n\n### Weaknesses\n1. **Resource-Intensive Deployment** – Running and fine-tuning large open models often requires significant compute, storage, and expertise, creating a barrier for smaller organizations.\n2. **Quality & Consistency Variability** – Since contributions come from diverse groups, model quality can be inconsistent, and there may be less rigorous safety testing or documentation compared to commercial offerings.\n3. **Security & Misuse Risks** – Open weights can be downloaded and misused (e.g., for deepfakes, disinformation, or attacks), and it is harder to enforce responsible-use policies once the model is public.\n\n---\n\n## Closed-Source AI Models\n*(e.g., GPT-4, Claude, Gemini, Gemini)*\n\n### Strengths\n1. **High-Quality Outputs** – Closed-source models are typically backed by large-scale, curated training pipelines and extensive evaluation, often producing more polished and reliable results.\n2. **Ease of Use & Support** – Users access these models through APIs or platforms with documentation, uptime guarantees, and professional support, lowering the technical barrier.\n3. **Safety & Alignment Controls** – Companies can implement guardrails, content filters, and continuous monitoring to reduce harmful outputs and maintain a brand-safe product.\n\n### Weaknesses\n1. **Lack of Transparency** – The model's inner workings, training data, and decision logic are proprietary, making it difficult to audit for bias, errors, or hidden behaviors.\n2. **Vendor Lock-In & Dependence** – Users are tied to a single provider's pricing, policies, and product roadmap, which can change unexpectedly or be discontinued.\n3. **Limited Customization** – Fine-tuning options are often restricted, and users typically cannot modify the model architecture or weights, limiting adaptability for niche or sensitive applications.\n\n---\n\n**In summary**: Open-source models excel in transparency, flexibility, and community collaboration but demand more resources and carry misuse risks. Closed-source models offer polished performance and ease of use but sacrifice transparency and lock users into a vendor's ecosystem."
+            },
+            "benchmark_score": 10
+          },
+          "improvement_percent": 34.29,
+          "decision": "REPLACE_AFTER_APPROVAL"
+        }
+      }
+    },
+    {
+      "run_id": "20260520231707",
+      "created_at": "2026-05-20T23:17:07",
+      "report_path": "03_reports\\ai_model_research_report_2026-05-20_23-17-07.md",
+      "recommendations": {
+        "coding_analysis": {
+          "current_baseline_score": 70,
+          "best_candidate": {
+            "name": "Qwen: Qwen3 Coder 480B A35B (free)",
+            "model_id": "qwen/qwen3-coder:free",
+            "provider": "OpenRouter",
+            "category": "coding_analysis",
+            "open_source_status": "verify exact license",
+            "free_tier_status": "verify current free-tier",
+            "strengths": [
+              "live discovered model",
+              "available via API",
+              "candidate for testing"
+            ],
+            "weaknesses": [
+              "license must be verified",
+              "availability may change",
+              "needs benchmark testing"
+            ],
+            "best_use_case": "dynamic evaluation",
+            "risk": "provider/rate-limit changes",
+            "migration_difficulty": "medium",
+            "scores": {
+              "quality": 30,
+              "free_tier": 15,
+              "api": 15,
+              "open_source": 10,
+              "stability": 7,
+              "migration": 7
+            },
+            "total_score": 84,
+            "benchmark": {
+              "success": false,
+              "error": "{\"error\":{\"message\":\"Provider returned error\",\"code\":429,\"metadata\":{\"raw\":\"qwen/qwen3-coder:free is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations\",\"provider_name\":\"Venice\",\"is_byok\":false,\"retry_after_seconds\":7,\"retry_after_seconds_raw\":7,\"headers\":{\"Retry-After\":\"7\"}}},\"user_id\":\"user_3DwvHydeNrDpCeQHaaFQqY8fBNH\"}"
+            },
+            "benchmark_score": 0
+          },
+          "improvement_percent": 20.0,
+          "decision": "REPLACE_AFTER_APPROVAL"
+        },
+        "research_reasoning": {
+          "current_baseline_score": 70,
+          "best_candidate": {
+            "name": "Baidu Qianfan: CoBuddy (free)",
+            "model_id": "baidu/cobuddy:free",
+            "provider": "OpenRouter",
+            "category": "research_reasoning",
+            "open_source_status": "verify exact license",
+            "free_tier_status": "verify current free-tier",
+            "strengths": [
+              "live discovered model",
+              "available via API",
+              "candidate for testing"
+            ],
+            "weaknesses": [
+              "license must be verified",
+              "availability may change",
+              "needs benchmark testing"
+            ],
+            "best_use_case": "dynamic evaluation",
+            "risk": "provider/rate-limit changes",
+            "migration_difficulty": "medium",
+            "scores": {
+              "quality": 30,
+              "free_tier": 15,
+              "api": 15,
+              "open_source": 10,
+              "stability": 7,
+              "migration": 7
+            },
+            "total_score": 94,
+            "benchmark": {
+              "success": true,
+              "content": "# Open-Source vs. Closed-Source AI Models\n\n## Open-Source AI Models\n*(e.g., LLaMA, Mistral, Falcon, BLOOM)*\n\n**Strengths**\n1. **Transparency & Auditability** – Code and weights are publicly available, allowing researchers to inspect, verify, and understand how the model works.\n2. **Customization & Flexibility** – Users can fine-tune, retrain, or modify the model for specific tasks, domains, or hardware constraints.\n3. **Community-Driven Improvement** – A global community of developers can contribute fixes, optimizations, and new features, often accelerating innovation.\n\n**Weaknesses**\n1. **Resource Intensive** – Running and fine-tuning large open models can require significant computational power, making them costly for individuals and small organizations.\n2. **Inconsistent Quality & Safety** – Without centralized oversight, models may lack rigorous safety testing, ethical guidelines, or consistent performance benchmarks.\n3. **Maintenance Burden** – Users are often responsible for their own updates, security patches, and infrastructure, which can be a steep learning curve.\n\n---\n\n## Closed-Source AI Models\n*(e.g., GPT-4, Claude, Gemini, PaLM)*\n\n**Strengths**\n1. **High Performance & Optimization** – Closed models often benefit from massive proprietary training data and compute, leading to state-of-the-art performance on many benchmarks.\n2. **Reliability & Safety** – Companies invest in rigorous testing, content filtering, and alignment, providing a more predictable and safer user experience.\n3. **Ease of Use** – Users access the model via APIs or platforms with minimal setup, removing the need for hardware or technical expertise.\n\n**Weaknesses**\n1. **Lack of Transparency** – The inner workings, training data, and design decisions are opaque, making it difficult to audit for bias, errors, or hidden behaviors.\n2. **Vendor Lock-In & Dependency** – Users are tied to a single provider's pricing, policies, and roadmap, with limited ability to modify or self-host the model.\n3. **Cost & Access Control** – Proprietary models often come with subscription fees or usage-based pricing, and providers can restrict access or change terms at will.\n\n---\n\n## Summary\n\n| | Open-Source | Closed-Source |\n|---|---|---|\n| **Best for** | Researchers, developers, customization | General users, enterprise reliability |\n| **Trade-off** | Freedom vs. responsibility | Convenience vs. opacity |\n| **Key risk** | Inconsistent safety & quality | Dependence on a single provider |\n\nNeither approach is universally \"better\"—the choice depends on your priorities: **control and transparency** favor open-source, while **ease of use and polished performance** favor closed-source."
+            },
+            "benchmark_score": 10
+          },
+          "improvement_percent": 34.29,
+          "decision": "REPLACE_AFTER_APPROVAL"
+        }
+      }
+    },
+    {
+      "run_id": "20260520233442",
+      "created_at": "2026-05-20T23:34:42",
+      "report_path": "03_reports\\ai_model_research_report_2026-05-20_23-34-42.md",
+      "recommendations": {
+        "coding_analysis": {
+          "current_baseline_score": 70,
+          "best_candidate": {
+            "name": "Qwen: Qwen3 Coder 480B A35B (free)",
+            "model_id": "qwen/qwen3-coder:free",
+            "provider": "OpenRouter",
+            "category": "coding_analysis",
+            "open_source_status": "verify exact license",
+            "free_tier_status": "verify current free-tier",
+            "strengths": [
+              "live discovered model",
+              "available via API",
+              "candidate for testing"
+            ],
+            "weaknesses": [
+              "license must be verified",
+              "availability may change",
+              "needs benchmark testing"
+            ],
+            "best_use_case": "dynamic evaluation",
+            "risk": "provider/rate-limit changes",
+            "migration_difficulty": "medium",
+            "scores": {
+              "quality": 30,
+              "free_tier": 15,
+              "api": 15,
+              "open_source": 10,
+              "stability": 7,
+              "migration": 7
+            },
+            "total_score": 84,
+            "benchmark": {
+              "success": false,
+              "error": "{\"error\":{\"message\":\"Provider returned error\",\"code\":429,\"metadata\":{\"raw\":\"qwen/qwen3-coder:free is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations\",\"provider_name\":\"Venice\",\"is_byok\":false,\"retry_after_seconds\":50,\"retry_after_seconds_raw\":50,\"headers\":{\"Retry-After\":\"50\"}}},\"user_id\":\"user_3DwvHydeNrDpCeQHaaFQqY8fBNH\"}"
+            },
+            "benchmark_score": 0
+          },
+          "improvement_percent": 20.0,
+          "decision": "REPLACE_AFTER_APPROVAL"
+        },
+        "research_reasoning": {
+          "current_baseline_score": 70,
+          "best_candidate": {
+            "name": "Baidu Qianfan: CoBuddy (free)",
+            "model_id": "baidu/cobuddy:free",
+            "provider": "OpenRouter",
+            "category": "research_reasoning",
+            "open_source_status": "verify exact license",
+            "free_tier_status": "verify current free-tier",
+            "strengths": [
+              "live discovered model",
+              "available via API",
+              "candidate for testing"
+            ],
+            "weaknesses": [
+              "license must be verified",
+              "availability may change",
+              "needs benchmark testing"
+            ],
+            "best_use_case": "dynamic evaluation",
+            "risk": "provider/rate-limit changes",
+            "migration_difficulty": "medium",
+            "scores": {
+              "quality": 30,
+              "free_tier": 15,
+              "api": 15,
+              "open_source": 10,
+              "stability": 7,
+              "migration": 7
+            },
+            "total_score": 94,
+            "benchmark": {
+              "success": true,
+              "content": "# Open-Source vs. Closed-Source AI Models\n\n## Open-Source AI Models\n*(e.g., LLaMA, Mistral, Stable Diffusion, BLOOM)*\n\n**Strengths**\n1. **Transparency & Auditability** — Code and weights are publicly available, allowing researchers and developers to inspect, verify, and understand how the model works.\n2. **Customizability** — Users can fine-tune, retrain, or modify models for specific domains, languages, or use cases without relying on a vendor.\n3. **Community-Driven Innovation** — A global community of contributors can rapidly iterate, fix bugs, and add features, often leading to faster progress.\n\n**Weaknesses**\n1. **Resource Intensity** — Training and fine-tuning large open models can require significant compute, data, and expertise that smaller teams may lack.\n2. **Inconsistent Quality & Support** — Models may lack rigorous testing, documentation, or ongoing maintenance, leading to reliability issues.\n3. **Safety & Misuse Risks** — Publicly available weights can be misused (e.g., for disinformation, malware, or harmful content) with limited built-in guardrails.\n\n---\n\n## Closed-Source AI Models\n*(e.g., GPT-4, Claude, Gemini, DALL·E)*\n\n**Strengths**\n1. **Performance & Polishing** — Typically benefit from large-scale investment, leading to strong general performance, reasoning, and user experience out of the box.\n2. **Safety & Guardrails** — Vendors can implement robust content filters, red-teaming, and continuous monitoring to reduce misuse.\n3. **Ease of Use** — Offer ready-to-use APIs and interfaces with minimal setup, making them accessible to non-technical users.\n\n**Weaknesses**\n1. **Lack of Transparency** — Users cannot inspect the model's inner workings, training data, or decision-making processes, which raises trust and accountability concerns.\n2. **Vendor Lock-In & Dependency** — Reliance on a single provider creates risk around pricing changes, service disruptions, or shifts in company strategy.\n3. **Limited Customization** — Users generally cannot fine-tune or modify the model, restricting its application to niche or proprietary use cases.\n\n---\n\n## Key Takeaway\n\n| Dimension | Open-Source | Closed-Source |\n|---|---|---|\n| Control | High | Low |\n| Accessibility | Requires expertise | Easy to start |\n| Transparency | Full | Limited |\n| Safety oversight | Community-driven | Vendor-driven |\n\nThe best choice often depends on the use case: **open-source** excels when control and customization matter, while **closed-source** tends to offer convenience and polished performance."
+            },
+            "benchmark_score": 10
+          },
+          "improvement_percent": 34.29,
+          "decision": "REPLACE_AFTER_APPROVAL"
+        }
+      }
+    },
+    {
+      "run_id": "20260521000850",
+      "created_at": "2026-05-21T00:08:50",
+      "report_path": "03_reports\\ai_model_research_report_2026-05-21_00-08-50.md",
+      "recommendations": {
+        "coding_analysis": {
+          "current_baseline_score": 70,
+          "best_candidate": {
+            "name": "Qwen: Qwen3 Coder 480B A35B (free)",
+            "model_id": "qwen/qwen3-coder:free",
+            "provider": "OpenRouter",
+            "category": "coding_analysis",
+            "open_source_status": "verify exact license",
+            "free_tier_status": "verify current free-tier",
+            "strengths": [
+              "live discovered model",
+              "available via API",
+              "candidate for testing"
+            ],
+            "weaknesses": [
+              "license must be verified",
+              "availability may change",
+              "needs benchmark testing"
+            ],
+            "best_use_case": "dynamic evaluation",
+            "risk": "provider/rate-limit changes",
+            "migration_difficulty": "medium",
+            "scores": {
+              "quality": 30,
+              "free_tier": 15,
+              "api": 15,
+              "open_source": 10,
+              "stability": 7,
+              "migration": 7
+            },
+            "total_score": 84,
+            "benchmark": {
+              "success": false,
+              "error": "{\"error\":{\"message\":\"Provider returned error\",\"code\":429,\"metadata\":{\"raw\":\"qwen/qwen3-coder:free is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations\",\"provider_name\":\"Venice\",\"is_byok\":false,\"retry_after_seconds\":30,\"retry_after_seconds_raw\":30,\"headers\":{\"Retry-After\":\"30\"}}},\"user_id\":\"user_3DwvHydeNrDpCeQHaaFQqY8fBNH\"}"
+            },
+            "benchmark_score": 0
+          },
+          "improvement_percent": 20.0,
+          "decision": "REPLACE_AFTER_APPROVAL"
+        },
+        "research_reasoning": {
+          "current_baseline_score": 70,
+          "best_candidate": {
+            "name": "Baidu Qianfan: CoBuddy (free)",
+            "model_id": "baidu/cobuddy:free",
+            "provider": "OpenRouter",
+            "category": "research_reasoning",
+            "open_source_status": "verify exact license",
+            "free_tier_status": "verify current free-tier",
+            "strengths": [
+              "live discovered model",
+              "available via API",
+              "candidate for testing"
+            ],
+            "weaknesses": [
+              "license must be verified",
+              "availability may change",
+              "needs benchmark testing"
+            ],
+            "best_use_case": "dynamic evaluation",
+            "risk": "provider/rate-limit changes",
+            "migration_difficulty": "medium",
+            "scores": {
+              "quality": 30,
+              "free_tier": 15,
+              "api": 15,
+              "open_source": 10,
+              "stability": 7,
+              "migration": 7
+            },
+            "total_score": 84,
+            "benchmark": {
+              "success": false,
+              "error": "{\"error\":{\"message\":\"Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day\",\"code\":429,\"metadata\":{\"headers\":{\"X-RateLimit-Limit\":\"50\",\"X-RateLimit-Remaining\":\"0\",\"X-RateLimit-Reset\":\"1779321600000\"},\"provider_name\":null}},\"user_id\":\"user_3DwvHydeNrDpCeQHaaFQqY8fBNH\"}"
+            },
+            "benchmark_score": 0
+          },
+          "improvement_percent": 20.0,
+          "decision": "REPLACE_AFTER_APPROVAL"
+        }
+      }
+    },
+    {
+      "run_id": "20260521001649",
+      "created_at": "2026-05-21T00:16:49",
+      "report_path": "03_reports\\ai_model_research_report_2026-05-21_00-16-48.md",
+      "recommendations": {
+        "coding_analysis": {
+          "current_baseline_score": 70,
+          "best_candidate": {
+            "name": "Qwen: Qwen3 Coder 480B A35B (free)",
+            "model_id": "qwen/qwen3-coder:free",
+            "provider": "OpenRouter",
+            "category": "coding_analysis",
+            "open_source_status": "verify exact license",
+            "free_tier_status": "verify current free-tier",
+            "strengths": [
+              "live discovered model",
+              "available via API",
+              "candidate for testing"
+            ],
+            "weaknesses": [
+              "license must be verified",
+              "availability may change",
+              "needs benchmark testing"
+            ],
+            "best_use_case": "dynamic evaluation",
+            "risk": "provider/rate-limit changes",
+            "migration_difficulty": "medium",
+            "scores": {
+              "quality": 30,
+              "free_tier": 15,
+              "api": 15,
+              "open_source": 10,
+              "stability": 7,
+              "migration": 7
+            },
+            "total_score": 84,
+            "benchmark": {
+              "success": false,
+              "error": "{\"error\":{\"message\":\"Provider returned error\",\"code\":429,\"metadata\":{\"raw\":\"qwen/qwen3-coder:free is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations\",\"provider_name\":\"Venice\",\"is_byok\":false,\"retry_after_seconds\":59,\"retry_after_seconds_raw\":59,\"headers\":{\"Retry-After\":\"59\"}}},\"user_id\":\"user_3DwvHydeNrDpCeQHaaFQqY8fBNH\"}"
+            },
+            "benchmark_score": 0
+          },
+          "improvement_percent": 20.0,
+          "decision": "REPLACE_AFTER_APPROVAL"
+        },
+        "research_reasoning": {
+          "current_baseline_score": 70,
+          "best_candidate": {
+            "name": "Baidu Qianfan: CoBuddy (free)",
+            "model_id": "baidu/cobuddy:free",
+            "provider": "OpenRouter",
+            "category": "research_reasoning",
+            "open_source_status": "verify exact license",
+            "free_tier_status": "verify current free-tier",
+            "strengths": [
+              "live discovered model",
+              "available via API",
+              "candidate for testing"
+            ],
+            "weaknesses": [
+              "license must be verified",
+              "availability may change",
+              "needs benchmark testing"
+            ],
+            "best_use_case": "dynamic evaluation",
+            "risk": "provider/rate-limit changes",
+            "migration_difficulty": "medium",
+            "scores": {
+              "quality": 30,
+              "free_tier": 15,
+              "api": 15,
+              "open_source": 10,
+              "stability": 7,
+              "migration": 7
+            },
+            "total_score": 84,
+            "benchmark": {
+              "success": false,
+              "error": "{\"error\":{\"message\":\"Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day\",\"code\":429,\"metadata\":{\"headers\":{\"X-RateLimit-Limit\":\"50\",\"X-RateLimit-Remaining\":\"0\",\"X-RateLimit-Reset\":\"1779321600000\"},\"provider_name\":null}},\"user_id\":\"user_3DwvHydeNrDpCeQHaaFQqY8fBNH\"}"
+            },
+            "benchmark_score": 0
+          },
+          "improvement_percent": 20.0,
+          "decision": "REPLACE_AFTER_APPROVAL"
+        }
+      }
+    },
+    {
+      "run_id": "20260522201331",
+      "created_at": "2026-05-22T20:13:31",
+      "report_path": "03_reports\\ai_model_research_report_2026-05-22_20-13-31.md",
+      "recommendations": {
+        "coding_analysis": {
+          "current_baseline_score": 70,
+          "best_candidate": {
+            "name": "Qwen: Qwen3 Coder 480B A35B (free)",
+            "model_id": "qwen/qwen3-coder:free",
+            "provider": "OpenRouter",
+            "category": "coding_analysis",
+            "open_source_status": "verify exact license",
+            "free_tier_status": "verify current free-tier",
+            "strengths": [
+              "live discovered model",
+              "available via API",
+              "candidate for testing"
+            ],
+            "weaknesses": [
+              "license must be verified",
+              "availability may change",
+              "needs benchmark testing"
+            ],
+            "best_use_case": "dynamic evaluation",
+            "risk": "provider/rate-limit changes",
+            "migration_difficulty": "medium",
+            "scores": {
+              "quality": 30,
+              "free_tier": 15,
+              "api": 15,
+              "open_source": 10,
+              "stability": 7,
+              "migration": 7
+            },
+            "total_score": 84,
+            "benchmark": {
+              "success": false,
+              "error": "{\"error\":{\"message\":\"Provider returned error\",\"code\":429,\"metadata\":{\"raw\":\"qwen/qwen3-coder:free is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations\",\"provider_name\":\"Venice\",\"is_byok\":false,\"retry_after_seconds\":32,\"retry_after_seconds_raw\":32,\"headers\":{\"Retry-After\":\"32\"}}},\"user_id\":\"user_3DwvHydeNrDpCeQHaaFQqY8fBNH\"}"
+            },
+            "benchmark_score": 0
+          },
+          "improvement_percent": 20.0,
+          "decision": "REPLACE_AFTER_APPROVAL"
+        },
+        "research_reasoning": {
+          "current_baseline_score": 70,
+          "best_candidate": {
+            "name": "Baidu Qianfan: CoBuddy (free)",
+            "model_id": "baidu/cobuddy:free",
+            "provider": "OpenRouter",
+            "category": "research_reasoning",
+            "open_source_status": "verify exact license",
+            "free_tier_status": "verify current free-tier",
+            "strengths": [
+              "live discovered model",
+              "available via API",
+              "candidate for testing"
+            ],
+            "weaknesses": [
+              "license must be verified",
+              "availability may change",
+              "needs benchmark testing"
+            ],
+            "best_use_case": "dynamic evaluation",
+            "risk": "provider/rate-limit changes",
+            "migration_difficulty": "medium",
+            "scores": {
+              "quality": 30,
+              "free_tier": 15,
+              "api": 15,
+              "open_source": 10,
+              "stability": 7,
+              "migration": 7
+            },
+            "total_score": 94,
+            "benchmark": {
+              "success": true,
+              "content": "# Open-Source vs. Closed-Source AI Models\n\n## Open-Source AI Models\n*(e.g., LLaMA, Mistral, Falcon, BLOOM)*\n\n### Strengths\n1. **Transparency & Auditability** — Code, weights, and training data (when available) can be inspected, enabling researchers to verify claims, find biases, and ensure safety.\n2. **Customizability** — Users can fine-tune, modify, and deploy models to fit specific use cases, industries, or hardware constraints.\n3. **Community-Driven Innovation** — A global community of contributors can iterate quickly, share improvements, and push the frontier collaboratively.\n\n### Weaknesses\n1. **Resource Intensity** — Training and fine-tuning often require substantial compute and expertise, creating a barrier for smaller organizations.\n2. **Inconsistent Quality & Support** — Models may lack rigorous testing, documentation, or ongoing maintenance compared to commercial products.\n3. **Security Risks** — Open weights can be misused for harmful purposes (e.g., generating disinformation, malware), and there is limited accountability.\n\n---\n\n## Closed-Source AI Models\n*(e.g., GPT-4, Claude, Gemini, Copilot)*\n\n### Strengths\n1. **High Performance & Polishing** — Typically backed by large-scale investment, resulting in strong general capabilities, instruction-following, and safety guardrails.\n2. **Reliability & Support** — Offer consistent updates, SLAs, and professional support, making them easier to integrate into production systems.\n3. **Controlled Deployment** — Providers can enforce usage policies, rate limits, and content moderation at scale.\n\n### Weaknesses\n1. **Lack of Transparency** — Users cannot inspect architectures, training data, or reasoning processes, making it hard to trust or debug outputs.\n2. **Vendor Lock-In & Dependency** — Reliance on a single provider limits flexibility, raises costs over time, and creates risks if the service is discontinued.\n3. **Limited Customization** — Fine-tuning options are often restricted or absent, and users have little control over model behavior or data privacy.\n\n---\n\n## Summary Table\n\n| Dimension | Open-Source | Closed-Source |\n|---|---|---|\n| **Transparency** | High | Low |\n| **Performance** | Varies | Generally high |\n| **Customization** | Full | Limited |\n| **Cost to deploy** | High (compute) | Pay-per-use or subscription |\n| **Safety control** | User responsibility | Provider responsibility |\n\nNeither category is universally \"better\"—the right choice depends on priorities like transparency, performance, cost, and control."
+            },
+            "benchmark_score": 10
+          },
+          "improvement_percent": 34.29,
+          "decision": "REPLACE_AFTER_APPROVAL"
+        }
+      }
+    },
+    {
+      "run_id": "20260522215518",
+      "created_at": "2026-05-22T21:55:18",
+      "report_path": "03_reports\\ai_model_research_report_2026-05-22_21-55-18.md",
+      "recommendations": {
+        "coding_analysis": {
+          "current_baseline_score": 70,
+          "best_candidate": {
+            "name": "Qwen: Qwen3 Coder 480B A35B (free)",
+            "model_id": "qwen/qwen3-coder:free",
+            "provider": "OpenRouter",
+            "category": "coding_analysis",
+            "open_source_status": "verify exact license",
+            "free_tier_status": "verify current free-tier",
+            "strengths": [
+              "live discovered model",
+              "available via API",
+              "candidate for testing"
+            ],
+            "weaknesses": [
+              "license must be verified",
+              "availability may change",
+              "needs benchmark testing"
+            ],
+            "best_use_case": "dynamic evaluation",
+            "risk": "provider/rate-limit changes",
+            "migration_difficulty": "medium",
+            "scores": {
+              "quality": 30,
+              "free_tier": 15,
+              "api": 15,
+              "open_source": 10,
+              "stability": 7,
+              "migration": 7
+            },
+            "total_score": 84,
+            "benchmark": {
+              "success": false,
+              "error": "{\"error\":{\"message\":\"Provider returned error\",\"code\":429,\"metadata\":{\"raw\":\"qwen/qwen3-coder:free is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations\",\"provider_name\":\"Venice\",\"is_byok\":false,\"retry_after_seconds\":26,\"retry_after_seconds_raw\":25.644,\"headers\":{\"Retry-After\":\"26\"}}},\"user_id\":\"user_3DwvHydeNrDpCeQHaaFQqY8fBNH\"}"
+            },
+            "benchmark_score": 0
+          },
+          "improvement_percent": 20.0,
+          "decision": "REPLACE_AFTER_APPROVAL"
+        },
+        "research_reasoning": {
+          "current_baseline_score": 70,
+          "best_candidate": {
+            "name": "Baidu Qianfan: CoBuddy (free)",
+            "model_id": "baidu/cobuddy:free",
+            "provider": "OpenRouter",
+            "category": "research_reasoning",
+            "open_source_status": "verify exact license",
+            "free_tier_status": "verify current free-tier",
+            "strengths": [
+              "live discovered model",
+              "available via API",
+              "candidate for testing"
+            ],
+            "weaknesses": [
+              "license must be verified",
+              "availability may change",
+              "needs benchmark testing"
+            ],
+            "best_use_case": "dynamic evaluation",
+            "risk": "provider/rate-limit changes",
+            "migration_difficulty": "medium",
+            "scores": {
+              "quality": 30,
+              "free_tier": 15,
+              "api": 15,
+              "open_source": 10,
+              "stability": 7,
+              "migration": 7
+            },
+            "total_score": 94,
+            "benchmark": {
+              "success": true,
+              "content": "# Open-Source vs. Closed-Source AI Models\n\n## Open-Source AI Models\n*(e.g., LLaMA, Mistral, Stable Diffusion, BLOOM)*\n\n**Strengths**\n1. **Transparency & Auditability** — The model weights, code, and training data documentation are publicly available, allowing researchers to inspect, verify, and debug the model.\n2. **Customization & Flexibility** — Users can fine-tune, retrain, or modify the model for specific domains, languages, or use cases without waiting for vendor updates.\n3. **Community Collaboration** — A global community of contributors can rapidly iterate, share improvements, and identify vulnerabilities.\n\n**Weaknesses**\n1. **Resource Intensive** — Running and fine-tuning large open models often requires significant hardware (GPUs/TPUs), which can be a barrier for smaller organizations.\n2. **Inconsistent Quality & Support** — Models vary widely in quality, and there is no guaranteed support or maintenance SLA; updates depend on community interest.\n3. **Potential for Misuse** — Public access lowers the barrier for malicious actors to deploy the model for harmful purposes (deepfakes, disinformation, cyberattacks).\n\n---\n\n## Closed-Source AI Models\n*(e.g., GPT-4, Claude, Gemini, Midjourney)*\n\n**Strengths**\n1. **High Performance & Polishing** — Companies invest heavily in training, evaluation, and alignment, often resulting in state-of-the-art benchmarks and refined user experience.\n2. **Reliability & Support** — Vendors provide documentation, APIs, uptime guarantees, and dedicated support, making them easier to integrate into production systems.\n3. **Safety & Alignment Controls** — Closed models can enforce usage policies, content filters, and guardrails directly, reducing the risk of harmful outputs.\n\n**Weaknesses**\n1. **Lack of Transparency** — Users cannot inspect the model architecture, weights, or training data, making it difficult to verify claims or trust the system.\n2. **Vendor Lock-In & Cost** — Dependence on a single provider limits portability, and pricing can change or scale unpredictably with usage.\n3. **Limited Customization** — Users generally cannot fine-tune the model or modify behavior beyond prompting, which restricts its use in specialized or sensitive domains.\n\n---\n\n## Summary Table\n\n| Aspect | Open-Source | Closed-Source |\n|---|---|---|\n| **Transparency** | High | Low |\n| **Customization** | Full control | Limited |\n| **Performance** | Varies | Often top-tier |\n| **Cost** | Hardware-driven | Usage-based fees |\n| **Safety/Guardrails** | User responsibility | Vendor-managed |\n| **Community** | Broad contributor base | Single organization |\n\nNeither approach is inherently superior—the best choice depends on the use case, budget, expertise, and risk tolerance of the organization."
+            },
+            "benchmark_score": 10
+          },
+          "improvement_percent": 34.29,
+          "decision": "REPLACE_AFTER_APPROVAL"
+        }
+      }
+    },
+    {
+      "run_id": "20260522230136",
+      "created_at": "2026-05-22T23:01:36",
+      "report_path": "03_reports\\ai_model_research_report_2026-05-22_23-01-36.md",
+      "recommendations": {
+        "coding_analysis": {
+          "current_baseline_score": 70,
+          "best_candidate": {
+            "name": "Qwen: Qwen3 Coder 480B A35B (free)",
+            "model_id": "qwen/qwen3-coder:free",
+            "provider": "OpenRouter",
+            "category": "coding_analysis",
+            "open_source_status": "verify exact license",
+            "free_tier_status": "verify current free-tier",
+            "strengths": [
+              "live discovered model",
+              "available via API",
+              "candidate for testing"
+            ],
+            "weaknesses": [
+              "license must be verified",
+              "availability may change",
+              "needs benchmark testing"
+            ],
+            "best_use_case": "dynamic evaluation",
+            "risk": "provider/rate-limit changes",
+            "migration_difficulty": "medium",
+            "scores": {
+              "quality": 30,
+              "free_tier": 15,
+              "api": 15,
+              "open_source": 10,
+              "stability": 7,
+              "migration": 7
+            },
+            "total_score": 84,
+            "benchmark": {
+              "success": false,
+              "error": "{\"error\":{\"message\":\"Provider returned error\",\"code\":429,\"metadata\":{\"raw\":\"qwen/qwen3-coder:free is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations\",\"provider_name\":\"Venice\",\"is_byok\":false,\"retry_after_seconds\":5,\"retry_after_seconds_raw\":4.624,\"headers\":{\"Retry-After\":\"5\"}}},\"user_id\":\"user_3DwvHydeNrDpCeQHaaFQqY8fBNH\"}"
+            },
+            "benchmark_score": 0
+          },
+          "improvement_percent": 20.0,
+          "decision": "REPLACE_AFTER_APPROVAL"
+        },
+        "research_reasoning": {
+          "current_baseline_score": 70,
+          "best_candidate": {
+            "name": "Baidu Qianfan: CoBuddy (free)",
+            "model_id": "baidu/cobuddy:free",
+            "provider": "OpenRouter",
+            "category": "research_reasoning",
+            "open_source_status": "verify exact license",
+            "free_tier_status": "verify current free-tier",
+            "strengths": [
+              "live discovered model",
+              "available via API",
+              "candidate for testing"
+            ],
+            "weaknesses": [
+              "license must be verified",
+              "availability may change",
+              "needs benchmark testing"
+            ],
+            "best_use_case": "dynamic evaluation",
+            "risk": "provider/rate-limit changes",
+            "migration_difficulty": "medium",
+            "scores": {
+              "quality": 30,
+              "free_tier": 15,
+              "api": 15,
+              "open_source": 10,
+              "stability": 7,
+              "migration": 7
+            },
+            "total_score": 94,
+            "benchmark": {
+              "success": true,
+              "content": "# Open-Source vs. Closed-Source AI Models\n\n## Open-Source AI Models\n*(e.g., LLaMA, Mistral, Falcon, Stable Diffusion)*\n\n**Strengths**\n1. **Transparency & Auditability** — Code and weights are publicly available, allowing researchers and developers to inspect, verify, and understand how the model works.\n2. **Customization & Flexibility** — Users can fine-tune, retrain, and adapt the model to specific domains, languages, or use cases without restrictions.\n3. **Community-Driven Improvement** — A global community of contributors can identify bugs, add features, and push updates quickly.\n\n**Weaknesses**\n1. **Resource Intensity** — Running and fine-tuning large open models often requires significant hardware (GPUs/TPUs) and technical expertise.\n2. **Less Polished Safety & Alignment** — Open models may lack the thorough safety testing and guardrails that closed models receive, raising risks of misuse.\n3. **Inconsistent Quality & Support** — Model quality varies widely; documentation, updates, and support depend on the maintainers, which can be uneven.\n\n---\n\n## Closed-Source AI Models\n*(e.g., GPT-4, Claude, Gemini, Midjourney)*\n\n**Strengths**\n1. **High Performance & Reliability** — Typically backed by large teams and significant funding, leading to strong baseline performance and consistent outputs.\n2. **Built-In Safety & Guardrails** — Companies invest in content filtering, bias mitigation, and responsible deployment out of the box.\n3. **Ease of Use** — Users access powerful models via APIs or interfaces with minimal setup, lowering the barrier to entry.\n\n**Weaknesses**\n1. **Lack of Transparency** — The inner workings, training data, and decision-making processes are proprietary, making it hard to audit or trust the model fully.\n2. **Vendor Lock-In & Dependence** — Users rely on a single provider for updates, pricing, and availability, with limited ability to modify or self-host.\n3. **Cost & Access Restrictions** — High usage fees and rate limits can be prohibitive, and access may be restricted by terms of service or geographic availability.\n\n---\n\n## Summary\n\n| Aspect | Open-Source | Closed-Source |\n|---|---|---|\n| Control | Full | Limited |\n| Transparency | High | Low |\n| Ease of use | Steeper learning curve | User-friendly |\n| Safety | Community-dependent | Provider-managed |\n| Cost | Hardware-dependent | Subscription/API fees |\n\nThe best choice often depends on the use case: **open-source** suits those who need control and customization, while **closed-source** suits those who prioritize convenience and out-of-the-box quality."
+            },
+            "benchmark_score": 10
+          },
+          "improvement_percent": 34.29,
+          "decision": "REPLACE_AFTER_APPROVAL"
+        }
+      }
+    },
+    {
+      "run_id": "20260523160734",
+      "created_at": "2026-05-23T16:07:34",
+      "report_path": "03_reports\\ai_model_research_report_2026-05-23_16-07-33.md",
+      "recommendations": {
+        "coding_analysis": {
+          "current_baseline_score": 70,
+          "best_candidate": {
+            "name": "Qwen: Qwen3 Coder 480B A35B (free)",
+            "model_id": "qwen/qwen3-coder:free",
+            "provider": "OpenRouter",
+            "category": "coding_analysis",
+            "open_source_status": "verify exact license",
+            "free_tier_status": "verify current free-tier",
+            "strengths": [
+              "live discovered model",
+              "available via API",
+              "candidate for testing"
+            ],
+            "weaknesses": [
+              "license must be verified",
+              "availability may change",
+              "needs benchmark testing"
+            ],
+            "best_use_case": "dynamic evaluation",
+            "risk": "provider/rate-limit changes",
+            "migration_difficulty": "medium",
+            "scores": {
+              "quality": 30,
+              "free_tier": 15,
+              "api": 15,
+              "open_source": 10,
+              "stability": 7,
+              "migration": 7
+            },
+            "total_score": 84,
+            "benchmark": {
+              "success": false,
+              "error": "{\"error\":{\"message\":\"Provider returned error\",\"code\":429,\"metadata\":{\"raw\":\"qwen/qwen3-coder:free is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations\",\"provider_name\":\"Venice\",\"is_byok\":false,\"retry_after_seconds\":19,\"retry_after_seconds_raw\":18.04,\"headers\":{\"Retry-After\":\"19\"}}},\"user_id\":\"user_3DwvHydeNrDpCeQHaaFQqY8fBNH\"}"
+            },
+            "benchmark_score": 0
+          },
+          "improvement_percent": 20.0,
+          "decision": "REPLACE_AFTER_APPROVAL"
+        },
+        "research_reasoning": {
+          "current_baseline_score": 70,
+          "best_candidate": {
+            "name": "Baidu Qianfan: CoBuddy (free)",
+            "model_id": "baidu/cobuddy:free",
+            "provider": "OpenRouter",
+            "category": "research_reasoning",
+            "open_source_status": "verify exact license",
+            "free_tier_status": "verify current free-tier",
+            "strengths": [
+              "live discovered model",
+              "available via API",
+              "candidate for testing"
+            ],
+            "weaknesses": [
+              "license must be verified",
+              "availability may change",
+              "needs benchmark testing"
+            ],
+            "best_use_case": "dynamic evaluation",
+            "risk": "provider/rate-limit changes",
+            "migration_difficulty": "medium",
+            "scores": {
+              "quality": 30,
+              "free_tier": 15,
+              "api": 15,
+              "open_source": 10,
+              "stability": 7,
+              "migration": 7
+            },
+            "total_score": 94,
+            "benchmark": {
+              "success": true,
+              "content": "# Open-Source vs. Closed-Source AI Models\n\n## Open-Source Models\n*Examples: LLaMA, Mistral, Falcon, BLOOM*\n\n**Strengths**\n1. **Transparency & Auditability** – Code, weights, and training data (sometimes) are available, allowing researchers and developers to inspect, verify, and understand how the model works.\n2. **Customization & Flexibility** – Users can fine-tune, retrain, or modify the model for specific tasks, domains, or hardware environments without waiting for vendor updates.\n3. **Community Collaboration** – A broad developer community can contribute improvements, fix bugs, and create derivatives, often accelerating innovation.\n\n**Weaknesses**\n1. **Resource Intensive** – Running and fine-tuning large open models can require significant hardware (GPUs/TPUs) and technical expertise, creating barriers for smaller organizations.\n2. **Less Polished & Tested** – Models may lack the rigorous safety evaluations, alignment work, and quality assurance that well-funded commercial teams provide.\n3. **Inconsistent Support & Documentation** – Depending on the project, documentation can be sparse, and community support may vary, making adoption harder for non-experts.\n\n---\n\n## Closed-Source Models\n*Examples: GPT-4, Claude, Gemini, Llama (via API)*\n\n**Strengths**\n1. **High Performance & Reliability** – Typically backed by large-scale compute, extensive RLHF/tuning, and professional QA, resulting in strong general-purpose performance.\n2. **Ease of Use** – Users access models via polished APIs with minimal setup, documentation, and support, lowering the barrier to entry.\n3. **Safety & Guardrails** – Companies invest heavily in content filtering, bias mitigation, and compliance, which can reduce harmful outputs.\n\n**Weaknesses**\n1. **Vendor Lock-In & Limited Control** – Users depend on the provider for access, pricing, and feature changes; there is no ability to inspect internals or run the model privately.\n2. **Cost & Usage Limits** – Access is often pay-per-use or subscription-based, and heavy or specialized workloads can become expensive over time.\n3. **Opaque Decision-Making** — Proprietary models lack transparency, making it difficult to audit for biases, errors, or hidden behaviors, and users cannot verify claims about the model.\n\n---\n\n## Quick Summary\n\n| Aspect | Open-Source | Closed-Source |\n|---|---|---|\n| Control | Full | Limited |\n| Accessibility | Technical barrier | Easy to start |\n| Transparency | High | Low |\n| Performance | Improving rapidly | Generally ahead |\n| Cost | Hardware-dependent | Per-token/API fees |\n| Safety/Guardrails | Community-driven | Provider-managed |\n\nBoth paradigms serve different needs, and many organizations benefit from a **hybrid approach**—using closed models for production-ready tasks and open models for research, customization, or data-sensitive workloads."
+            },
+            "benchmark_score": 10
+          },
+          "improvement_percent": 34.29,
+          "decision": "REPLACE_AFTER_APPROVAL"
+        }
+      }
+    },
+    {
+      "run_id": "20260523162214",
+      "created_at": "2026-05-23T16:22:14",
+      "report_path": "03_reports\\ai_model_research_report_2026-05-23_16-22-14.md",
+      "recommendations": {
+        "coding_analysis": {
+          "current_baseline_score": 70,
+          "best_candidate": {
+            "name": "Qwen: Qwen3 Coder 480B A35B (free)",
+            "model_id": "qwen/qwen3-coder:free",
+            "provider": "OpenRouter",
+            "category": "coding_analysis",
+            "open_source_status": "verify exact license",
+            "free_tier_status": "verify current free-tier",
+            "strengths": [
+              "live discovered model",
+              "available via API",
+              "candidate for testing"
+            ],
+            "weaknesses": [
+              "license must be verified",
+              "availability may change",
+              "needs benchmark testing"
+            ],
+            "best_use_case": "dynamic evaluation",
+            "risk": "provider/rate-limit changes",
+            "migration_difficulty": "medium",
+            "scores": {
+              "quality": 30,
+              "free_tier": 15,
+              "api": 15,
+              "open_source": 10,
+              "stability": 7,
+              "migration": 7
+            },
+            "total_score": 84,
+            "benchmark": {
+              "success": false,
+              "error": "{\"error\":{\"message\":\"Provider returned error\",\"code\":429,\"metadata\":{\"raw\":\"qwen/qwen3-coder:free is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations\",\"provider_name\":\"Venice\",\"is_byok\":false,\"retry_after_seconds\":13,\"retry_after_seconds_raw\":12.348,\"headers\":{\"Retry-After\":\"13\"}}},\"user_id\":\"user_3DwvHydeNrDpCeQHaaFQqY8fBNH\"}"
+            },
+            "benchmark_score": 0
+          },
+          "improvement_percent": 20.0,
+          "decision": "REPLACE_AFTER_APPROVAL"
+        },
+        "research_reasoning": {
+          "current_baseline_score": 70,
+          "best_candidate": {
+            "name": "Baidu Qianfan: CoBuddy (free)",
+            "model_id": "baidu/cobuddy:free",
+            "provider": "OpenRouter",
+            "category": "research_reasoning",
+            "open_source_status": "verify exact license",
+            "free_tier_status": "verify current free-tier",
+            "strengths": [
+              "live discovered model",
+              "available via API",
+              "candidate for testing"
+            ],
+            "weaknesses": [
+              "license must be verified",
+              "availability may change",
+              "needs benchmark testing"
+            ],
+            "best_use_case": "dynamic evaluation",
+            "risk": "provider/rate-limit changes",
+            "migration_difficulty": "medium",
+            "scores": {
+              "quality": 30,
+              "free_tier": 15,
+              "api": 15,
+              "open_source": 10,
+              "stability": 7,
+              "migration": 7
+            },
+            "total_score": 94,
+            "benchmark": {
+              "success": true,
+              "content": "# Open-Source vs. Closed-Source AI Models\n\n## Open-Source AI Models\n*Examples: LLaMA, Mistral, Falcon, BLOOM*\n\n### Strengths\n1. **Transparency & Auditability** — Code, weights, and training data are publicly available, allowing researchers and developers to inspect, verify, and understand how the model works.\n2. **Customizability & Flexibility** — Users can fine-tune, retrain, or modify models for specific domains, languages, or use cases without relying on a vendor.\n3. **Cost Efficiency** — No licensing fees; organizations can run models on their own infrastructure, reducing long-term dependency on paid APIs.\n\n### Weaknesses\n1. **Resource Intensity** — Running and fine-tuning large models requires significant compute, storage, and expertise that smaller teams may lack.\n2. **Inconsistent Quality & Support** — Community-driven projects vary widely in quality, documentation, and maintenance; no formal SLA or support guarantee.\n3. **Security & Safety Gaps** — Open availability can enable misuse (e.g., jailbreaking, malicious fine-tuning), and safety guardrails often lag behind closed-source counterparts.\n\n---\n\n## Closed-Source AI Models\n*Examples: GPT-4, Claude, Gemini, proprietary enterprise models*\n\n### Strengths\n1. **High Performance & Polishing** — Typically backed by massive budgets, resulting in strong general performance, reasoning, and safety alignment out of the box.\n2. **Reliable Support & SLAs** — Vendors provide documentation, customer support, uptime guarantees, and regular updates.\n3. **Safety & Compliance Controls** — Built-in content filtering, bias mitigation, and regulatory compliance reduce the risk of harmful outputs.\n\n### Weaknesses\n1. **Vendor Lock-In & Dependency** — Users rely on a single provider's roadmap, pricing, and availability; changes can disrupt workflows.\n2. **Lack of Transparency** — Model architecture, training data, and evaluation methods are opaque, making it difficult to audit for bias or errors.\n3. **Cost at Scale** — API pricing can become expensive for heavy or high-volume use, and costs are set unilaterally by the provider.\n\n---\n\n## Summary\n\n| Factor | Open-Source | Closed-Source |\n|---|---|---|\n| Control | High | Low |\n| Ease of Use | Requires expertise | Plug-and-play |\n| Transparency | Full | Limited |\n| Cost | Low upfront, high compute | Pay-per-use |\n| Safety | Community-driven | Vendor-managed |\n\nThe best choice often depends on the use case: **open-source** favors research, customization, and independence, while **closed-source** favors reliability, performance, and ease of deployment."
+            },
+            "benchmark_score": 10
+          },
+          "improvement_percent": 34.29,
+          "decision": "REPLACE_AFTER_APPROVAL"
+        }
+      }
+    },
+    {
+      "run_id": "20260523225115",
+      "created_at": "2026-05-23T22:51:15",
+      "report_path": "03_reports\\ai_model_research_report_2026-05-23_22-51-15.md",
+      "recommendations": {
+        "coding_analysis": {
+          "current_baseline_score": 70,
+          "best_candidate": {
+            "name": "Qwen: Qwen3 Coder 480B A35B (free)",
+            "model_id": "qwen/qwen3-coder:free",
+            "provider": "OpenRouter",
+            "category": "coding_analysis",
+            "open_source_status": "verify exact license",
+            "free_tier_status": "verify current free-tier",
+            "strengths": [
+              "live discovered model",
+              "available via API",
+              "candidate for testing"
+            ],
+            "weaknesses": [
+              "license must be verified",
+              "availability may change",
+              "needs benchmark testing"
+            ],
+            "best_use_case": "dynamic evaluation",
+            "risk": "provider/rate-limit changes",
+            "migration_difficulty": "medium",
+            "scores": {
+              "quality": 30,
+              "free_tier": 15,
+              "api": 15,
+              "open_source": 10,
+              "stability": 7,
+              "migration": 7
+            },
+            "total_score": 84,
+            "benchmark": {
+              "success": false,
+              "error": "{\"error\":{\"message\":\"Provider returned error\",\"code\":429,\"metadata\":{\"raw\":\"qwen/qwen3-coder:free is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations\",\"provider_name\":\"Venice\",\"is_byok\":false,\"retry_after_seconds\":22,\"retry_after_seconds_raw\":22,\"headers\":{\"Retry-After\":\"22\"}}},\"user_id\":\"user_3DwvHydeNrDpCeQHaaFQqY8fBNH\"}"
+            },
+            "benchmark_score": 0
+          },
+          "improvement_percent": 20.0,
+          "decision": "REPLACE_AFTER_APPROVAL"
+        },
+        "research_reasoning": {
+          "current_baseline_score": 70,
+          "best_candidate": {
+            "name": "Baidu Qianfan: CoBuddy (free)",
+            "model_id": "baidu/cobuddy:free",
+            "provider": "OpenRouter",
+            "category": "research_reasoning",
+            "open_source_status": "verify exact license",
+            "free_tier_status": "verify current free-tier",
+            "strengths": [
+              "live discovered model",
+              "available via API",
+              "candidate for testing"
+            ],
+            "weaknesses": [
+              "license must be verified",
+              "availability may change",
+              "needs benchmark testing"
+            ],
+            "best_use_case": "dynamic evaluation",
+            "risk": "provider/rate-limit changes",
+            "migration_difficulty": "medium",
+            "scores": {
+              "quality": 30,
+              "free_tier": 15,
+              "api": 15,
+              "open_source": 10,
+              "stability": 7,
+              "migration": 7
+            },
+            "total_score": 94,
+            "benchmark": {
+              "success": true,
+              "content": "# Open-Source vs. Closed-Source AI Models\n\n## Open-Source AI Models\n*Examples: LLaMA, Mistral, Falcon, BLOOM*\n\n**Strengths**\n1. **Transparency & Auditability** – Code, weights, and training data (when available) can be inspected, allowing researchers to verify claims, identify biases, and debug issues.\n2. **Customizability & Flexibility** – Users can fine-tune, retrain, or modify models for specific domains, hardware, or use cases without waiting for vendor permission.\n3. **Community Collaboration** – A global community can contribute improvements, extensions, and optimizations, often accelerating innovation and reducing duplication of effort.\n\n**Weaknesses**\n1. **Resource Intensity** – Training or fine-tuning large models requires significant computational power, expertise, and cost, creating a barrier for many organizations.\n2. **Variable Quality & Support** – Models vary widely in quality, documentation, and maintenance; some projects are abandoned, leaving users without updates or security patches.\n3. **Security & Misuse Risks** – Open weights can be misused for harmful purposes (e.g., disinformation, malware), and there is limited accountability for downstream abuse.\n\n---\n\n## Closed-Source AI Models\n*Examples: GPT-4, Claude, Gemini, Copilot*\n\n**Strengths**\n1. **Performance & Polishing** – Companies can invest heavily in RLHF, safety tuning, and infrastructure, often producing models with strong general performance and polished user experiences.\n2. **Consistent Support & Updates** – Vendors provide ongoing maintenance, security updates, documentation, and professional support, reducing the burden on users.\n3. **Safety & Compliance Controls** – Built-in content filters, usage policies, and compliance frameworks help reduce harmful outputs and legal liability.\n\n**Weaknesses**\n1. **Lack of Transparency** – Proprietary training data, methods, and model architecture are hidden, making it difficult to audit for bias, errors, or hidden behaviors.\n2. **Vendor Lock-In & Dependence** – Users rely on a single provider for access, pricing, and feature changes; API changes or service disruptions can disrupt workflows.\n3. **Cost & Scalability Constraints** – Access is often pay-per-use or tiered, and heavy usage can become expensive; users cannot self-host or modify the model to fit unique needs.\n\n---\n\n**Summary Table**\n\n| Dimension | Open-Source | Closed-Source |\n|---|---|---|\n| Transparency | High | Low |\n| Customization | Full | Limited |\n| Support | Community-driven | Vendor-provided |\n| Cost | Hardware-dependent | Subscription/API fees |\n| Safety controls | User-responsible | Built-in |\n| Misuse risk | Higher | Lower (but not zero) |\n\nThe best choice often depends on the use case: organizations needing control and transparency lean open-source, while those prioritizing ease of use and polished performance tend toward closed-source."
+            },
+            "benchmark_score": 10
+          },
+          "improvement_percent": 34.29,
+          "decision": "REPLACE_AFTER_APPROVAL"
+        }
+      }
+    },
+    {
+      "run_id": "20260523235729",
+      "created_at": "2026-05-23T23:57:29",
+      "report_path": "03_reports\\ai_model_research_report_2026-05-23_23-57-29.md",
+      "recommendations": {
+        "coding_analysis": {
+          "current_baseline_score": 70,
+          "best_candidate": {
+            "name": "Qwen: Qwen3 Coder 480B A35B (free)",
+            "model_id": "qwen/qwen3-coder:free",
+            "provider": "OpenRouter",
+            "category": "coding_analysis",
+            "open_source_status": "verify exact license",
+            "free_tier_status": "verify current free-tier",
+            "strengths": [
+              "live discovered model",
+              "available via API",
+              "candidate for testing"
+            ],
+            "weaknesses": [
+              "license must be verified",
+              "availability may change",
+              "needs benchmark testing"
+            ],
+            "best_use_case": "dynamic evaluation",
+            "risk": "provider/rate-limit changes",
+            "migration_difficulty": "medium",
+            "scores": {
+              "quality": 30,
+              "free_tier": 15,
+              "api": 15,
+              "open_source": 10,
+              "stability": 7,
+              "migration": 7
+            },
+            "total_score": 84,
+            "benchmark": {
+              "success": false,
+              "error": "{\"error\":{\"message\":\"Provider returned error\",\"code\":429,\"metadata\":{\"raw\":\"qwen/qwen3-coder:free is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations\",\"provider_name\":\"Venice\",\"is_byok\":false}},\"user_id\":\"user_3DwvHydeNrDpCeQHaaFQqY8fBNH\"}"
+            },
+            "benchmark_score": 0
+          },
+          "improvement_percent": 20.0,
+          "decision": "REPLACE_AFTER_APPROVAL"
+        },
+        "research_reasoning": {
+          "current_baseline_score": 70,
+          "best_candidate": {
+            "name": "Baidu Qianfan: CoBuddy (free)",
+            "model_id": "baidu/cobuddy:free",
+            "provider": "OpenRouter",
+            "category": "research_reasoning",
+            "open_source_status": "verify exact license",
+            "free_tier_status": "verify current free-tier",
+            "strengths": [
+              "live discovered model",
+              "available via API",
+              "candidate for testing"
+            ],
+            "weaknesses": [
+              "license must be verified",
+              "availability may change",
+              "needs benchmark testing"
+            ],
+            "best_use_case": "dynamic evaluation",
+            "risk": "provider/rate-limit changes",
+            "migration_difficulty": "medium",
+            "scores": {
+              "quality": 30,
+              "free_tier": 15,
+              "api": 15,
+              "open_source": 10,
+              "stability": 7,
+              "migration": 7
+            },
+            "total_score": 94,
+            "benchmark": {
+              "success": true,
+              "content": "# Open-Source vs. Closed-Source AI Models\n\n## Open-Source AI Models\n*(e.g., LLaMA, Mistral, Falcon, BLOOM)*\n\n### Strengths\n1. **Transparency & Auditing** — Code, weights, and training data (often) are publicly available, allowing researchers to inspect for biases, safety issues, or errors.\n2. **Customization & Flexibility** — Users can fine-tune, retrain, or modify the model for specific domains, hardware, or use cases without restrictions.\n3. **Community Innovation** — A broad developer community can contribute improvements, leading to rapid iteration and diverse applications.\n\n### Weaknesses\n1. **Resource Intensity** — Running and fine-tuning large models often requires significant computational resources that smaller teams or individuals may lack.\n2. **Inconsistent Quality & Safety** — Without centralized oversight, models may vary widely in quality, and safety measures are not uniformly enforced.\n3. **Lack of Vendor Support** — Users generally rely on community forums rather than dedicated technical support or enterprise-level SLAs.\n\n---\n\n## Closed-Source AI Models\n*(e.g., GPT-4, Claude, Gemini, Gemini)*\n\n### Strengths\n1. **Polished Performance** — Typically undergo extensive benchmarking, optimization, and quality assurance before release.\n2. **Ease of Use** — Offer well-documented APIs, consistent uptime, and often require less technical expertise to integrate.\n3. **Safety & Compliance** — Benefit from built-in guardrails, content filtering, and regulatory compliance efforts.\n\n### Weaknesses\n1. **Opacity & Limited Control** — Users cannot inspect internals, verify claims, or modify behavior, creating trust and accountability concerns.\n2. **Vendor Lock-in & Cost** — Dependence on a single provider, with pricing that can scale unpredictably and limited data portability.\n3. **Restricted Customization** — Fine-tuning and deployment options are typically limited to what the provider allows.\n\n---\n\n## Summary\n\n| Dimension | Open-Source | Closed-Source |\n|---|---|---|\n| Transparency | High | Low |\n| Ease of Use | Lower | Higher |\n| Customization | Full | Limited |\n| Safety Guarantees | Variable | Centralized |\n| Cost Predictability | Infrastructure-dependent | Subscription-based |\n\nThe best choice often depends on the use case: **open-source** suits those who need control and transparency, while **closed-source** suits those prioritizing convenience and out-of-the-box reliability."
+            },
+            "benchmark_score": 10
+          },
+          "improvement_percent": 34.29,
+          "decision": "REPLACE_AFTER_APPROVAL"
+        }
+      }
+    },
+    {
+      "run_id": "20260524003401",
+      "created_at": "2026-05-24T00:34:01",
+      "report_path": "03_reports\\ai_model_research_report_2026-05-24_00-34-01.md",
+      "recommendations": {
+        "coding_analysis": {
+          "current_baseline_score": 70,
+          "best_candidate": {
+            "name": "Qwen: Qwen3 Coder 480B A35B (free)",
+            "model_id": "qwen/qwen3-coder:free",
+            "provider": "OpenRouter",
+            "category": "coding_analysis",
+            "open_source_status": "verify exact license",
+            "free_tier_status": "verify current free-tier",
+            "strengths": [
+              "live discovered model",
+              "available via API",
+              "candidate for testing"
+            ],
+            "weaknesses": [
+              "license must be verified",
+              "availability may change",
+              "needs benchmark testing"
+            ],
+            "best_use_case": "dynamic evaluation",
+            "risk": "provider/rate-limit changes",
+            "migration_difficulty": "medium",
+            "scores": {
+              "quality": 30,
+              "free_tier": 15,
+              "api": 15,
+              "open_source": 10,
+              "stability": 7,
+              "migration": 7
+            },
+            "total_score": 84,
+            "benchmark": {
+              "success": false,
+              "error": "{\"error\":{\"message\":\"Provider returned error\",\"code\":429,\"metadata\":{\"raw\":\"qwen/qwen3-coder:free is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations\",\"provider_name\":\"Venice\",\"is_byok\":false,\"retry_after_seconds\":36,\"retry_after_seconds_raw\":36,\"headers\":{\"Retry-After\":\"36\"}}},\"user_id\":\"user_3DwvHydeNrDpCeQHaaFQqY8fBNH\"}"
+            },
+            "benchmark_score": 0
+          },
+          "improvement_percent": 20.0,
+          "decision": "REPLACE_AFTER_APPROVAL"
+        },
+        "research_reasoning": {
+          "current_baseline_score": 70,
+          "best_candidate": {
+            "name": "Baidu Qianfan: CoBuddy (free)",
+            "model_id": "baidu/cobuddy:free",
+            "provider": "OpenRouter",
+            "category": "research_reasoning",
+            "open_source_status": "verify exact license",
+            "free_tier_status": "verify current free-tier",
+            "strengths": [
+              "live discovered model",
+              "available via API",
+              "candidate for testing"
+            ],
+            "weaknesses": [
+              "license must be verified",
+              "availability may change",
+              "needs benchmark testing"
+            ],
+            "best_use_case": "dynamic evaluation",
+            "risk": "provider/rate-limit changes",
+            "migration_difficulty": "medium",
+            "scores": {
+              "quality": 30,
+              "free_tier": 15,
+              "api": 15,
+              "open_source": 10,
+              "stability": 7,
+              "migration": 7
+            },
+            "total_score": 94,
+            "benchmark": {
+              "success": true,
+              "content": "# Open-Source vs. Closed-Source AI Models\n\n## Open-Source AI Models\n*(e.g., LLaMA, Mistral, BLOOM, Falcon)*\n\n**Strengths**\n1. **Transparency & Auditing** — Code and weights are publicly available, allowing researchers and developers to inspect, verify, and understand how the model works.\n2. **Customizability** — Users can fine-tune, retrain, and adapt models to niche tasks, domains, or hardware constraints.\n3. **Cost Efficiency** — No licensing fees; organizations can run models locally, avoiding per-token API costs and vendor lock-in.\n\n**Weaknesses**\n1. **Resource Intensity** — Training and running large open models often demands significant compute, memory, and technical expertise.\n2. **Inconsistent Quality & Safety** — Models vary widely in capability and may lack rigorous testing, guardrails, or standardized safety measures.\n3. **Limited Up-to-Date Support** — Community-driven maintenance can be inconsistent, and documentation or help resources may lag behind.\n\n---\n\n## Closed-Source AI Models\n*(e.g., GPT-4, Claude, Gemini, proprietary APIs)*\n\n**Strengths**\n1. **High Performance** — Typically backed by large-scale training, extensive optimization, and state-of-the-art benchmarks.\n2. **Reliability & Safety** — Professional QA, content moderation, and regular updates reduce risks of harmful or unreliable outputs.\n3. **Ease of Use** — Simple API access means lower technical barriers; users don't need to manage infrastructure or expertise.\n\n**Weaknesses**\n1. **Vendor Lock-in & Dependency** — Reliance on a single provider limits portability and gives the vendor control over pricing, policy, and availability.\n2. **Lack of Transparency** — Model architecture, training data, and decisions are proprietary, making it hard to audit for bias or verify claims.\n3. **Cost at Scale** — Per-token or subscription pricing can become expensive for high-volume or long-running applications.\n\n---\n\n**Summary**: Open-source models excel in flexibility and transparency but demand more resources and effort. Closed-source models offer polished, ready-to-use performance but trade away control and visibility. The best choice depends on the use case, budget, and the importance of transparency."
+            },
+            "benchmark_score": 10
+          },
+          "improvement_percent": 34.29,
+          "decision": "REPLACE_AFTER_APPROVAL"
+        }
+      }
+    },
+    {
+      "run_id": "20260524184308",
+      "created_at": "2026-05-24T18:43:08",
+      "report_path": "03_reports\\ai_model_research_report_2026-05-24_18-43-08.md",
+      "recommendations": {
+        "coding_analysis": {
+          "current_baseline_score": 70,
+          "best_candidate": {
+            "name": "Qwen: Qwen3 Coder 480B A35B (free)",
+            "model_id": "qwen/qwen3-coder:free",
+            "provider": "OpenRouter",
+            "category": "coding_analysis",
+            "open_source_status": "verify exact license",
+            "free_tier_status": "verify current free-tier",
+            "strengths": [
+              "live discovered model",
+              "available via API",
+              "candidate for testing"
+            ],
+            "weaknesses": [
+              "license must be verified",
+              "availability may change",
+              "needs benchmark testing"
+            ],
+            "best_use_case": "dynamic evaluation",
+            "risk": "provider/rate-limit changes",
+            "migration_difficulty": "medium",
+            "scores": {
+              "quality": 30,
+              "free_tier": 15,
+              "api": 15,
+              "open_source": 10,
+              "stability": 7,
+              "migration": 7
+            },
+            "total_score": 84,
+            "benchmark": {
+              "success": false,
+              "error": "{\"error\":{\"message\":\"Provider returned error\",\"code\":429,\"metadata\":{\"raw\":\"qwen/qwen3-coder:free is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations\",\"provider_name\":\"Venice\",\"is_byok\":false,\"retry_after_seconds\":9,\"retry_after_seconds_raw\":8.498,\"headers\":{\"Retry-After\":\"9\"}}},\"user_id\":\"user_3DwvHydeNrDpCeQHaaFQqY8fBNH\"}"
+            },
+            "benchmark_score": 0
+          },
+          "improvement_percent": 20.0,
+          "decision": "REPLACE_AFTER_APPROVAL"
+        },
+        "research_reasoning": {
+          "current_baseline_score": 70,
+          "best_candidate": {
+            "name": "Baidu Qianfan: CoBuddy (free)",
+            "model_id": "baidu/cobuddy:free",
+            "provider": "OpenRouter",
+            "category": "research_reasoning",
+            "open_source_status": "verify exact license",
+            "free_tier_status": "verify current free-tier",
+            "strengths": [
+              "live discovered model",
+              "available via API",
+              "candidate for testing"
+            ],
+            "weaknesses": [
+              "license must be verified",
+              "availability may change",
+              "needs benchmark testing"
+            ],
+            "best_use_case": "dynamic evaluation",
+            "risk": "provider/rate-limit changes",
+            "migration_difficulty": "medium",
+            "scores": {
+              "quality": 30,
+              "free_tier": 15,
+              "api": 15,
+              "open_source": 10,
+              "stability": 7,
+              "migration": 7
+            },
+            "total_score": 94,
+            "benchmark": {
+              "success": true,
+              "content": "# Open-Source vs. Closed-Source AI Models\n\n## Open-Source AI Models\n*(e.g., LLaMA, Mistral, Falcon, BLOOM)*\n\n**Strengths**\n1. **Transparency & Auditing** — Code and weights are publicly available, allowing researchers and developers to inspect, verify, and understand how the model works.\n2. **Customization & Flexibility** — Users can fine-tune, retrain, and adapt the model to niche tasks, languages, or domains without relying on a vendor.\n3. **Cost Efficiency** — No licensing fees; organizations can run models on their own hardware, reducing long-term dependency on paid APIs.\n\n**Weaknesses**\n1. **Resource Intensity** — Training or even fine-tuning large open models often requires significant hardware (GPUs/TPUs), which can be prohibitively expensive.\n2. **Limited Safety Guardrails** — Without centralized oversight, open models may lack robust content filtering or alignment, raising misuse concerns.\n3. **Uneven Quality & Support** — Model quality varies widely across the community, and documentation or technical support is inconsistent.\n\n---\n\n## Closed-Source AI Models\n*(e.g., GPT-4, Claude, Gemini, Gemini)*\n\n**Strengths**\n1. **High Performance & Polishing** — Typically backed by large teams and massive datasets, resulting in strong general capabilities and refined user experience.\n2. **Built-In Safety & Compliance** — Vendors invest in alignment, content moderation, and regulatory compliance, offering more predictable behavior.\n3. **Ease of Use** — Users access models via APIs or interfaces without needing specialized infrastructure or ML expertise.\n\n**Weaknesses**\n1. **Vendor Lock-In & Cost** — Users depend on the provider's pricing, roadmap, and uptime; costs can scale unpredictably with usage.\n2. **Lack of Transparency** — Proprietary weights and training data mean users cannot fully audit the model for biases, errors, or hidden behavior.\n3. **Restricted Customization** — Fine-tuning options are often limited, and users have little control over model behavior, architecture, or deployment environment.\n\n---\n\n**In summary**: Open-source models empower control and transparency but demand resources and carry safety risks. Closed-source models offer polish and convenience but trade away transparency and flexibility for a dependency on a single provider."
+            },
+            "benchmark_score": 10
+          },
+          "improvement_percent": 34.29,
+          "decision": "REPLACE_AFTER_APPROVAL"
+        }
+      }
+    }
+  ]
+}

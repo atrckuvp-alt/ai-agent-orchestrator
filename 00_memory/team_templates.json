@@ -1,0 +1,35 @@
+{
+  "templates": {
+    "research_team": {
+      "name": "Research & Analysis Team",
+      "description": "ทีมวิจัยและวิเคราะห์ข้อมูลเชิงลึก",
+      "agents": ["research_agent", "orchestrator"],
+      "default_models": {
+        "research_agent": "deepseek/deepseek-r1",
+        "orchestrator": "openrouter/free"
+      },
+      "objective_prompt": "วิเคราะห์และวิจัยหัวข้อ: {objective}"
+    },
+    "coding_team": {
+      "name": "Coding & Development Team",
+      "description": "ทีมพัฒนาโค้ดและวิเคราะห์ทางเทคนิค",
+      "agents": ["coding_agent", "orchestrator"],
+      "default_models": {
+        "coding_agent": "qwen/qwen2.5-coder",
+        "orchestrator": "openrouter/free"
+      },
+      "objective_prompt": "พัฒนาโค้ดและแก้ปัญหา: {objective}"
+    },
+    "full_stack_team": {
+      "name": "Full Stack AI Team",
+      "description": "ทีมครบวงจร (Research + Coding)",
+      "agents": ["research_agent", "coding_agent", "orchestrator"],
+      "default_models": {
+        "research_agent": "deepseek/deepseek-r1",
+        "coding_agent": "qwen/qwen2.5-coder",
+        "orchestrator": "openrouter/free"
+      },
+      "objective_prompt": "สร้างโซลูชันครบวงจรสำหรับ: {objective}"
+    }
+  }
+}

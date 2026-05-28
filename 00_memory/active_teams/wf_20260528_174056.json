@@ -1,0 +1,15 @@
+{
+  "workflow_id": "wf_20260528_174056",
+  "created_at": "2026-05-28T17:40:56.191189",
+  "objective": "Run full system analysis with latest open-source models",
+  "team_type": "full_stack_team",
+  "mode": "mock",
+  "status": "approved",
+  "agents": [
+    "research_agent",
+    "coding_agent",
+    "orchestrator"
+  ],
+  "updated_at": "2026-05-28T17:41:20.790030",
+  "approved_at": "2026-05-28T17:41:20.789953"
+}

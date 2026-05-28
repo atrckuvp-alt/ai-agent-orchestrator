@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>AI Agent Research Team Dashboard</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 24px; background: #f6f6f6; }
+    h1 { color: #222; }
+    .card { background: white; padding: 16px; margin-bottom: 16px; border-radius: 12px; box-shadow: 0 2px 8px #ddd; }
+    pre { background: #111; color: #0f0; padding: 12px; overflow: auto; border-radius: 8px; }
+  </style>
+</head>
+<body>
+  <h1>AI Agent Research Team Dashboard</h1>
+
+  <div class="card">
+    <h2>How to Use</h2>
+    <p>Open JSON files in <code>00_memory</code> to inspect system status.</p>
+  </div>
+
+  <div class="card">
+    <h2>Important Files</h2>
+    <ul>
+      <li><b>current_stack.json</b> — active approved models</li>
+      <li><b>champion_models.json</b> — current best candidates</li>
+      <li><b>approval_queue.json</b> — pending human approvals</li>
+      <li><b>decision_history.json</b> — system decisions</li>
+      <li><b>benchmark_history.json</b> — model test history</li>
+      <li><b>self_improvement_log.json</b> — improvement ideas</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h2>Run Command</h2>
+    <pre>python 04_scripts\run_orchestrator.py --api openrouter</pre>
+  </div>
+
+  <div class="card">
+    <h2>Approval Command</h2>
+    <pre>python 04_scripts\human_approval.py --request-id REQUEST_ID --decision APPROVE</pre>
+  </div>
+</body>
+</html>

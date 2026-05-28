@@ -1,0 +1,1 @@
+worker: python 04_scripts/telegram_bot.py

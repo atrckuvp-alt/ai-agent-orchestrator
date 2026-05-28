@@ -1,0 +1,64 @@
+{
+  "meta_orchestrator": {
+    "version": "1.0",
+    "created_at": "2026-05-28T17:39:51.522048",
+    "active_teams": [
+      "infrastructure_team",
+      "research_team",
+      "coding_team",
+      "full_stack_team"
+    ],
+    "governance": {
+      "use_traidharma": true,
+      "use_iddhipada": true,
+      "pdpa_compliant": true,
+      "prefer_open_source": true,
+      "approval_required": true
+    }
+  },
+  "teams": {
+    "infrastructure_team": {
+      "name": "infrastructure_team",
+      "description": "Core AI Infrastructure - OSS Research & Benchmark",
+      "agents": [
+        "research_agent",
+        "benchmark_agent"
+      ],
+      "created_at": "2026-05-28T17:45:55.294840",
+      "status": "active",
+      "core_skill_reference": "meta_orchestrator_skill.md"
+    },
+    "research_team": {
+      "name": "research_team",
+      "description": "Deep Research & Analysis Team",
+      "agents": [
+        "research_agent"
+      ],
+      "created_at": "2026-05-28T17:45:55.314024",
+      "status": "active",
+      "core_skill_reference": "meta_orchestrator_skill.md"
+    },
+    "coding_team": {
+      "name": "coding_team",
+      "description": "Coding & Development Team",
+      "agents": [
+        "coding_agent"
+      ],
+      "created_at": "2026-05-28T17:45:55.332558",
+      "status": "active",
+      "core_skill_reference": "meta_orchestrator_skill.md"
+    },
+    "full_stack_team": {
+      "name": "full_stack_team",
+      "description": "Full Stack AI Solution Team",
+      "agents": [
+        "research_agent",
+        "coding_agent",
+        "orchestrator"
+      ],
+      "created_at": "2026-05-28T17:45:55.353143",
+      "status": "active",
+      "core_skill_reference": "meta_orchestrator_skill.md"
+    }
+  }
+}
