@@ -173,6 +173,9 @@ async def main():
     await dp.start_polling(bot)
 
 # ====================== HEALTH CHECK SERVER ======================
+from http.server import BaseHTTPRequestHandler, HTTPServer
+from threading import Thread
+
 class HealthHandler(BaseHTTPRequestHandler):
     def do_GET(self):
         self.send_response(200)
@@ -187,8 +190,8 @@ def run_health_server():
         server = HTTPServer(('0.0.0.0', 10000), HealthHandler)
         print("🌐 Health check server started on port 10000")
         server.serve_forever()
-    except:
-        print("⚠️ Health server failed to start")
+    except Exception as e:
+        print(f"⚠️ Health server failed to start: {e}")
 
 # ====================== MAIN ======================
 async def main():
