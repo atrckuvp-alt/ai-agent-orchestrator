@@ -172,5 +172,35 @@ async def main():
     print("🤖 Telegram AI Operations Bot + Improved Natural Language is running...")
     await dp.start_polling(bot)
 
+# ====================== HEALTH CHECK SERVER ======================
+class HealthHandler(BaseHTTPRequestHandler):
+    def do_GET(self):
+        self.send_response(200)
+        self.send_header('Content-type', 'text/html')
+        self.end_headers()
+        self.wfile.write(b"AI Orchestrator Bot is running on Render.com")
+        return
+
+def run_health_server():
+    """รัน Health Check Server บน port 10000"""
+    try:
+        server = HTTPServer(('0.0.0.0', 10000), HealthHandler)
+        print("🌐 Health check server started on port 10000")
+        server.serve_forever()
+    except:
+        print("⚠️ Health server failed to start")
+
+# ====================== MAIN ======================
+async def main():
+    logging.basicConfig(level=logging.INFO)
+    print("🤖 Telegram AI Operations Platform is starting...")
+
+    # รัน Health Server ใน Thread แยก
+    health_thread = Thread(target=run_health_server, daemon=True)
+    health_thread.start()
+
+    print("🌐 Health check server is running (port 10000)")
+    await dp.start_polling(bot)
+
 if __name__ == "__main__":
     asyncio.run(main())
