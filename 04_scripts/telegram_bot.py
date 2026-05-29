@@ -131,6 +131,25 @@ async def show_system_status(message: Message):
     await message.answer("📊 **System Status**\n✅ Meta Orchestrator: Active\n✅ Natural Language: Ready")
 
 # ====================== MESSAGE HANDLER ======================
+async def parse_user_intent(text: str):
+    """Natural Language Parser แบบฉลาดขึ้น"""
+    lower = text.lower().strip()
+    
+    if any(k in lower for k in ["รัน", "run", "เริ่ม", "execute", "สั่ง", "orchestrator"]):
+        return {"intent": "run_orchestrator", "objective": text}
+    
+    if any(k in lower for k in ["สร้างทีม", "team", "สร้าง ai", "infrastructure", "research team"]):
+        return {"intent": "create_team", "objective": text}
+    
+    if any(k in lower for k in ["วิจัย", "หา", "research", "oss", "tool", "opensource"]):
+        return {"intent": "research_task", "objective": text}
+    
+    if any(k in lower for k in ["พัฒนา", "coding", "build", "เขียนโค้ด", "โปรแกรม"]):
+        return {"intent": "coding_task", "objective": text}
+    
+    # Default - ส่งไป Meta Orchestrator วิเคราะห์
+    return {"intent": "general", "objective": text}
+
 
 @dp.message()
 async def handle_message(message: Message):
@@ -140,20 +159,14 @@ async def handle_message(message: Message):
     user_text = message.text.strip()
     user_id = message.from_user.id
 
-    # ตรวจสอบสถานะการสนทนา
-    state = user_states.get(user_id)
-    if state and state.get("step") == "waiting_objective":
-        user_states[user_id]["objective"] = user_text
-        user_states[user_id]["step"] = "waiting_mode"
-        await show_mode_menu(message, user_id)
-        return
-
     intent = await parse_user_intent(user_text)
 
     if intent["intent"] == "run_orchestrator":
         await callback_run_orchestrator(message)
-    elif intent["intent"] == "create_team":
-        await callback_create_team(message, intent)
+    elif intent["intent"] == "research_task":
+        await message.answer("🔍 Infrastructure Team กำลังวิจัย OSS Tools...")
+        result = await infrastructure_team.research_open_source(intent["objective"])
+        await message.answer(f"✅ วิจัยเสร็จแล้ว\nCategory: {result['category']}\nStatus: {result['status']}")
     else:
         await show_main_menu(message)
 

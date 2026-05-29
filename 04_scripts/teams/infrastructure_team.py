@@ -20,28 +20,27 @@ class InfrastructureTeam:
             }, indent=2, ensure_ascii=False), encoding="utf-8")
 
     async def research_open_source(self, category: str):
-        """Core Infrastructure Team - วิจัย Open Source Tools ด้วย Core Skill"""
+        """Core Infrastructure Team - วิจัย OSS Tools จริงด้วย Meta Skill"""
         print(f"🔍 Infrastructure Team researching: {category}")
 
-        # ใช้ Core Skill จาก Meta Orchestrator
         core_skill = meta_orchestrator.get_core_skill()
 
         prompt = f"""
-You are an expert OSS Researcher with strong governance mindset.
+You are an expert OSS Researcher following Buddhist governance principles.
 
-Core Principles:
-{core_skill[:800]}  # ใช้ Core Skill เป็นแนวทาง
+Core Framework:
+{core_skill[:700]}
 
 Category: {category}
 
 Find the best open-source / free-tier tools.
-Focus on: quality, stability, free-tier limits, community support, ease of use.
+Focus on: quality, stability, free-tier usability, community support, ease of integration.
 
-Return in clean JSON format only:
+Return clean JSON only:
 {{
   "category": "{category}",
   "top_recommendations": ["tool1", "tool2", "tool3"],
-  "best_choice": "tool_name",
+  "best_choice": "recommended_tool",
   "reasoning": "เหตุผลตามหลักวิมังสาและความยั่งยืน",
   "free_tier_notes": "ข้อควรระวังเรื่อง free tier"
 }}
@@ -54,11 +53,11 @@ Return in clean JSON format only:
             "category": category,
             "timestamp": dt.datetime.now().isoformat(),
             "status": "success" if result.get("success") else "failed",
-            "raw_result": result,
+            "raw_result": result.get("content", str(result)),
             "used_skill": "meta_orchestrator_skill.md"
         }
 
-        # บันทึกผลการวิจัย
+        # บันทึกผล
         data = json.loads(self.research_path.read_text(encoding="utf-8"))
         data["research"].append(research_entry)
         data["last_updated"] = dt.datetime.now().isoformat()
