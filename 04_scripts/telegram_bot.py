@@ -6,6 +6,7 @@ from aiogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton, C
 from dotenv import load_dotenv
 import os
 from pathlib import Path
+from teams.infrastructure_team import infrastructure_team
 
 load_dotenv()
 
@@ -132,22 +133,11 @@ async def show_system_status(message: Message):
 
 # ====================== MESSAGE HANDLER ======================
 async def parse_user_intent(text: str):
-    """Natural Language Parser แบบฉลาดขึ้น"""
     lower = text.lower().strip()
-    
-    if any(k in lower for k in ["รัน", "run", "เริ่ม", "execute", "สั่ง", "orchestrator"]):
-        return {"intent": "run_orchestrator", "objective": text}
-    
-    if any(k in lower for k in ["สร้างทีม", "team", "สร้าง ai", "infrastructure", "research team"]):
-        return {"intent": "create_team", "objective": text}
-    
-    if any(k in lower for k in ["วิจัย", "หา", "research", "oss", "tool", "opensource"]):
+    if any(k in lower for k in ["วิจัย", "research", "หา tool", "oss", "opensource"]):
         return {"intent": "research_task", "objective": text}
-    
-    if any(k in lower for k in ["พัฒนา", "coding", "build", "เขียนโค้ด", "โปรแกรม"]):
-        return {"intent": "coding_task", "objective": text}
-    
-    # Default - ส่งไป Meta Orchestrator วิเคราะห์
+    if any(k in lower for k in ["รัน", "run", "เริ่ม", "orchestrator"]):
+        return {"intent": "run_orchestrator", "objective": text}
     return {"intent": "general", "objective": text}
 
 
@@ -156,17 +146,14 @@ async def handle_message(message: Message):
     if not is_allowed(message.from_user.id):
         return
 
-    user_text = message.text.strip()
-    user_id = message.from_user.id
+    intent = await parse_user_intent(message.text)
 
-    intent = await parse_user_intent(user_text)
-
-    if intent["intent"] == "run_orchestrator":
-        await callback_run_orchestrator(message)
-    elif intent["intent"] == "research_task":
-        await message.answer("🔍 Infrastructure Team กำลังวิจัย OSS Tools...")
+    if intent["intent"] == "research_task":
+        await message.answer("🔍 กำลังวิจัย Open Source Tools...")
         result = await infrastructure_team.research_open_source(intent["objective"])
-        await message.answer(f"✅ วิจัยเสร็จแล้ว\nCategory: {result['category']}\nStatus: {result['status']}")
+        await message.answer(f"✅ วิจัยเสร็จสิ้น\nCategory: {result['category']}\nStatus: {result['status']}")
+    elif intent["intent"] == "run_orchestrator":
+        await callback_run_orchestrator(message)
     else:
         await show_main_menu(message)
 
