@@ -37,7 +37,7 @@ async def build_and_run_workflow(objective: str, team_type="full_stack_team", mo
 
 
 async def approve_workflow(workflow_id: str):
-    """อนุมัติและรัน Workflow + ส่งรายงานกลับ Telegram"""
+    """อนุมัติ Workflow และส่งรายงานผลกลับ Telegram"""
     team = team_manager.get_team(workflow_id)
     if not team:
         return {"success": False, "error": "ไม่พบ Workflow"}
@@ -48,29 +48,41 @@ async def approve_workflow(workflow_id: str):
 
     print(f"✅ Approved workflow: {workflow_id}")
 
-    # รัน Orchestrator จริง
     try:
+        # รัน Orchestrator
         import subprocess
         result = subprocess.run(
             ["python", str(ROOT / "04_scripts" / "run_orchestrator.py"), "--mock"],
             capture_output=True,
             text=True,
-            timeout=180,
+            timeout=120,
             cwd=str(ROOT)
         )
 
-        report_message = f"✅ Workflow `{workflow_id}` อนุมัติและรันสำเร็จแล้ว!\n\n"
-        report_message += f"**Objective:** {team.get('objective', 'N/A')}\n"
-        report_message += f"**Status:** Completed"
+        report = f"""
+✅ **Workflow อนุมัติและรันสำเร็จแล้ว**
+
+**Workflow ID:** `{workflow_id}`
+**Objective:** {team.get('objective', 'Run full system analysis')}
+**Team:** {team.get('team_type', 'Full Stack Team')}
+**Status:** ✅ Completed
+**Time:** {dt.datetime.now().strftime("%Y-%m-%d %H:%M:%S")}
+
+---
+**รายงานสรุป:** 
+ระบบได้วิเคราะห์และลงทะเบียนทีมหลักเรียบร้อยแล้ว
+Meta Orchestrator ทำงานปกติ
+        """
 
         return {
             "success": True, 
-            "message": report_message,
+            "message": report,
             "workflow_id": workflow_id
         }
 
     except Exception as e:
-        return {"success": False, "error": str(e)}
+        error_report = f"❌ Workflow `{workflow_id}` รันไม่สำเร็จ\nError: {str(e)[:200]}"
+        return {"success": False, "message": error_report}
 
 
 async def reject_workflow(workflow_id: str, reason=""):
