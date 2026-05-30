@@ -31,11 +31,47 @@ ROOT = Path(__file__).resolve().parents[1]
 MEMORY = ROOT / "00_memory"
 REPORTS = ROOT / "03_reports"
 
+
 def load_json(path: Path) -> Dict[str, Any]:
     return json.loads(path.read_text(encoding="utf-8"))
 
 def save_json(path: Path, data: Dict[str, Any]) -> None:
     path.write_text(json.dumps(data, indent=2, ensure_ascii=False), encoding="utf-8")
+
+def load_skills(agent_name):
+
+    skills_path = (ROOT / "01_skills" / agent_name)
+
+    all_skills = []
+
+    if not skills_path.exists():
+        return ""
+
+    for root, dirs, files in os.walk(skills_path):
+
+        for file in files:
+
+            if file.endswith(".md"):
+
+                skill_file = Path(root) / file
+
+                try:
+
+                    content = skill_file.read_text(
+                        encoding="utf-8"
+                    )
+
+                    all_skills.append(
+                        f"\n\n# SKILL: {file}\n{content}"
+                    )
+
+                except Exception as e:
+
+                    print(
+                        f"Failed loading skill {file}: {e}"
+                    )
+
+    return "\n".join(all_skills)
 
 def score_model(model: Dict[str, Any]) -> int:
     weights = {
@@ -498,9 +534,15 @@ def run_agent(agent_name, model_id, task_prompt, runtime_metrics, runtime_metric
 
     start_time = dt.datetime.now()
 
+    skills_context = load_skills(agent_name)
+
     system_prompt = f"""
 You are {agent_name}.
 You are part of an AI model research team.
+
+Skills Context:
+
+{skills_context}
 
 Rules:
 - Prefer open-source models.

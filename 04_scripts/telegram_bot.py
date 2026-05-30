@@ -1,11 +1,16 @@
 import asyncio
 import logging
+import os
+from pathlib import Path
+from dotenv import load_dotenv
+
+# เพิ่มการ Import สำหรับ Web Server หลอกระบบ Render
+from fastapi import FastAPI
+import uvicorn
+
 from aiogram import Bot, Dispatcher
 from aiogram.filters import Command
 from aiogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery
-from dotenv import load_dotenv
-import os
-from pathlib import Path
 
 load_dotenv()
 
@@ -24,9 +29,22 @@ def is_allowed(user_id: int) -> bool:
     return user_id in ALLOWED_USERS
 
 # Import
+# หมายเหตุ: ตรวจสอบให้แน่ใจว่าไฟล์เหล่านี้อยู่ในโฟลเดอร์เดียวกันหรือมีใน Path
 from meta_orchestrator import meta_orchestrator
 from teams.infrastructure_team import infrastructure_team
 from workflow_builder import execute_user_objective, approve_workflow, reject_workflow
+
+# ====================== FASTAPI SETUP ======================
+# สร้างเว็บเซิร์ฟเวอร์ขนาดเล็กเพื่อตอบสเตตัสให้กับ Health Check ของ Render
+app = FastAPI()
+
+@app.get("/")
+async def health_check():
+    return {
+        "status": "healthy", 
+        "message": "Conversational AI Command Center is active!",
+        "platform": "Render Free Tier"
+    }
 
 # ====================== COMMANDS ======================
 
@@ -113,11 +131,28 @@ async def handle_message(message: Message):
     else:
         await show_main_menu(message)
 
-# ====================== MAIN ======================
+# ====================== MAIN (Refactored) ======================
 async def main():
     logging.basicConfig(level=logging.INFO)
-    print("🤖 Telegram AI Operations Platform + Final Polish is running...")
-    await dp.start_polling(bot)
+    logger = logging.getLogger(__name__)
+    
+    # ดึงค่าพอร์ตที่ Render มอบให้ผ่าน Environment Variable (หากไม่มีจะใช้ 8080)
+    port = int(os.getenv("PORT", 8080))
+    
+    # ตั้งค่าคอนฟิกสำหรับ Uvicorn เพื่อรัน FastAPI Web Server
+    config = uvicorn.Config(app, host="0.0.0.0", port=port, log_level="info")
+    server = uvicorn.Server(config)
+
+    logger.info("🤖 Starting Telegram AI Operations Platform + FastAPI Server...")
+    
+    # ใช้ asyncio.gather เพื่อเปิด Web Server หลอก Render ไปพร้อม ๆ กับการทำ Polling บอต 
+    await asyncio.gather(
+        server.serve(),
+        dp.start_polling(bot)
+    )
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    try:
+        asyncio.run(main())
+    except (KeyboardInterrupt, SystemExit):
+        print("Bot stopped cleanly.")
