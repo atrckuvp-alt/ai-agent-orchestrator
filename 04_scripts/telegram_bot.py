@@ -16,7 +16,7 @@ if not BOT_TOKEN:
 bot = Bot(token=BOT_TOKEN)
 dp = Dispatcher()
 
-ALLOWED_USERS = [YOUR_TELEGRAM_ID_HERE]  
+ALLOWED_USERS = [7238952711] # ← เปลี่ยนเป็น ID ของคุณ
 
 user_states = {}
 
