@@ -1,5 +1,17 @@
-.env
 __pycache__/
-*.pyc
 *.log
 00_memory/*.json
+# บล็อกไฟล์เก็บความลับ
+.env
+.env.local
+.env.*
+
+# บล็อกโฟลเดอร์จำลองระบบ Python (ถ้ามี)
+venv/
+.venv/
+__pycache__/
+*.pyc
+
+# บล็อกไฟล์ขยะของระบบปฏิบัติการ
+.DS_Store
+Thumbs.db
