@@ -5,25 +5,25 @@ import datetime as dt
 from provider_router import provider_router
 from user_memory import user_memory
 
+# กำหนดตำแหน่ง Root และชี้เข้าโฟลเดอร์จริงตามเครื่องของคุณ
 ROOT = Path(__file__).resolve().parents[1]
 MEMORY = ROOT / "00_memory"
-SKILLS_DIR = MEMORY / "skills"
+SKILLS_DIR = ROOT / "01_skills" / "orchestrator" 
 
 class MetaOrchestrator:
     def __init__(self):
+        # โหลดไฟล์สกิลและกรอบแนวคิดจากโฟลเดอร์ 01_skills/orchestrator/ ตรงตามตำแหน่งจริง
         self.skill_path = SKILLS_DIR / "meta_orchestrator_skill.md"
-        # เพิ่มพาร์ทสำหรับอ่านไฟล์ Decision Framework ใหม่
         self.framework_path = SKILLS_DIR / "decision_framework.md"
         self.registry_path = MEMORY / "team_registry.json"
         
-        # สร้างโฟลเดอร์เผื่อไว้กรณีระบบติดตั้งใหม่
         SKILLS_DIR.mkdir(parents=True, exist_ok=True)
         
         self._load_core_skill()
         self._load_decision_framework()
         self._init_registry()
         
-        # ลงทะเบียนทีมหลัก
+        # ลงทะเบียนทีมหลักเข้าสู่ Registry
         self.register_team("infrastructure_team", "Core AI Infrastructure - OSS Research & Benchmark", ["research_agent", "benchmark_agent"])
         self.register_team("research_team", "Deep Research & Analysis Team", ["research_agent"])
         self.register_team("coding_team", "Coding & Development Team", ["coding_agent"])
@@ -32,19 +32,20 @@ class MetaOrchestrator:
     def _load_core_skill(self):
         try:
             self.core_skill = self.skill_path.read_text(encoding="utf-8")
+            print("✅ Meta Orchestrator loaded Core Skills from 01_skills/orchestrator/")
         except FileNotFoundError:
             self.core_skill = "Core Skill: Executive Orchestration and High-Level Coordination."
+            print("⚠️ Warning: meta_orchestrator_skill.md not found in 01_skills/orchestrator/")
 
     def _load_decision_framework(self):
-        """โหลดพิมพ์เขียวกรอบแนวคิดการตัดสินใจเข้าสู่หน่วยความจำหลัก"""
+        """โหลดพิมพ์เขียวกรอบแนวคิดการตัดสินใจเข้าสู่สมองส่วนกลาง"""
         try:
             if self.framework_path.exists():
                 self.decision_framework = self.framework_path.read_text(encoding="utf-8")
-                print("🎯 [Meta Orchestrator] Loaded Triple-Lens Decision Framework Successfully!")
+                print("🎯 [Meta Orchestrator] Loaded Decision Framework from 01_skills/orchestrator/")
             else:
-                # Fallback หากไฟล์ยังไม่ถูกเขียนย้ายไปโฟลเดอร์เป้าหมาย
                 self.decision_framework = "Framework: Optimize for free tier, use systems thinking, and maintain legal safety."
-                print("⚠️ [Warning] decision_framework.md not found in skills directory, using static framework.")
+                print("⚠️ [Warning] decision_framework.md not found in 01_skills/orchestrator/, using static fallback.")
         except Exception as e:
             self.decision_framework = "Framework: Default parameters."
             print(f"⚠️ [Error] Cannot load framework: {e}")
@@ -62,13 +63,12 @@ class MetaOrchestrator:
             self.registry_path.write_text(json.dumps(default, indent=2, ensure_ascii=False), encoding="utf-8")
 
     async def route_objective(self, objective: str, user_id: int = 7238952711) -> dict:
-        print(f"🧠 [Meta Orchestrator] Executing Triple-Lens Decision Matrix...")
+        print(f"🧠 [Meta Orchestrator] Executing Triple-Lens Decision Matrix with User Memory...")
         
         mem_ctx = user_memory.get_context(user_id)
         past_summary = mem_ctx.get("summary_context", "ไม่มีประวัติคุยก่อนหน้า")
         past_entities = json.dumps(mem_ctx.get("extracted_entities", {}), ensure_ascii=False)
 
-        # ผสานเอา Decision Framework เข้าไปขนาบข้างระบบความคิดของ Prompt
         prompt = f"""
         คุณคือ Meta Orchestrator (COO + CTO) หน้าที่ของคุณคือวิเคราะห์ Objective ปัจจุบันของผู้ใช้
         โดยพิจารณาร่วมกับ "ประวัติการคุยย้อนหลัง" และต้องตัดสินใจภายใต้กรอบ "Decision Framework" อย่างเคร่งครัด
@@ -87,7 +87,7 @@ class MetaOrchestrator:
         คำสั่งปัจจุบันจากผู้ใช้: "{objective}"
 
         จงเลือกทีมที่เหมาะสมที่สุดตามหลักการ และเขียนอธิบายเหตุผล (Reason) 
-        โดยให้ระบุชัดเจนว่าสอดคล้องกับกรอบแนวคิดใน Decision Framework อย่างไร (เช่น สอดคล้องกับเลนบริหาร/หลักวิมังสา/ความคุ้มค่า Free-tier)
+        โดยให้ระบุชัดเจนว่าสอดคล้องกับกรอบแนวคิดใน Decision Framework อย่างไร (เช่น สอดคล้องกับเลนบริหาร/หลักคิดวิมังสา/ความคุ้มค่าบน Free-tier)
 
         ให้ตอบกลับเฉพาะในรูปแบบ JSON โครงสร้างนี้เท่านั้น (ห้ามมี Markdown นอก JSON):
         {{
@@ -100,8 +100,6 @@ class MetaOrchestrator:
         
         try:
             ai_response = await provider_router.request_llm(prompt, tier="reasoning")
-            
-            # แก้ไขส่วน cleaned_json ให้ถูกต้อง (สำคัญ!)
             cleaned_json = ai_response.replace("```json", "").replace("```", "").strip()
             result_data = json.loads(cleaned_json)
             
@@ -124,6 +122,9 @@ class MetaOrchestrator:
             "reason": reason,
             "objective": objective
         }
+
+    def get_core_skill(self):
+        return self.core_skill
 
     def register_team(self, team_name: str, description: str, agents: list):
         registry = json.loads(self.registry_path.read_text(encoding="utf-8"))

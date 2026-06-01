@@ -1,8 +1,16 @@
+import sys
+from pathlib import Path
+sys.path.append(str(Path(__file__).resolve().parents[1]))
+# --- หลังจากนั้นด้านล่างปล่อยให้เป็นโค้ดเดิมของคุณปกติได้เลยครับ ---
+import logging
+# ตัวอย่างโค้ดเดิมของคุณ...
 import asyncio
 import logging
 import os
 from pathlib import Path
 from dotenv import load_dotenv
+# ✨ เปลี่ยนมาเรียกใช้ตัวแปรคลาสอัจฉรียะที่เราทำไว้ในข้อ 1
+from intent_router import intent_router
 
 # เพิ่มการ Import สำหรับ Web Server หลอกระบบ Render
 from fastapi import FastAPI
@@ -30,10 +38,11 @@ def is_allowed(user_id: int) -> bool:
 
 # Import
 # หมายเหตุ: ตรวจสอบให้แน่ใจว่าไฟล์เหล่านี้อยู่ในโฟลเดอร์เดียวกันหรือมีใน Path
-from meta_orchestrator import meta_orchestrator
+from meta_orchestrator import MetaOrchestrator
 from teams.infrastructure_team import infrastructure_team
 from workflow_builder import execute_user_objective, approve_workflow, reject_workflow
 
+meta_orchestrator = MetaOrchestrator()
 # ====================== FASTAPI SETUP ======================
 # สร้างเว็บเซิร์ฟเวอร์ขนาดเล็กเพื่อตอบสเตตัสให้กับ Health Check ของ Render
 app = FastAPI()
@@ -107,27 +116,50 @@ Systems Thinking + ไตรลักษณ์ + อิทธิบาท 4
 
 # ====================== NATURAL LANGUAGE ======================
 
-async def parse_user_intent(text: str):
-    lower = text.lower().strip()
-    if any(k in lower for k in ["วิจัย", "research", "หา tool", "oss"]):
-        return {"intent": "research_task", "objective": text}
-    if any(k in lower for k in ["รัน", "run", "เริ่ม", "execute", "orchestrator"]):
-        return {"intent": "run_orchestrator", "objective": text}
-    return {"intent": "general", "objective": text}
+# แก้ไขเพิ่มการอิมพอร์ตตัวคัดกรองระบบใหม่ไว้ด้านบนของไฟล์ telegram_bot.py ด้วยครับ
+# from intent_router import intent_router
 
 @dp.message()
 async def handle_message(message: Message):
     if not is_allowed(message.from_user.id):
         return
 
-    intent = await parse_user_intent(message.text)
+    user_id = message.from_user.id
+    text = message.text
 
-    if intent["intent"] == "research_task":
-        await message.answer("🔍 Infrastructure Team กำลังวิจัย...")
-        result = await infrastructure_team.research_open_source(intent["objective"])
-        await message.answer(f"✅ วิจัยเสร็จสิ้น\n**Category:** {result.get('category')}\n**Status:** {result.get('status')}")
-    elif intent["intent"] == "run_orchestrator":
-        await callback_run_orchestrator(message)
+    # 1. Hard Rule: ดักคีย์เวิร์ดล้างสมองเบื้องต้นโดยไม่ใช้ Token AI
+    if any(k in text.lower() for k in ["เริ่มใหม่", "ล้างสมอง", "ลบความจำ", "reset"]):
+        user_memory.clear_memory(user_id)
+        await message.answer("🧹 ระบบคัดกรองทำการล้างความจำเก่าให้เรียบร้อยแล้วครับ สามารถเริ่มต้นคุยหัวข้อใหม่ได้เลย")
+        return
+
+    # 2. เรียกใช้งานตัวคัดกรองเจตนาผูกความจำที่เราสร้างขึ้น (ตาม intent_routing.md)
+    await message.answer("🧠 กำลังวิเคราะห์เจตนาและตรวจสอบบริบทความจำ...")
+    intent_result = await intent_router.route_intent_with_memory(text, user_id=user_id)
+    
+    intent_name = intent_result.get("intent", "show_menu")
+    combined_objective = intent_result.get("objective", text)
+
+    # 3. แตกแขนงการทำงานตามคำสั่ง Intent ID 01 - 04
+    if intent_name == "oss_research":
+        await message.answer("🔬 [Intent: OSS Research] กำลังส่งต่อข้อมูลให้ Infrastructure Team วิจัย...")
+        result = await execute_user_objective(combined_objective, user_id=user_id)
+        await message.answer(result.get("message"))
+
+    elif intent_name == "cost_optimization":
+        await message.answer("💰 [Intent: Cost Optimization] กำลังประเมินและวิเคราะห์คำนวณต้นทุนระบบ...")
+        result = await execute_user_objective(f"วิเคราะห์เรื่องการประหยัดต้นทุน: {combined_objective}", user_id=user_id)
+        await message.answer(result.get("message"))
+
+    elif intent_name == "run_orchestrator":
+        await message.answer("🚀 [Intent: Run Orchestrator] เปิดระบบประมวลผลเพื่อตรวจสอบ AI Model...")
+        result = await execute_user_objective(combined_objective, user_id=user_id)
+        await message.answer(result.get("message"))
+
+    elif intent_name == "show_menu":
+        # กรณีขอดูเมนู หรือ AI วิเคราะห์แล้วไม่เข้าพวก
+        await show_main_menu(message)
+
     else:
         await show_main_menu(message)
 

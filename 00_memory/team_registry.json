@@ -24,9 +24,8 @@
         "research_agent",
         "benchmark_agent"
       ],
-      "created_at": "2026-05-30T22:29:01.956722",
-      "status": "active",
-      "core_skill_reference": "meta_orchestrator_skill.md"
+      "created_at": "2026-06-01T18:54:53.721483",
+      "status": "active"
     },
     "research_team": {
       "name": "research_team",
@@ -34,9 +33,8 @@
       "agents": [
         "research_agent"
       ],
-      "created_at": "2026-05-30T22:29:01.979318",
-      "status": "active",
-      "core_skill_reference": "meta_orchestrator_skill.md"
+      "created_at": "2026-06-01T18:54:53.742448",
+      "status": "active"
     },
     "coding_team": {
       "name": "coding_team",
@@ -44,9 +42,8 @@
       "agents": [
         "coding_agent"
       ],
-      "created_at": "2026-05-30T22:29:01.994453",
-      "status": "active",
-      "core_skill_reference": "meta_orchestrator_skill.md"
+      "created_at": "2026-06-01T18:54:53.757948",
+      "status": "active"
     },
     "full_stack_team": {
       "name": "full_stack_team",
@@ -56,9 +53,8 @@
         "coding_agent",
         "orchestrator"
       ],
-      "created_at": "2026-05-30T22:29:02.010197",
-      "status": "active",
-      "core_skill_reference": "meta_orchestrator_skill.md"
+      "created_at": "2026-06-01T18:54:53.773234",
+      "status": "active"
     }
   }
 }

@@ -3,9 +3,11 @@ from pathlib import Path
 import datetime as dt
 import sys
 
-sys.path.append(str(Path(__file__).resolve().parents[1] / "04_scripts"))
+from meta_orchestrator import MetaOrchestrator #  ดึงตัวคลาสพิมพ์ใหญ่เข้ามา
 
-from meta_orchestrator import meta_orchestrator
+meta_orchestrator = MetaOrchestrator() #  สร้างอินสแตนซ์ใช้งานในไฟล์นี้แยกออกมา
+
+sys.path.append(str(Path(__file__).resolve().parents[1] / "04_scripts"))
 
 class InfrastructureTeam:
     def __init__(self):

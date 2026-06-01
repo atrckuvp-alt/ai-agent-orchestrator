@@ -16,7 +16,7 @@ ROOT = Path(__file__).resolve().parents[1]
 MEMORY = ROOT / "00_memory"
 
 async def build_and_run_workflow(objective: str, team_type="full_stack_team", mode="mock"):
-    workflow_id = f\"wf_{dt.datetime.now().strftime('%Y%m%d_%H%M%S')}\"
+    workflow_id = f"wf_{dt.datetime.now().strftime('%Y%m%d_%H%M%S')}"
 
     workflow_config = {
         "workflow_id": workflow_id,
