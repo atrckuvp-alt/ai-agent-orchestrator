@@ -119,49 +119,69 @@ Systems Thinking + ไตรลักษณ์ + อิทธิบาท 4
 # แก้ไขเพิ่มการอิมพอร์ตตัวคัดกรองระบบใหม่ไว้ด้านบนของไฟล์ telegram_bot.py ด้วยครับ
 # from intent_router import intent_router
 
+# =====================================================================
+# 📍 ค้นหาฟังก์ชัน @dp.message() ของเก่า แล้วแทนที่ด้วยโค้ดด้านล่างนี้ทั้งหมด
+# =====================================================================
+
 @dp.message()
-async def handle_message(message: Message):
-    if not is_allowed(message.from_user.id):
-        return
-
+async def handle_text_message(message: Message):
     user_id = message.from_user.id
-    text = message.text
-
-    # 1. Hard Rule: ดักคีย์เวิร์ดล้างสมองเบื้องต้นโดยไม่ใช้ Token AI
-    if any(k in text.lower() for k in ["เริ่มใหม่", "ล้างสมอง", "ลบความจำ", "reset"]):
-        user_memory.clear_memory(user_id)
-        await message.answer("🧹 ระบบคัดกรองทำการล้างความจำเก่าให้เรียบร้อยแล้วครับ สามารถเริ่มต้นคุยหัวข้อใหม่ได้เลย")
+    if not is_allowed(user_id):
+        await message.answer("❌ คุณไม่มีสิทธิ์ใช้งานระบบนี้")
         return
 
-    # 2. เรียกใช้งานตัวคัดกรองเจตนาผูกความจำที่เราสร้างขึ้น (ตาม intent_routing.md)
-    await message.answer("🧠 กำลังวิเคราะห์เจตนาและตรวจสอบบริบทความจำ...")
-    intent_result = await intent_router.route_intent_with_memory(text, user_id=user_id)
-    
-    intent_name = intent_result.get("intent", "show_menu")
-    combined_objective = intent_result.get("objective", text)
+    text = message.text
+    logger.info(f"📥 [Telegram Bot] Received message from {user_id}: {text}")
 
-    # 3. แตกแขนงการทำงานตามคำสั่ง Intent ID 01 - 04
+    # 🔗 [แทรกจุดที่ 1.1] บันทึกข้อความของผู้ใช้เข้าสู่ Short-Term Buffer ทันทีที่รับมา
+    try:
+        from memory_manager import memory_manager
+        memory_manager.add_to_short_term(user_id, role="user", content=text)
+    except Exception as e:
+        logger.error(f"⚠️ [Memory Error] ไม่สามารถเพิ่มข้อความลงบัฟเฟอร์ได้: {e}")
+
+    # --- (ส่วนนี้คือโค้ดประมวลผล Intent เดิมของคุณ) ---
+    route_res = await intent_router.route_intent_with_memory(text, user_id=user_id)
+    intent_name = route_res.get("intent", "general")
+    combined_objective = route_res.get("objective", text)
+
+    ai_reply_text = "" # ตัวแปรสำหรับดักเก็บคำตอบสุดท้ายส่งไปลงความจำ
+
     if intent_name == "oss_research":
-        await message.answer("🔬 [Intent: OSS Research] กำลังส่งต่อข้อมูลให้ Infrastructure Team วิจัย...")
-        result = await execute_user_objective(combined_objective, user_id=user_id)
-        await message.answer(result.get("message"))
+        await message.answer("🔍 [Intent: OSS Research] กำลังค้นหาข้อมูล Open-source...")
+        result = await execute_user_objective(f"วิเคราะห์ตัวเลือก Open-source: {combined_objective}", user_id=user_id)
+        ai_reply_text = result.get("message", "")
+        await message.answer(ai_reply_text)
 
     elif intent_name == "cost_optimization":
-        await message.answer("💰 [Intent: Cost Optimization] กำลังประเมินและวิเคราะห์คำนวณต้นทุนระบบ...")
-        result = await execute_user_objective(f"วิเคราะห์เรื่องการประหยัดต้นทุน: {combined_objective}", user_id=user_id)
-        await message.answer(result.get("message"))
+        await message.answer("💰 [Intent: Cost Optimization] กำลังวิเคราะห์งบประมาณและทรัพยากร...")
+        result = await execute_user_objective(f"วิเคราะห์แนวทางการประหยัดต้นทุน: {combined_objective}", user_id=user_id)
+        ai_reply_text = result.get("message", "")
+        await message.answer(ai_reply_text)
 
     elif intent_name == "run_orchestrator":
         await message.answer("🚀 [Intent: Run Orchestrator] เปิดระบบประมวลผลเพื่อตรวจสอบ AI Model...")
         result = await execute_user_objective(combined_objective, user_id=user_id)
-        await message.answer(result.get("message"))
+        ai_reply_text = result.get("message", "")
+        await message.answer(ai_reply_text)
 
     elif intent_name == "show_menu":
-        # กรณีขอดูเมนู หรือ AI วิเคราะห์แล้วไม่เข้าพวก
         await show_main_menu(message)
-
     else:
         await show_main_menu(message)
+
+    # 🔗 [แทรกจุดที่ 1.2] เมื่อ AI ทำงานเสร็จและตอบผู้ใช้แล้ว บันทึกคำตอบและสั่งสรุปความจำระยะยาว
+    if ai_reply_text:
+        try:
+            # 1. บันทึกคำตอบของ AI ลง Short-Term Buffer
+            memory_manager.add_to_short_term(user_id, role="assistant", content=ai_reply_text)
+            
+            # 2. คอนแว่นต์/บีบอัดข้อมูลเป็นประสบการณ์สะสมระยะยาว (คำนวณผ่านโมเดลฟรี ทริกเกอร์ Async)
+            logger.info("🧠 [Memory System] เริ่มทำการสกัดประสบการณ์และคีย์เวิร์ดสำคัญ...")
+            await memory_manager.compress_and_update_long_term(user_id)
+            logger.info("✅ [Memory System] ซิงค์ความจำระยะยาวขึ้นคลาวด์/ดิสก์ เรียบร้อยแล้ว")
+        except Exception as e:
+            logger.error(f"⚠️ [Memory Management Engine Error]: {e}")
 
 # ====================== MAIN (Refactored) ======================
 async def main():

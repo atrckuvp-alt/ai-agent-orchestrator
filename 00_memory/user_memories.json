@@ -1,0 +1,14 @@
+{
+  "user_id": 7238952711,
+  "short_term_buffer": [
+    {"role": "user", "content": "อยากทำเว็บขายของ"},
+    {"role": "bot", "content": "รับทราบครับ กำลังจัดหาทีมงาน"}
+  ],
+  "long_term_summary": {
+    "last_updated": "2026-05-31T23:15:00",
+    "project_context": "พัฒนาแพลตฟอร์ม E-commerce",
+    "preferred_tools": ["FastAPI", "PostgreSQL", "React"],
+    "key_decisions": "เลือกใช้ infrastructure_team ในการทำวิจัย OSS Tools ประสิทธิภาพสูง",
+    "current_status": "รอสรุปผลโครงสร้างพื้นฐานระบบ"
+  }
+}

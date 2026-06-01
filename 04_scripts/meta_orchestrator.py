@@ -108,15 +108,40 @@ class MetaOrchestrator:
             team = result_data.get("team", "full_stack_team")
             reason = result_data.get("reason", "วิเคราะห์ผ่านระบบ Triple-Lens Framework")
             new_summary = result_data.get("new_summary_context", objective)
-            entities = result_data.get("extracted_entities", {})
+# =====================================================================
+# ✅ วางโค้ดชุดนี้แทนที่บล็อกจัดการ Entities และ Exception ด้านล่างของฟังก์ชัน route_to_team
+# =====================================================================
+            # 🔗 [เริ่มจุดแทรกแทนที่] สกัดและปรับรูปแบบ Entities ให้เข้ากับโครงสร้าง Long-Term Memory
+            raw_entities = result_data.get("extracted_entities", {})
+            
+            # ทำการ Flat แขนงข้อมูลเพื่อให้จัดเก็บลง Keyword Index ของ AI-BOS ได้ง่ายและไม่ซ้ำซ้อน
+            formatted_entities = {
+                "teams": [team] if team else [],
+                "workflows": [raw_entities.get("workflow")] if isinstance(raw_entities.get("workflow"), str) else raw_entities.get("workflows", []),
+                "open_source": raw_entities.get("tools", []) or raw_entities.get("open_source", []),
+                "keywords": raw_entities.get("keywords", [])
+            }
 
-            user_memory.update_context(user_id, summary_context=new_summary, current_intent=team, entities=entities)
+            # บันทึกข้อมูลเข้าสู่ Unified Core Memory (เชื่อมเข้ากับ memory_manager อัตโนมัติ)
+            user_memory.update_context(
+                user_id=user_id, 
+                summary_context=new_summary, 
+                current_intent=team, 
+                entities=formatted_entities
+            )
             
         except Exception as e:
-            print(f"⚠️ [Fallback] Switch to Static Rules: {e}")
+            print(f"⚠️ [Fallback] Switch to Static Rules due to error: {e}")
             team = "full_stack_team"
-            reason = "Static Fallback: ระบบเลือกทีมกลางเพื่อความปลอดภัยสูงสุด"
-            user_memory.update_context(user_id, summary_context=objective, current_intent=team, entities={})
+            reason = f"Static Fallback: ระบบเลือกทีมกลางเพื่อความปลอดภัยสูงสุด ({str(e)})"
+            
+            # กรณีเอิร์รอร์จากตัวโมเดล ให้ทำ Fallback บันทึกค่าเซฟตี้พื้นฐานเพื่อไม่ให้ Process หลักหยุดทำงาน
+            user_memory.update_context(
+                user_id=user_id, 
+                summary_context=objective, 
+                current_intent=team, 
+                entities={"teams": [team], "workflows": [], "open_source": [], "keywords": []}
+            )
 
         print(f"→ Routed to: {team} | Reason: {reason}")
         return {

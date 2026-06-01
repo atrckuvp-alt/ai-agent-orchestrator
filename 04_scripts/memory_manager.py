@@ -1,7 +1,9 @@
 import json
+import os
 import datetime as dt
 from pathlib import Path
-from provider_router import provider_router # ดึงตัวเราท์เตอร์ของคุณมาใช้
+import base64
+from provider_router import provider_router
 
 ROOT = Path(__file__).resolve().parents[1]
 MEMORY_DIR = ROOT / "00_memory" / "user_memories"
@@ -9,12 +11,14 @@ MEMORY_DIR = ROOT / "00_memory" / "user_memories"
 class MemoryManager:
     def __init__(self):
         MEMORY_DIR.mkdir(parents=True, exist_ok=True)
+        # ดึงสิทธิ์ GitHub เพื่อใช้เป็นหน่วยความจำถาวรฟรี 100% กรณี Render รีสตาร์ทตัวเอง
+        self.github_token = os.getenv("GITHUB_TOKEN")
+        self.github_repo = os.getenv("GITHUB_REPOSITORY")  # รูปแบบ "username/repo"
 
     def _get_user_path(self, user_id: int) -> Path:
         return MEMORY_DIR / f"{user_id}.json"
 
     def load_memory(self, user_id: int) -> dict:
-        """โหลดความจำของผู้ใช้ หากไม่เคยมีให้สร้างโครงสร้างเริ่มต้น"""
         path = self._get_user_path(user_id)
         if path.exists():
             try:
@@ -26,70 +30,99 @@ class MemoryManager:
             "short_term_buffer": [],
             "long_term_summary": {
                 "last_updated": "",
-                "project_context": "ไม่มีบริบทก่อนหน้านี้",
-                "preferred_tools": [],
-                "key_decisions": "",
-                "current_status": ""
+                "business_context": "ไม่มีบริบทก่อนหน้านี้",
+                "teams_discovered": [],
+                "workflows_used": [],
+                "discovered_open_source": [],
+                "cost_optimization_logs": [],
+                "essential_keywords": []
             }
         }
 
     def save_memory(self, user_id: int, memory_data: dict):
-        """บันทึกข้อมูลลงไฟล์ JSON"""
         path = self._get_user_path(user_id)
-        path.write_text(json.dumps(memory_data, indent=2, ensure_ascii=False), encoding="utf-8")
+        json_content = json.dumps(memory_data, indent=2, ensure_ascii=False)
+        path.write_text(json_content, encoding="utf-8")
+
+        # สั่งอัปโหลดขึ้น GitHub ทันทีเพื่อความคงทนถาวร (ถ้ามีการคอนฟิก TOKEN ไว้ใน Render ENV)
+        if self.github_token and self.github_repo:
+            try:
+                import httpx
+                import asyncio
+                try:
+                    loop = asyncio.get_running_loop()
+                    if loop.is_running():
+                        loop.create_task(self._sync_to_github(user_id, json_content))
+                except RuntimeError:
+                    asyncio.run(self._sync_to_github(user_id, json_content))
+            except Exception as e:
+                print(f"⚠️ [GitHub Sync Warning] ล้มเหลว: {e}")
+
+    async def _sync_to_github(self, user_id: int, content: str):
+        import httpx
+        path_in_repo = f"00_memory/user_memories/{user_id}.json"
+        url = f"https://api.github.com/repos/{self.github_repo}/contents/{path_in_repo}"
+        headers = {
+            "Authorization": f"token {self.github_token}",
+            "Accept": "application/vnd.github.v3+json"
+        }
+        async with httpx.AsyncClient() as client:
+            sha = None
+            res = await client.get(url, headers=headers)
+            if res.status_code == 200:
+                sha = res.json().get("sha")
+            payload = {
+                "message": f"🧠 AI-BOS Memory System Event Loop: Update User {user_id}",
+                "content": base64.b64encode(content.encode("utf-8")).decode("utf-8"),
+            }
+            if sha:
+                payload["sha"] = sha
+            await client.put(url, json=payload, headers=headers)
 
     def add_to_short_term(self, user_id: int, role: str, content: str):
-        """เก็บประวัติคุยดิบล่าสุด จำกัดไว้ไม่เกิน 5 ข้อความเพื่อไม่ให้ระบบหนัก"""
         memory = self.load_memory(user_id)
         memory["short_term_buffer"].append({"role": role, "content": content})
-        # สไลด์เอาเฉพาะ 5 ข้อความล่าสุด (Buffer ซ่อมแซมตัวเอง)
-        if len(memory["short_term_buffer"]) > 5:
-            memory["short_term_buffer"] = memory["short_term_buffer"][-5:]
+        # สไลด์คุมประวัติบทสนทนาดิบไว้ไม่เกิน 3 ชุดล่าสุดเพื่อป้องกัน RAM 512MB เต็ม
+        if len(memory["short_term_buffer"]) > 3:
+            memory["short_term_buffer"] = memory["short_term_buffer"][-3:]
         self.save_memory(user_id, memory)
 
     async def compress_and_update_long_term(self, user_id: int):
-        """
-        ใช้ LLM ในการบีบอัดข้อความยาวๆ ให้เหลือเฉพาะสรุปสาระสำคัญ (Semantic Recall)
-        """
         memory = self.load_memory(user_id)
         if not memory["short_term_buffer"]:
             return
 
-        # ดึงประวัติสั้นมาจัดฟอร์แมตให้ AI อ่าน
         history_text = "\n".join([f"{m['role']}: {m['content']}" for m in memory["short_term_buffer"]])
         current_summary = json.dumps(memory["long_term_summary"], ensure_ascii=False)
 
         prompt = f"""
-        คุณคือระบบจัดการความจำระยะยาวของ AI Agent หน้าที่ของคุณคืออัปเดตข้อมูลสรุปของโปรเจกต์ 
-        จากบทสนทนาล่าสุดที่เกิดขึ้น เพื่อไม่ให้ระบบต้องจดจำคำพูดไร้สาระทั้งหมด
+        คุณคือ 'ตัวสกัดประสบการณ์สะสมระยะยาว' ของระบบ AI Business Operating System (AI-BOS)
+        จงอ่านบทสนทนาล่าสุดแล้วประมวลผลควบรวมเข้ากับข้อมูลหน่วยความจำเดิม สกัดเฉพาะคีย์เวิร์ด เอนทิตีเทคนิค และบริบทเชิงธุรกิจอย่างกระชับ ห้ามบันทึกคำพูดลอยๆ
 
-        ข้อมูลสรุปเดิมในระบบ:
+        ความจำระยะยาวเดิม:
         {current_summary}
 
-        บทสนทนาล่าสุดที่เพิ่งคุยกัน:
+        บทสนทนาล่าสุด:
         {history_text}
 
-        จงอัปเดตและสรุปข้อมูลใหม่ให้อยู่ในรูปแบบ JSON เท่านั้น ห้ามตอบเป็นคำอธิบายอื่น:
+        จงตอบกลับด้วยรูปแบบ JSON นี้เท่านั้น ห้ามมีข้อความอื่นปนเด็ดขาด:
         {{
-            "project_context": "สรุปเป้าหมายหรือตัวโปรเจกต์สั้นๆ ในประโยคเดียว",
-            "preferred_tools": ["รายชื่อเครื่องมือหรือเทคโนโลยีที่คุยกัน (เก็บเป็น array)"],
-            "key_decisions": "การตัดสินใจหลักๆ หรือคำสั่งสำคัญที่ตกลงกันล่าสุด",
-            "current_status": "สถานะปัจจุบันของงานหรือสิ่งที่ผู้ใช้กำลังรออยู่"
+            "business_context": "บริบทเป้าหมายสูงสุดของบริษัทผู้ใช้งานในปัจจุบัน",
+            "teams_discovered": ["อาร์เรย์รายชื่อทีมที่เคยสร้างหรือเรียกใช้งาน ห้ามซ้ำกับของเดิม"],
+            "workflows_used": ["อาร์เรย์สรุปเวิร์กโฟลว์ทางเทคนิคที่เคยใช้ เช่น weekly_ai_model_research_mvp_v1"],
+            "discovered_open_source": ["ซอฟต์แวร์โอเพนซอร์สหรือโมเดลฟรีที่ค้นพบและนำมาประยุกต์ใช้"],
+            "cost_optimization_logs": ["รายการคำแนะนำเกี่ยวกับการจัดคอสหรือประหยัดทรัพยากรที่เคยเสนอสำเร็จ"],
+            "essential_keywords": ["คีย์เวิร์ดดัชนีสั้นๆ รวมเรื่องทั้งหมดจำกัดไม่เกิน 15 คำ"]
         }}
         """
-        
         try:
-            # ใช้ Fast tier ในการสรุปประหยัดและเร็ว
             ai_response = await provider_router.request_llm(prompt, tier="fast")
-            cleaned_json = ai_response.replace("```json", "").replace("
-```", "").strip()
+            cleaned_json = ai_response.replace("```json", "").replace("```", "").strip()
             new_summary = json.loads(cleaned_json)
-            
             new_summary["last_updated"] = dt.datetime.now().isoformat()
             memory["long_term_summary"] = new_summary
             self.save_memory(user_id, memory)
-            print(f"🧠 [Memory Manager] Long-term summary compressed for user {user_id}")
         except Exception as e:
-            print(f"⚠️ [Memory Error] ไม่สามารถสรุปความจำได้: {e}")
+            print(f"⚠️ [Memory Management Engine Error]: {e}")
 
 memory_manager = MemoryManager()
