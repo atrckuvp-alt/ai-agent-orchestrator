@@ -168,7 +168,13 @@ async def handle_text_message(message: Message):
     elif intent_name == "show_menu":
         await show_main_menu(message)
     else:
-        await show_main_menu(message)
+        # 🧠 [จุดแทรกโค้ดใหม่] จัดการข้อความทั่วไป (General Chat) ป้องกันบอทนิ่งเงียบ
+        # เช็คว่าถ้าตัวแปร ai_reply_text ยังว่างอยู่ (เพราะ AI ไม่ได้เจนอะไรกลับมา) ให้ใส่ข้อความต้อนรับแทน
+        if not ai_reply_text or ai_reply_text.strip() == "":
+            ai_reply_text = f"🤖 สวัสดีครับนายท่าน! ผมรับทราบข้อความ '{text}' เรียบร้อยแล้ว ปัจจุบันระบบกำลังเตรียมพร้อมเข้าสู่สเต็ปถัดไป (STEP 26) หากต้องการสั่งงานด่วน สามารถใช้คำสั่งผ่านเมนูหลักได้เลยครับ!"
+        
+        # ส่งข้อความตอบกลับผู้ใช้ใน Telegram ทันที
+        await message.answer(ai_reply_text)
 
     # 🔗 [แทรกจุดที่ 1.2] เมื่อ AI ทำงานเสร็จและตอบผู้ใช้แล้ว บันทึกคำตอบและสั่งสรุปความจำระยะยาว
     if ai_reply_text:
