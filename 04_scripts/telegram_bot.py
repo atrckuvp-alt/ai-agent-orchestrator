@@ -20,15 +20,19 @@ ALLOWED_USERS = [7238952711]
 def is_allowed(user_id: int) -> bool:
     return user_id in ALLOWED_USERS
 
-# --- [🔗 📍 แก้ไขจุดนี้: ควบรวมพาร์ทหน้าแรกให้รองรับ POST จาก Telegram ได้ทันที] ---
+# --- [🔗 📍 แก้ไขจุดนี้: ปรับแก้การ Feed Update สลัดบั๊ก BaseModel] ---
 @app.post("/")
 @app.post("/webhook")
 async def telegram_webhook(request: Request):
-    """รองรับทั้งยิงเข้าพาร์ทหลัก / และพาร์ท /webhook เพื่อดักจับ 405 Method Not Allowed"""
+    """รองรับการรับข้อความจาก Telegram ผ่าน Webhook และส่งต่อไปยัง Dispatcher"""
     try:
         data = await request.json()
-        update = Update.model_validate(data, context={"bot": bot})
-        await dp.feed_update(bot, update)
+        
+        # แก้ไข: เปลี่ยนมาใช้โครงสร้าง Pydantic ผ่านคำสั่งตรงของ Aiogram ป้องกัน BaseModel __init__ Error 100%
+        update = Update(**data)
+        
+        # ส่งต่อสัญญาณเข้าไปประมวลผลในระบบหูรับข้อความ (Handlers) 
+        await dp.feed_update(bot=bot, update=update)
         return {"status": "ok"}
     except Exception as e:
         print(f"⚠️ [Webhook Feed Error]: {e}")
@@ -43,7 +47,6 @@ async def health_check():
 @app.on_event("startup")
 async def on_startup():
     if RENDER_URL:
-        # บังคับผูกท่อเข้าที่พาร์ทหลักเพื่อความชัวร์และตรงกับล็อกที่ Telegram ส่งมา
         webhook_url = f"{RENDER_URL}/"
         print(f"🔗 [Webhook Setup] Setting webhook target to: {webhook_url}")
         await bot.delete_webhook(drop_pending_updates=True)
@@ -62,10 +65,11 @@ async def handle_text_message(message: types.Message):
     text = message.text
 
     if not is_allowed(user_id):
-        await message.answer("🔒 ขอภัยครับ บัญชีของคุณไม่ได้ลงทะเบียนเข้าใช้งานระบบ")
+        await message.answer("🔒 ขออภัยครับ บัญชีของคุณไม่ได้ลงทะเบียนเข้าใช้งานระบบ")
         return
 
-    print(f"📥 [Webhook Working!] Processing Natural Language: '{text}'")
+    # พ่นล็อกข้อความจริงที่ได้รับขึ้นหน้าจอ Render ทันที
+    print(f"📥 [Webhook Working!] Processing Natural Language from {user_id}: '{text}'")
 
     status_msg = await message.answer(
         "🧠 *รับทราบคำสั่งครับ...* กำลังวิเคราะห์และส่งงานต่อให้โมดูลหลังบ้านประมวลผลสักครู่ครับ"
