@@ -1,60 +1,32 @@
 {
   "meta_orchestrator": {
-    "version": "1.0",
-    "created_at": "2026-05-28T17:39:51.522048",
+    "status": "active",
     "active_teams": [
       "infrastructure_team",
-      "research_team",
-      "coding_team",
-      "full_stack_team"
-    ],
-    "governance": {
-      "use_traidharma": true,
-      "use_iddhipada": true,
-      "pdpa_compliant": true,
-      "prefer_open_source": true,
-      "approval_required": true
-    }
+      "oss_research_team"
+    ]
   },
   "teams": {
     "infrastructure_team": {
-      "name": "infrastructure_team",
-      "description": "Core AI Infrastructure - OSS Research & Benchmark",
-      "agents": [
-        "research_agent",
-        "benchmark_agent"
+      "name": "Infrastructure & Cloud DevOps Team",
+      "description": "รับผิดชอบการออกแบบ คํานวณต้นทุน ย้ายระบบ จัดการเซิร์ฟเวอร์ Cloud (AWS, Azure, GCP) และ Infra, ปรับปรุงประสิทธิภาพ และการประหยัดต้นทุน (Cost Optimization)",
+      "capabilities": [
+        "cloud_architecture_design",
+        "cost_optimization",
+        "migration_planning",
+        "docker_kubernetes_setup"
       ],
-      "created_at": "2026-06-01T22:08:14.443554",
-      "status": "active"
+      "entry_point": "teams.infrastructure_team.infrastructure_team:infrastructure_team"
     },
-    "research_team": {
-      "name": "research_team",
-      "description": "Deep Research & Analysis Team",
-      "agents": [
-        "research_agent"
+    "oss_research_team": {
+      "name": "Open Source Software Research Team",
+      "description": "รับผิดชอบการค้นหา เปรียบเทียบ และวิจัยเทคโนโลยี Open Source, เครื่องมือซอฟต์แวร์, ไลบรารี และจัดทำเอกสารเปรียบเทียบข้อดีข้อเสีย (OSS Evaluation)",
+      "capabilities": [
+        "oss_evaluation",
+        "technology_stack_comparison",
+        "open_source_licensing_check"
       ],
-      "created_at": "2026-06-01T22:08:14.459706",
-      "status": "active"
-    },
-    "coding_team": {
-      "name": "coding_team",
-      "description": "Coding & Development Team",
-      "agents": [
-        "coding_agent"
-      ],
-      "created_at": "2026-06-01T22:08:14.476813",
-      "status": "active"
-    },
-    "full_stack_team": {
-      "name": "full_stack_team",
-      "description": "Full Stack AI Solution Team",
-      "agents": [
-        "research_agent",
-        "coding_agent",
-        "orchestrator"
-      ],
-      "created_at": "2026-06-01T22:08:14.496476",
-      "status": "active"
+      "entry_point": "teams.oss_research_team.oss_research_team:oss_research_team"
     }
   }
 }

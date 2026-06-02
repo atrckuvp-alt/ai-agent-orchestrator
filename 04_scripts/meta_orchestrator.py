@@ -12,22 +12,14 @@ SKILLS_DIR = MEMORY / "skills"
 class MetaOrchestrator:
     def __init__(self):
         self.skill_path = SKILLS_DIR / "meta_orchestrator_skill.md"
-        # เพิ่มพาร์ทสำหรับอ่านไฟล์ Decision Framework ใหม่
         self.framework_path = SKILLS_DIR / "decision_framework.md"
         self.registry_path = MEMORY / "team_registry.json"
         
-        # สร้างโฟลเดอร์เผื่อไว้กรณีระบบติดตั้งใหม่
         SKILLS_DIR.mkdir(parents=True, exist_ok=True)
         
         self._load_core_skill()
         self._load_decision_framework()
         self._init_registry()
-        
-        # ลงทะเบียนทีมหลัก
-        self.register_team("infrastructure_team", "Core AI Infrastructure - OSS Research & Benchmark", ["research_agent", "benchmark_agent"])
-        self.register_team("research_team", "Deep Research & Analysis Team", ["research_agent"])
-        self.register_team("coding_team", "Coding & Development Team", ["coding_agent"])
-        self.register_team("full_stack_team", "Full Stack AI Solution Team", ["research_agent", "coding_agent", "orchestrator"])
 
     def _load_core_skill(self):
         try:
@@ -36,13 +28,11 @@ class MetaOrchestrator:
             self.core_skill = "Core Skill: Executive Orchestration and High-Level Coordination."
 
     def _load_decision_framework(self):
-        """โหลดพิมพ์เขียวกรอบแนวคิดการตัดสินใจเข้าสู่หน่วยความจำหลัก"""
         try:
             if self.framework_path.exists():
                 self.decision_framework = self.framework_path.read_text(encoding="utf-8")
                 print("🎯 [Meta Orchestrator] Loaded Triple-Lens Decision Framework Successfully!")
             else:
-                # Fallback หากไฟล์ยังไม่ถูกเขียนย้ายไปโฟลเดอร์เป้าหมาย
                 self.decision_framework = "Framework: Optimize for free tier, use systems thinking, and maintain legal safety."
                 print("⚠️ [Warning] decision_framework.md not found in skills directory, using static framework.")
         except Exception as e:
@@ -50,25 +40,46 @@ class MetaOrchestrator:
             print(f"⚠️ [Error] Cannot load framework: {e}")
 
     def _init_registry(self):
+        """โหลดระบบจัดตั้งทีมแบบ Dynamic จากไฟล์ JSON Registry โดยตรง"""
         if not self.registry_path.exists():
             self.registry_path.parent.mkdir(parents=True, exist_ok=True)
             default = {
                 "meta_orchestrator": {
                     "status": "active",
-                    "active_teams": []
+                    "active_teams": ["infrastructure_team", "oss_research_team"]
                 },
-                "teams": {}
+                "teams": {
+                    "infrastructure_team": {
+                        "name": "Infrastructure & Cloud DevOps Team",
+                        "description": "รับผิดชอบการออกแบบ คํานวณต้นทุน และจัดการเซิร์ฟเวอร์ Cloud / Cost Optimization",
+                        "capabilities": ["cloud_architecture_design", "cost_optimization"],
+                        "entry_point": "teams.infrastructure_team.infrastructure_team:infrastructure_team"
+                    }
+                }
             }
             self.registry_path.write_text(json.dumps(default, indent=2, ensure_ascii=False), encoding="utf-8")
 
+    def _get_registered_teams_description(self) -> str:
+        """แปลงรายการทีมใน JSON ออกมาเป็น String เพื่อป้อนให้ LLM เลือกอย่างแม่นยำ"""
+        try:
+            registry = json.loads(self.registry_path.read_text(encoding="utf-8"))
+            teams_desc = []
+            for t_id, t_info in registry.get("teams", {}).items():
+                teams_desc.append(f"- '{t_id}': {t_info.get('description')} (Capabilities: {', '.join(t_info.get('capabilities', []))})")
+            return "\n".join(teams_desc)
+        except Exception:
+            return "- 'infrastructure_team': Core Infrastructure AI Team"
+
     async def route_objective(self, objective: str, user_id: int = 7238952711) -> dict:
-        print(f"🧠 [Meta Orchestrator] Executing Triple-Lens Decision Matrix...")
+        print(f"🧠 [Meta Orchestrator] Executing Triple-Lens Decision Matrix via Team Registry...")
         
         mem_ctx = user_memory.get_context(user_id)
         past_summary = mem_ctx.get("summary_context", "ไม่มีประวัติคุยก่อนหน้า")
         past_entities = json.dumps(mem_ctx.get("extracted_entities", {}), ensure_ascii=False)
+        
+        # ดึงรายชื่อทีมปัจจุบันจากฐานระบบ JSON มามัดรวมใส่ Prompt
+        available_teams_prompt = self._get_registered_teams_description()
 
-        # ผสานเอา Decision Framework เข้าไปขนาบข้างระบบความคิดของ Prompt
         prompt = f"""
         คุณคือ Meta Orchestrator (COO + CTO) หน้าที่ของคุณคือวิเคราะห์ Objective ปัจจุบันของผู้ใช้
         โดยพิจารณาร่วมกับ "ประวัติการคุยย้อนหลัง" และต้องตัดสินใจภายใต้กรอบ "Decision Framework" อย่างเคร่งครัด
@@ -77,8 +88,8 @@ class MetaOrchestrator:
         [DECISION FRAMEWORK MATRIX]
         {self.decision_framework}
         ---
-        [CORE SKILL]
-        {self.core_skill}
+        [AVAILABLE TEAMS IN REGISTRY]
+        {available_teams_prompt}
         ---
         [CONTEXT MEMORY]
         - ประวัติสาระสำคัญเดิม: {past_summary}
@@ -86,13 +97,13 @@ class MetaOrchestrator:
         ---
         คำสั่งปัจจุบันจากผู้ใช้: "{objective}"
 
-        จงเลือกทีมที่เหมาะสมที่สุดตามหลักการ และเขียนอธิบายเหตุผล (Reason) 
-        โดยให้ระบุชัดเจนว่าสอดคล้องกับกรอบแนวคิดใน Decision Framework อย่างไร (เช่น สอดคล้องกับเลนบริหาร/หลักวิมังสา/ความคุ้มค่า Free-tier)
+        จงเลือกทีมงานปฏิบัติการที่เหมาะสมที่สุดจากรายการทีมที่มีอยู่จริงในระบบด้านบนเท่านั้น ห้ามคิดชื่อทีมขึ้นมาใหม่เองเด็ดขาด!
+        เขียนอธิบายเหตุผล (Reason) สั้นๆ เชิงกลยุทธ์
 
         ให้ตอบกลับเฉพาะในรูปแบบ JSON โครงสร้างนี้เท่านั้น (ห้ามมี Markdown นอก JSON):
         {{
-            "team": "ชื่อทีมที่เลือก (infrastructure_team, research_team, coding_team, full_stack_team)",
-            "reason": "อธิบายเหตุผลเชิงกลยุทธ์ที่เชื่อมโยงกับ Decision Framework สั้นๆ",
+            "team": "ชื่อคีย์ของทีมที่เลือก (เช่น infrastructure_team หรือ oss_research_team)",
+            "reason": "อธิบายเหตุผลเชิงกลยุทธ์ที่เชื่อมโยงกับ Decision Framework",
             "new_summary_context": "สรุปสาระสำคัญเพิ่มจากคำสั่งปัจจุบันสั้นๆ 1 ประโยคเพื่อจำต่อ",
             "extracted_entities": {{"key1": "value1"}}
         }}
@@ -100,21 +111,15 @@ class MetaOrchestrator:
         
         try:
             ai_response = await provider_router.request_llm(prompt, tier="reasoning")
-            
-            # แก้ไขส่วน cleaned_json ให้ถูกต้อง (สำคัญ!)
-            cleaned_json = ai_response.replace("```json", "").replace("```", "").strip()
+            cleaned_json = ai_response.replace("```json", "").replace("
+```", "").strip()
             result_data = json.loads(cleaned_json)
             
-            team = result_data.get("team", "full_stack_team")
-            reason = result_data.get("reason", "วิเคราะห์ผ่านระบบ Triple-Lens Framework")
+            team = result_data.get("team", "infrastructure_team")
+            reason = result_data.get("reason", "วิเคราะห์ผ่านระบบ Dynamic Team Registry")
             new_summary = result_data.get("new_summary_context", objective)
-# =====================================================================
-# ✅ วางโค้ดชุดนี้แทนที่บล็อกจัดการ Entities และ Exception ด้านล่างของฟังก์ชัน route_to_team
-# =====================================================================
-            # 🔗 [เริ่มจุดแทรกแทนที่] สกัดและปรับรูปแบบ Entities ให้เข้ากับโครงสร้าง Long-Term Memory
-            raw_entities = result_data.get("extracted_entities", {})
             
-            # ทำการ Flat แขนงข้อมูลเพื่อให้จัดเก็บลง Keyword Index ของ AI-BOS ได้ง่ายและไม่ซ้ำซ้อน
+            raw_entities = result_data.get("extracted_entities", {})
             formatted_entities = {
                 "teams": [team] if team else [],
                 "workflows": [raw_entities.get("workflow")] if isinstance(raw_entities.get("workflow"), str) else raw_entities.get("workflows", []),
@@ -122,7 +127,6 @@ class MetaOrchestrator:
                 "keywords": raw_entities.get("keywords", [])
             }
 
-            # บันทึกข้อมูลเข้าสู่ Unified Core Memory (เชื่อมเข้ากับ memory_manager อัตโนมัติ)
             user_memory.update_context(
                 user_id=user_id, 
                 summary_context=new_summary, 
@@ -131,11 +135,10 @@ class MetaOrchestrator:
             )
             
         except Exception as e:
-            print(f"⚠️ [Fallback] Switch to Static Rules due to error: {e}")
-            team = "full_stack_team"
-            reason = f"Static Fallback: ระบบเลือกทีมกลางเพื่อความปลอดภัยสูงสุด ({str(e)})"
+            print(f"⚠️ [Fallback] Switch to Registry Default due to error: {e}")
+            team = "infrastructure_team"
+            reason = f"Registry Fallback: ระบบเลือกทีมพื้นฐานความปลอดภัยสูง ({str(e)})"
             
-            # กรณีเอิร์รอร์จากตัวโมเดล ให้ทำ Fallback บันทึกค่าเซฟตี้พื้นฐานเพื่อไม่ให้ Process หลักหยุดทำงาน
             user_memory.update_context(
                 user_id=user_id, 
                 summary_context=objective, 
@@ -143,25 +146,11 @@ class MetaOrchestrator:
                 entities={"teams": [team], "workflows": [], "open_source": [], "keywords": []}
             )
 
-        print(f"→ Routed to: {team} | Reason: {reason}")
+        print(f"→ Routed to Dynamic Team: {team} | Reason: {reason}")
         return {
             "team": team,
             "reason": reason,
             "objective": objective
         }
-
-    def register_team(self, team_name: str, description: str, agents: list):
-        registry = json.loads(self.registry_path.read_text(encoding="utf-8"))
-        registry["teams"][team_name] = {
-            "name": team_name,
-            "description": description,
-            "agents": agents,
-            "created_at": dt.datetime.now().isoformat(),
-            "status": "active"
-        }
-        if team_name not in registry["meta_orchestrator"]["active_teams"]:
-            registry["meta_orchestrator"]["active_teams"].append(team_name)
-        self.registry_path.write_text(json.dumps(registry, indent=2, ensure_ascii=False), encoding="utf-8")
-        return registry["teams"][team_name]
 
 meta_orchestrator = MetaOrchestrator()
