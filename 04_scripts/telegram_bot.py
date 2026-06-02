@@ -1,11 +1,22 @@
 import os
 import json
+import sys
 from pathlib import Path
 from contextlib import asynccontextmanager
 from fastapi import FastAPI, Request
 from aiogram import Bot, Dispatcher, types
 from aiogram.types import Update
 from aiogram.filters import Command
+
+# --- 🎯 [CRITICAL PATH RESOLUTION] แก้ปัญหาการหาโมดูลหลังบ้านไม่เจอตอนรันบน Render ---
+# บังคับเพิ่มโฟลเดอร์รากของโปรเจกต์ และโฟลเดอร์ 04_scripts เข้าไปในพาร์ทหลักของระบบ Python
+CURRENT_DIR = Path(__file__).resolve().parent
+PROJECT_ROOT = CURRENT_DIR.parent
+
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
+if str(CURRENT_DIR) not in sys.path:
+    sys.path.insert(0, str(CURRENT_DIR))
 
 TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
 RENDER_URL = os.getenv("RENDER_EXTERNAL_URL") 
@@ -50,18 +61,15 @@ async def telegram_webhook(request: Request):
     try:
         json_data = await request.json()
         
-        # 🛡️ ระบบ Bulletproof Parsing: ป้องกันข้อผิดพลาดของ Pydantic ทุกสถานการณ์
+        # ระบบ Bulletproof Parsing: ป้องกันข้อผิดพลาดของ Pydantic ทุกสถานการณ์
         update = None
         try:
-            # กลยุทธ์ที่ 1: แปลงแบบมาตรฐาน Pydantic v2 (ไม่ใส่ context ป้องกันบั๊ก positional argument)
             update = Update.model_validate(json_data)
-        except Exception as e1:
+        except Exception:
             try:
-                # กลยุทธ์ที่ 2: แปลงแบบส่ง bot context เข้าไปด้วย
                 update = Update.model_validate(json_data, context={"bot": bot})
-            except Exception as e2:
+            except Exception:
                 try:
-                    # กลยุทธ์ที่ 3: รองรับระบบ Pydantic v1 (สำหรับสภาพแวดล้อมเก่า)
                     update = Update.parse_obj(json_data)
                 except Exception as e3:
                     raise ValueError(f"ไม่สามารถแปลงโครงสร้าง JSON เป็น Update Object ได้: {e3}")
@@ -99,6 +107,7 @@ async def handle_text_message(message: types.Message):
     )
 
     try:
+        # ทำการโหลดฟังก์ชันแบบ Dynamic หลังจากแก้ไขพาร์ทระบบเสร็จสิ้น
         from workflow_builder import execute_user_objective
         result = await execute_user_objective(objective=text, user_id=user_id)
 
