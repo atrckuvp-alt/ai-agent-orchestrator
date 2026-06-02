@@ -5,8 +5,15 @@ import sys
 import asyncio
 import importlib
 
-ROOT = Path(__file__).resolve().parents[1]
-sys.path.append(str(ROOT / "04_scripts"))
+# --- 🎯 [FIXED PATH RESOLUTION] ประกาศตัวแปรพาร์ทรากแก้วให้สมบูรณ์ ---
+CURRENT_DIR = Path(__file__).resolve().parent
+ROOT = CURRENT_DIR.parent if CURRENT_DIR.name == "04_scripts" else CURRENT_DIR
+
+# ผูกพาร์ทเข้าระบบ Python เผื่อเรียกโมดูลข้ามกันบน Render
+if str(CURRENT_DIR) not in sys.path:
+    sys.path.append(str(CURRENT_DIR))
+if str(ROOT) not in sys.path:
+    sys.path.append(str(ROOT))
 
 from team_manager import team_manager
 from meta_orchestrator import meta_orchestrator
