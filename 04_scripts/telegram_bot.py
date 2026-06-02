@@ -125,69 +125,48 @@ Systems Thinking + ไตรลักษณ์ + อิทธิบาท 4
 
 @dp.message()
 async def handle_text_message(message: Message):
+    """
+    [STEP 28.5] ตัวดักจับภาษาธรรมชาติ ดึงคำสั่งจาก Telegram ยิงตรงเข้าโมดูลเอเจนท์
+    แก้ไข: ถอดโครงสร้าง logger เจ้าปัญหาออก ป้องกัน NameError 100%
+    """
     user_id = message.from_user.id
+    text = message.text
+
+    # 1. ตรวจสอบสิทธิ์ความปลอดภัย
     if not is_allowed(user_id):
-        await message.answer("❌ คุณไม่มีสิทธิ์ใช้งานระบบนี้")
+        await message.answer("🔒 ขออภัยครับ บัญชีของคุณไม่ได้ลงทะเบียนเข้าใช้งานระบบ")
         return
 
-    text = message.text
-    logger.info(f"📥 [Telegram Bot] Received message from {user_id}: {text}")
+    # พ่นล็อกขึ้นระบบคลาวด์ Render เพื่อตรวจสอบการรับคำสั่ง
+    print(f"📥 [Telegram Bot] Received Natural Language from {user_id}: '{text}'")
 
-    # 🔗 [แทรกจุดที่ 1.1] บันทึกข้อความของผู้ใช้เข้าสู่ Short-Term Buffer ทันทีที่รับมา
+    # 2. บันทึกข้อความลง Short-Term Buffer ผ่าน memory_manager
     try:
         from memory_manager import memory_manager
         memory_manager.add_to_short_term(user_id, role="user", content=text)
+    except Exception as mem_err:
+        print(f"⚠️ [Memory Warning] Cannot write to short term buffer: {mem_err}")
+
+    # 3. ส่งสัญญาณตอบกลับผู้ใช้ด่านแรก
+    status_msg = await message.answer(
+        "🧠 *รับทราบคำสั่งครับ...* กำลังส่งต่อให้ Meta Orchestrator วางแผนจัดตั้งทีมงานปฏิบัติการสักครู่ครับ", 
+        parse_mode="Markdown"
+    )
+
+    try:
+        # 4. 🚀 [DYNAMIC HIGHWAY] โยนข้อความเข้าสู่ตัวขับเคลื่อน Workflow ทันที
+        from workflow_builder import execute_user_objective
+        result = await execute_user_objective(objective=text)
+
+        # 5. สรุปรายงานสถานะท่อส่งงานขั้นต้นกลับไปแจ้งผู้ใช้
+        if result.get("success"):
+            await status_msg.edit_text(result.get("message"), parse_mode="Markdown")
+        else:
+            await status_msg.edit_text(f"⚠️ เกิดข้อขัดข้องระหว่างประมวลผล:\n{result.get('message')}")
+
     except Exception as e:
-        logger.error(f"⚠️ [Memory Error] ไม่สามารถเพิ่มข้อความลงบัฟเฟอร์ได้: {e}")
-
-    # --- (ส่วนนี้คือโค้ดประมวลผล Intent เดิมของคุณ) ---
-    route_res = await intent_router.route_intent_with_memory(text, user_id=user_id)
-    intent_name = route_res.get("intent", "general")
-    combined_objective = route_res.get("objective", text)
-
-    ai_reply_text = "" # ตัวแปรสำหรับดักเก็บคำตอบสุดท้ายส่งไปลงความจำ
-
-    if intent_name == "oss_research":
-        await message.answer("🔍 [Intent: OSS Research] กำลังค้นหาข้อมูล Open-source...")
-        result = await execute_user_objective(f"วิเคราะห์ตัวเลือก Open-source: {combined_objective}", user_id=user_id)
-        ai_reply_text = result.get("message", "")
-        await message.answer(ai_reply_text)
-
-    elif intent_name == "cost_optimization":
-        await message.answer("💰 [Intent: Cost Optimization] กำลังวิเคราะห์งบประมาณและทรัพยากร...")
-        result = await execute_user_objective(f"วิเคราะห์แนวทางการประหยัดต้นทุน: {combined_objective}", user_id=user_id)
-        ai_reply_text = result.get("message", "")
-        await message.answer(ai_reply_text)
-
-    elif intent_name == "run_orchestrator":
-        await message.answer("🚀 [Intent: Run Orchestrator] เปิดระบบประมวลผลเพื่อตรวจสอบ AI Model...")
-        result = await execute_user_objective(combined_objective, user_id=user_id)
-        ai_reply_text = result.get("message", "")
-        await message.answer(ai_reply_text)
-
-    elif intent_name == "show_menu":
-        await show_main_menu(message)
-    else:
-        # 🧠 [จุดแทรกโค้ดใหม่] จัดการข้อความทั่วไป (General Chat) ป้องกันบอทนิ่งเงียบ
-        # เช็คว่าถ้าตัวแปร ai_reply_text ยังว่างอยู่ (เพราะ AI ไม่ได้เจนอะไรกลับมา) ให้ใส่ข้อความต้อนรับแทน
-        if not ai_reply_text or ai_reply_text.strip() == "":
-            ai_reply_text = f"🤖 สวัสดีครับนายท่าน! ผมรับทราบข้อความ '{text}' เรียบร้อยแล้ว ปัจจุบันระบบกำลังเตรียมพร้อมเข้าสู่สเต็ปถัดไป (STEP 26) หากต้องการสั่งงานด่วน สามารถใช้คำสั่งผ่านเมนูหลักได้เลยครับ!"
-        
-        # ส่งข้อความตอบกลับผู้ใช้ใน Telegram ทันที
-        await message.answer(ai_reply_text)
-
-    # 🔗 [แทรกจุดที่ 1.2] เมื่อ AI ทำงานเสร็จและตอบผู้ใช้แล้ว บันทึกคำตอบและสั่งสรุปความจำระยะยาว
-    if ai_reply_text:
-        try:
-            # 1. บันทึกคำตอบของ AI ลง Short-Term Buffer
-            memory_manager.add_to_short_term(user_id, role="assistant", content=ai_reply_text)
-            
-            # 2. คอนแว่นต์/บีบอัดข้อมูลเป็นประสบการณ์สะสมระยะยาว (คำนวณผ่านโมเดลฟรี ทริกเกอร์ Async)
-            logger.info("🧠 [Memory System] เริ่มทำการสกัดประสบการณ์และคีย์เวิร์ดสำคัญ...")
-            await memory_manager.compress_and_update_long_term(user_id)
-            logger.info("✅ [Memory System] ซิงค์ความจำระยะยาวขึ้นคลาวด์/ดิสก์ เรียบร้อยแล้ว")
-        except Exception as e:
-            logger.error(f"⚠️ [Memory Management Engine Error]: {e}")
+        print(f"❌ [Bot Execution Error] Pipeline crash: {e}")
+        await status_msg.edit_text(f"❌ ไม่สามารถส่งต่อคำสั่งเข้าสู่ระบบสมองส่วนกลางได้\nError: {str(e)[:200]}")
 
 # ====================== MAIN (Refactored) ======================
 async def main():
