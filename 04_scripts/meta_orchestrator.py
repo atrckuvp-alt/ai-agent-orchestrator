@@ -111,8 +111,9 @@ class MetaOrchestrator:
         
         try:
             ai_response = await provider_router.request_llm(prompt, tier="reasoning")
-            cleaned_json = ai_response.replace("```json", "").replace("
-```", "").strip()
+            
+            # [แก้ไขจุดบั๊กบรรทัด 114 ที่มีปัญหาเรื่องเครื่องหมายอัญประกาศ]
+            cleaned_json = ai_response.replace("```json", "").replace("```", "").strip()
             result_data = json.loads(cleaned_json)
             
             team = result_data.get("team", "infrastructure_team")
