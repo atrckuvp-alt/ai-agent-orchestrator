@@ -20,11 +20,9 @@ class IntentRouter:
 
     def route_user_intent(self, user_message: str) -> str:
         """
-        [LAYER 2 — Intent Routing with Multi-Team Routing]
-        คัดแยกเจตนาว่าข้อความต้องการใช้ทีมโครงสร้างพื้นฐาน (Infra) หรือทีมโอเพนซอร์สซอฟต์แวร์ (OSS)
+        [LAYER 2 — Intent Routing with Multi-Team Priority]
         """
         message_lower = user_message.lower().strip()
-        registry = self._load_registry()
         
         print(f"🧠 [Intent Router] กำลังวิเคราะห์ข้อความเจาะจงเป้าหมาย: '{user_message}'")
         
@@ -33,25 +31,21 @@ class IntentRouter:
         if any(gk in message_lower for gk in general_keywords):
             return "general_chat"
         
-        # 2. ค้นหาแบบ Keyword Match ตรงจากฐานทะเบียนทีมย่อย (Dynamic Search)
-        for team_key, team_info in registry.get("teams", {}).items():
-            keywords = team_info.get("keywords", [])
-            if any(kw in message_lower for kw in keywords):
-                print(f"🎯 [Intent Router] ตรวจพบคำเฉพาะเจาะจง! โยนงานเข้าทีม -> {team_key}")
-                return team_key
-                
-        # 3. Fallback Heuristics แยกแยะประเภทกรณีไม่มีคีย์เวิร์ดตรงตัว
-        # แนวการจัดการระบบ / คลาวด์ / เซิฟเวอร์ / เช็คระบบ -> infrastructure_team
-        infra_clues = ["ฐานข้อมูล", "เซิฟเวอร์", "db", "cloud", "server", "deploy", "optimize", "ระบบ"]
-        if any(ic in message_lower for ic in infra_clues):
-            print("💡 [Intent Router Fallback] ตรวจพบเบาะแสเชิงระบบ -> ส่งเข้า infrastructure_team")
-            return "infrastructure_team"
-
-        # แนวการหาเครื่องมือใช้งาน / ซอฟต์แวร์สำเร็จรูป / มาร์เก็ตติ้ง -> oss_research_team
-        oss_clues = ["หา", "scout", "marketing", "โอเพนซอร์ส", "ซอฟต์แวร์", "แอป", "คู่แข่ง", "automation", "tool"]
-        if any(oc in message_lower for oc in oss_clues):
-            print("💡 [Intent Router Fallback] ตรวจพบเบาะแสเชิงซอฟต์แวร์ใช้งาน -> ส่งเข้า oss_research_team")
+        # 2. [CRITICAL BUGFIX] ดักจับคำสั่งคอมโบควบสองทีม (Collaboration Pattern Detection)
+        # ถ้าพบบทสนทนาที่มีคีย์เวิร์ดของทั้งสองสายงานในที่เดียวกัน ให้ส่งเข้า OSS Team เสมอ เพื่อไปเริ่ม Workflow Chain
+        has_infra_clue = any(ic in message_lower for ic in ["infra", "cloud", "database", "เซิฟเวอร์", "เซอเวอ", "คลาวด์", "ระบบ"])
+        has_oss_clue = any(oc in message_lower for oc in ["oss", "open-source", "หาซอฟต์แวร์", "เครื่องมือ", "crm", "automation", "tool"])
+        
+        if has_infra_clue and has_oss_clue:
+            print("🎯 [Intent Router Combo] ตรวจพบคำสั่งควบคู่! จัดลำดับความสำคัญส่งเข้า -> oss_research_team เพื่อเริ่มกระบวนการส่งไม้ต่อ")
             return "oss_research_team"
+
+        # 3. Fallback Heuristics แยกทีมเดี่ยวๆ (กรณีพิมพ์สั่งอย่างใดอย่างหนึ่ง)
+        if has_oss_clue:
+            return "oss_research_team"
+            
+        if has_infra_clue:
+            return "infrastructure_team"
             
         return "unknown"
 
