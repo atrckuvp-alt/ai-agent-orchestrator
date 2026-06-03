@@ -10,7 +10,6 @@ class IntentRouter:
         pass
 
     def _load_registry(self):
-        """โหลดทะเบียนทีมปฏิบัติการจากความจำ 00_memory/team_registry.json"""
         if not REGISTRY_PATH.exists():
             return {"teams": {}}
         try:
@@ -34,7 +33,7 @@ class IntentRouter:
         if any(gk in message_lower for gk in general_keywords):
             return "general_chat"
         
-        # 2. ค้นหาแบบ Keyword Match ตรงจากฐานทะเบียนทีม (Dynamic Search)
+        # 2. ค้นหาแบบ Keyword Match ตรงจากฐานทะเบียนทีมย่อย (Dynamic Search)
         for team_key, team_info in registry.get("teams", {}).items():
             keywords = team_info.get("keywords", [])
             if any(kw in message_lower for kw in keywords):
@@ -42,14 +41,14 @@ class IntentRouter:
                 return team_key
                 
         # 3. Fallback Heuristics แยกแยะประเภทกรณีไม่มีคีย์เวิร์ดตรงตัว
-        # แยกว่าเป็นแนว "การจัดการระบบ/ปรับเซิฟเวอร์/ฐานข้อมูล" -> infrastructure_team
-        infra_clues = ["ฐานข้อมูล", "เซิฟเวอร์", "db", "cloud", "server", "deploy", "optimize"]
+        # แนวการจัดการระบบ / คลาวด์ / เซิฟเวอร์ / เช็คระบบ -> infrastructure_team
+        infra_clues = ["ฐานข้อมูล", "เซิฟเวอร์", "db", "cloud", "server", "deploy", "optimize", "ระบบ"]
         if any(ic in message_lower for ic in infra_clues):
             print("💡 [Intent Router Fallback] ตรวจพบเบาะแสเชิงระบบ -> ส่งเข้า infrastructure_team")
             return "infrastructure_team"
 
-        # แยกว่าเป็นแนว "การหาซอฟต์แวร์/มาร์เก็ตติ้ง/เครื่องมือทางธุรกิจ" -> oss_research_team
-        oss_clues = ["หา", "scout", "marketing", "โอเพนซอร์ส", "ซอฟต์แวร์", "แอป", "คู่แข่ง", "automation"]
+        # แนวการหาเครื่องมือใช้งาน / ซอฟต์แวร์สำเร็จรูป / มาร์เก็ตติ้ง -> oss_research_team
+        oss_clues = ["หา", "scout", "marketing", "โอเพนซอร์ส", "ซอฟต์แวร์", "แอป", "คู่แข่ง", "automation", "tool"]
         if any(oc in message_lower for oc in oss_clues):
             print("💡 [Intent Router Fallback] ตรวจพบเบาะแสเชิงซอฟต์แวร์ใช้งาน -> ส่งเข้า oss_research_team")
             return "oss_research_team"
