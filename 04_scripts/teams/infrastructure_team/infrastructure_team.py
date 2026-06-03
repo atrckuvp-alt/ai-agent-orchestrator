@@ -6,7 +6,7 @@ import asyncio
 
 # ค้นหาพาธรากฐานของโปรเจกต์หลักเพื่อนำเข้าโมดูลแวดล้อมได้ถูกต้อง
 CURRENT_DIR = Path(__file__).resolve().parent
-ROOT = CURRENT_DIR.parent.parent.parent  # ขึ้นไป 3 ชั้น เพื่อให้พ้นจาก 04_scripts/teams/infrastructure_team ไปยัง Root
+ROOT = CURRENT_DIR.parent.parent.parent  # ขึ้นไป 3 ชั้น เพื่อไปยัง Root
 
 # ลงทะเบียนพาธของสคริปต์เข้าสู่ระบบระบบอ้างอิงของ Python
 paths_to_add = [
@@ -93,7 +93,7 @@ class InfrastructureTeam:
 2️⃣ {mock_infra_report.get('top_recommendations')[1]}
 3️⃣ {mock_infra_report.get('top_recommendations')[2]}
 
-💡 **วิเคราะห์ความคุ้มค่าตามหลักธรรมาภิบาล:**
+💡 **วิเคราะห์ความคุค่าตามหลักธรรมาภิบาล:**
 _{mock_infra_report.get('reasoning')}_
 
 ⚠️ **ข้อสังเกตโควตาคลาวด์ฟรี (Free Tier Alert):**
@@ -102,8 +102,8 @@ _{mock_infra_report.get('reasoning')}_
                 await bot.send_message(chat_id=user_id, text=formatted_report.strip(), parse_mode="Markdown")
                 print(f"📨 [Infrastructure Team] ส่งเอกสารรายงานกลับหาผู้ใช้ {user_id} สำเร็จ")
                 
-                session = await bot.get_session()
-                await session.close()
+                # 🎯 [CORRECT IMPLEMENTATION] ปิดพอร์ตรองรับเซสชันระบบ Aiogram 3.x อย่างปลอดภัย
+                await bot.session.close()
         except Exception as tel_err:
             print(f"❌ [Telegram Send Error] ไม่สามารถส่งรายงานหาผู้ใช้ได้: {tel_err}")
 
