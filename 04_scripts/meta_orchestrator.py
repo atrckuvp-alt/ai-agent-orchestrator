@@ -10,7 +10,7 @@ REGISTRY_PATH = ROOT / "00_memory" / "team_registry.json"
 if str(CURRENT_DIR) not in sys.path:
     sys.path.insert(0, str(CURRENT_DIR))
 
-# นำเข้าโมดูลคัดแยกเจตนาตามโครงสร้างไฟล์จริงบนเครื่องของนายท่าน
+# นำเข้าโมดูลคัดแยกเจตนา
 from intent_router import intent_router
 
 class MetaOrchestrator:
@@ -77,7 +77,16 @@ class MetaOrchestrator:
             print(f"❌ [Orchestrator Failover Alert] การโหลดหรือรันโมดูลทีมย่อยล้มเหลว: {e}")
             return {
                 "status": "fallback_activated",
-                "message": "ระบบทีมปฏิบัติการขัดข้องชั่วคราว แต่หน่วยความจำหลักปลอดภัยดีครับ"
+                "message": f"ระบบทีมปฏิบัติการขัดข้องชั่วคราว แต่หน่วยความจำหลักปลอดภัยดีครับ (Error: {e})"
             }
+
+    async def route_objective(self, user_message: str, user_id: int):
+        """
+        [Backward Compatibility Alias] 
+        รองรับการเชื่อมต่อกับระบบเก่าที่เรียกชื่อฟังก์ชัน route_objective
+        โดยทำการดึงข้อความวิ่งสับสายเข้าสู่ฟังก์ชันหลักโดยตรง
+        """
+        print(f"🔄 [Orchestrator Alias] สับสายฟังก์ชันจาก route_objective -> route_and_execute")
+        return await self.route_and_execute(user_message=user_message, user_id=user_id)
 
 meta_orchestrator = MetaOrchestrator()
