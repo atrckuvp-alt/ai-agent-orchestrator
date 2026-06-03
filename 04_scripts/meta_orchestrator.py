@@ -10,7 +10,6 @@ REGISTRY_PATH = ROOT / "00_memory" / "team_registry.json"
 if str(CURRENT_DIR) not in sys.path:
     sys.path.insert(0, str(CURRENT_DIR))
 
-# นำเข้าโมดูลคัดแยกเจตนา
 from intent_router import intent_router
 
 class MetaOrchestrator:
@@ -19,7 +18,6 @@ class MetaOrchestrator:
         self._ensure_registry_exists()
         
     def _ensure_registry_exists(self):
-        """ตรวจสอบและสร้างไฟล์สารบัญทีมในคลังความจำกลางหากไม่พบ"""
         REGISTRY_PATH.parent.mkdir(parents=True, exist_ok=True)
         if not REGISTRY_PATH.exists():
             default_registry = {
@@ -43,25 +41,37 @@ class MetaOrchestrator:
     async def route_and_execute(self, user_message: str, user_id: int):
         """
         [LAYER 3 - Orchestration Engine]
-        รับคำสั่งจาก Telegram -> ส่งให้ Intent Router คัดแยก -> เรียกทีมย่อยทำงานอัตโนมัติ
         """
-        # 1. ส่งข้อความไปให้สมองส่วนคัดแยกเจตนาทำงาน (Layer 2)
+        # 1. ส่งข้อความไปให้สมองส่วนคัดแยกเจตนาทำงาน
         target_team = intent_router.route_user_intent(user_message)
+        
+        # [NEW LOGIC] รองรับคำทักทายทั่วไป ไม่ปัดคำสั่งทิ้งดื้อๆ
+        if target_team == "general_chat":
+            guide_message = """
+🤖 **สวัสดีครับนายท่าน! ผมคือ AI Command Center ของท่าน** ขณะนี้ระบบกำลังพัฒนาและอยู่ใน **STEP 23 (Intent Router)** ผมสามารถรับคำสั่งภาษาธรรมชาติเพื่อเรียกใช้ทีมปฏิบัติการได้แล้วครับ!
+
+💡 **ท่านสามารถสั่งงานผมในหัวข้อเหล่านี้ได้เลย:**
+• *"ช่วยวิจัยฐานข้อมูลแบบฟรีให้หน่อย"*
+• *"หาตัวเลือกคลาวด์เซิฟเวอร์ประหยัดต้นทุน"*
+• *"ช่วยวางโครงสร้างระบบโปรเจกต์ใหม่"*
+
+_พิมพ์รายละเอียดงานที่ต้องการวิจัยส่งเข้ามาได้เลยครับ ทีมปฏิบัติการย่อยพร้อมสแตนด์บายทำงานให้ท่านทันที!_
+            """
+            return {"status": "success", "data": {"success": True, "message": guide_message.strip()}}
         
         if target_team == "unknown":
             return {
                 "status": "failed",
-                "message": "ขออภัยครับนายท่าน ผมยังไม่เข้าใจคำสั่งนี้ หรือยังไม่มีทีมที่รองรับงานประเภทนี้ในระบบครับ"
+                "message": "ขออภัยครับนายท่าน ผมยังไม่เข้าใจคำสั่งนี้ หรือยังไม่มีทีมที่รองรับงานประเภทนี้ในระบบครับ ลองพิมพ์ทดสอบเกี่ยวกับ 'วิจัยระบบอินฟราคลาวด์' ดูไหมครับ?"
             }
             
-        # 2. ดึงคอนฟิกของทีมปฏิบัติการเป้าหมาย
+        # 2. รันทีมปฏิบัติการตามปกติ
         registry = self._load_registry()
         team_config = registry["teams"].get(target_team)
         
         if not team_config:
             return {"status": "failed", "message": f"ไม่พบข้อมูลโมดูลของทีม {target_team} ในความจำ"}
             
-        # 3. Dynamic Module Injection (โหลดทีมย่อยขึ้นมาทำงาน)
         try:
             entry_point_str = team_config["entry_point"]
             module_path, obj_name = entry_point_str.split(":")
@@ -74,18 +84,13 @@ class MetaOrchestrator:
             return {"status": "success", "data": result}
             
         except Exception as e:
-            print(f"❌ [Orchestrator Failover Alert] การโหลดหรือรันโมดูลทีมย่อยล้มเหลว: {e}")
+            print(f"❌ [Orchestrator Failover Alert] โหลดโมดูลล้มเหลว: {e}")
             return {
                 "status": "fallback_activated",
                 "message": f"ระบบทีมปฏิบัติการขัดข้องชั่วคราว แต่หน่วยความจำหลักปลอดภัยดีครับ (Error: {e})"
             }
 
     async def route_objective(self, user_message: str, user_id: int):
-        """
-        [Backward Compatibility Alias] 
-        รองรับการเชื่อมต่อกับระบบเก่าที่เรียกชื่อฟังก์ชัน route_objective
-        โดยทำการดึงข้อความวิ่งสับสายเข้าสู่ฟังก์ชันหลักโดยตรง
-        """
         print(f"🔄 [Orchestrator Alias] สับสายฟังก์ชันจาก route_objective -> route_and_execute")
         return await self.route_and_execute(user_message=user_message, user_id=user_id)
 
