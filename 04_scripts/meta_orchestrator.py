@@ -217,5 +217,21 @@ class MetaOrchestrator:
 
     async def route_objective(self, user_message: str, user_id: int):
         return await self.route_and_execute(user_message=user_message, user_id=user_id)
+    
+async def execute_scheduled_task(self, user_id: int):
+        """
+        [STEP 32 - Autonomous Cron Executive]
+        ฟังก์ชันสำหรับให้ระบบจ้างงานตัวเองอัตโนมัติเมื่อถึงเวลาที่กำหนด
+        """
+        print("⏰ [Chronos Activated] เริ่มต้นปฏิบัติการตามตารางเวลาประจำวัน...")
+        
+        # ร่างคำสั่งประยุกต์เสมือนนายท่านตื่นมาสั่งเองตอนเช้า
+        scheduled_prompt = "สรุปเทรนด์เทคโนโลยีเครื่องมือ Open-Source และสถาปัตยกรรมคลาวด์ที่น่าจับตามองในสัปดาห์นี้"
+        
+        # ส่งเข้าลูปมหาเกราะ 5 ชั้นทันที
+        print(f"🤖 [Chronos Router] กำลังส่งคำสั่งอัตโนมัติเข้าสู่ระบบควบคุม...")
+        result = await self.route_and_execute(user_message=scheduled_prompt, user_id=user_id)
+        
+        return result
 
 meta_orchestrator = MetaOrchestrator()
