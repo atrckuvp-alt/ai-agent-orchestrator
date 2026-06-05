@@ -1,9 +1,10 @@
-# Complete file: 04_scripts/telegram_bot.py (With Webhook Flush Mechanics)
+# Complete file: 04_scripts/telegram_bot.py (Pure FastAPI/ASGI Webhook Integration)
 import os
 import sys
 import asyncio
 import datetime
 from pathlib import Path
+from telebot.types import Update
 from telebot.async_telebot import AsyncTeleBot
 from dotenv import load_dotenv
 
@@ -21,32 +22,63 @@ if not TELEGRAM_BOT_TOKEN:
 
 bot = AsyncTeleBot(TELEGRAM_BOT_TOKEN)
 
-# 🌐 [ASGI APP FOR RENDER]
+# =====================================================================
+# 🌐 [WEBHOOK ENGINE - ASGI APP FOR RENDER]
+# =====================================================================
 async def app(scope, receive, send):
+    """ Fast Webhook Gateway ดักจับข้อมูลที่ Telegram ยิงเข้าทาง POST /webhook """
     if scope['type'] == 'lifespan':
         while True:
             message = await receive()
             if message['type'] == 'lifespan.startup':
+                # ตั้งค่าเปิด Chronos Loop คู่ขนานตอนสตาร์ทระบบ
+                MY_USER_ID = 7238952711
+                asyncio.create_task(autonomous_cron_loop(bot, MY_USER_ID))
+                print("📡 [Webhook Active] ระบบสมองกลตั้งรับสัญญาณผ่านท่อ POST /webhook เรียบร้อย...")
                 await send({'type': 'lifespan.startup.complete'})
             elif message['type'] == 'lifespan.shutdown':
                 await send({'type': 'lifespan.shutdown.complete'})
                 return
-    else:
+                
+    elif scope['type'] == 'http' and scope['path'] == '/webhook' and scope['method'] == 'POST':
+        # 📥 ดึงข้อมูลดิบ (Body) ที่ Telegram โยนเข้าเซิร์ฟเวอร์
+        body = b""
+        more_body = True
+        while more_body:
+            message = await receive()
+            body += message.get('body', b'')
+            more_body = message.get('more_body', False)
+            
+        if body:
+            try:
+                # แปลงข้อมูลดิบเข้าสู่ตัวแปรระบบของ Telebot แล้วสั่งประมวลผลทันที
+                json_string = body.decode('utf-8')
+                update = Update.de_json(json_string)
+                await bot.process_new_updates([update])
+            except Exception as e:
+                print(f"⚠️ [Webhook Parse Error] ถอดรหัสคำสั่งพลาด: {e}")
+                
         await send({
             'type': 'http.response.start',
             'status': 200,
             'headers': [[b'content-type', b'text/plain']],
         })
+        await send({'type': 'http.response.body', 'body': b'OK'})
+        
+    else:
+        # หน้าแรกแสดงสถานะปกติเมื่อเปิดผ่านเว็บ Browser
         await send({
-            'type': 'http.response.body',
-            'body': b'AI Orchestrator Command Center Is Operating Smoothly.',
+            'type': 'http.response.start',
+            'status': 200,
+            'headers': [[b'content-type', b'text/plain']],
         })
+        await send({'type': 'http.response.body', 'body': b'AI Command Center Webhook Status: LIVE'})
 
 # =====================================================================
-# ⏰ [⏰ CHRONOS WATCHER - THAI TIMEZONE FIXED]
+# ⏰ [PLAN A - CHRONOS WATCHER TIME-ZONE FIXED]
 # =====================================================================
 async def autonomous_cron_loop(bot_instance, target_user_id: int):
-    print("⏳ [Chronos Watcher] ระบบเฝ้าระวังเวลาเปิดทำงานคู่ขนาน...")
+    print("⏳ [Chronos Watcher] ระบบเฝ้าระวังเวลารายงานเช้า เปิดทำงานคู่ขนาน...")
     has_run_today = False
     
     while True:
@@ -56,10 +88,10 @@ async def autonomous_cron_loop(bot_instance, target_user_id: int):
             
             if now.hour == 9 and now.minute == 0:
                 if not has_run_today:
-                    print("🔔 [Chronos Trigger] สั่งเดินเครื่องรายงานเช้า!")
+                    print("🔔 [Chronos Trigger] ได้เวลา 09:00 น. ยิงรายงานเข้า Telegram!")
                     await bot_instance.send_message(
                         chat_id=target_user_id, 
-                        text="⏰ **[Morning Briefing]** อรุณสวัฒดิ์ครับนายท่าน! ระบบเริ่มประมวลผลรายงานยุทธศาสตร์ประจำวันแล้วครับ..."
+                        text="⏰ **[Morning Briefing]** อรุณสวัสดิ์ครับนายท่าน! ระบบเริ่มประมวลผลรายงานยุทธศาสตร์ประจำวันอัตโนมัติแล้วครับ..."
                     )
                     scheduled_result = await meta_orchestrator.execute_scheduled_task(user_id=target_user_id)
                     if scheduled_result and "data" in scheduled_result and "message" in scheduled_result["data"]:
@@ -80,8 +112,8 @@ async def autonomous_cron_loop(bot_instance, target_user_id: int):
 @bot.message_handler(commands=['start', 'help'])
 async def send_welcome(message):
     welcome_text = (
-        "🤖 **AI Command Center (v2.3)**\n\n"
-        "🟢 ล้างระบบ Webhook เก่าเรียบร้อย (Flushed)\n"
+        "🤖 **AI Command Center (v3.0 - Pure Webhook)**\n\n"
+        "🟢 เชื่อมท่อสัญญาณตรงยิงเข้าหน้าเซิร์ฟเวอร์ (Connected)\n"
         "🟢 บังคับฐานเวลาประเทศไทย 09:00 น. (Fixed)\n"
         "🟢 ยูนิต Growth Marketing BU (Ready)"
     )
@@ -92,24 +124,10 @@ async def handle_all_messages(message):
     user_id = message.from_user.id
     user_text = message.text
     
-    print(f"📥 [Incoming Message] จาก {user_id}: {user_text}")
+    print(f"📥 [Incoming Message via Webhook] จาก {user_id}: {user_text}")
     orchestrator_response = await meta_orchestrator.route_and_execute(user_message=user_text, user_id=user_id)
     
     if orchestrator_response and "data" in orchestrator_response:
         data_payload = orchestrator_response["data"]
         if "message" in data_payload:
             await bot.send_message(chat_id=message.chat.id, text=data_payload["message"])
-
-if __name__ == "__main__":
-    async def main():
-        MY_USER_ID = 7238952711
-        
-        # 🔥 [CRITICAL FIX] สั่งลบล้าง Webhook ค้างเก่าบนระบบของ Telegram ทันที เพื่อเปิดทางให้ Polling ทำงานได้
-        print("🧼 [Webhook Cleaner] กำลังสั่งล้างการลงทะเบียน Webhook เก่าออกจากเซิร์ฟเวอร์ Telegram...")
-        await bot.remove_webhook()
-        
-        asyncio.create_task(autonomous_cron_loop(bot_instance=bot, target_user_id=MY_USER_ID))
-        print("📡 [Polling Active] บอทเปลี่ยนมาใช้ระบบดึงข้อมูลตรง รอรับคำสั่งนายท่านแล้ว...")
-        await bot.infinity_polling(timeout=60, allowed_updates=["message", "photo"])
-    
-    asyncio.run(main())
