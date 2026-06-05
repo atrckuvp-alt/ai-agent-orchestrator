@@ -1,4 +1,4 @@
-# Complete file: 04_scripts/telegram_bot.py (With Strict Thailand Time Zone Fix)
+# Complete file: 04_scripts/telegram_bot.py (With Strict Thailand Time Zone & ASGI App Fix)
 import os
 import sys
 import asyncio
@@ -21,6 +21,28 @@ if not TELEGRAM_BOT_TOKEN:
 
 bot = AsyncTeleBot(TELEGRAM_BOT_TOKEN)
 
+# 🌐 🔥 [ASGI APP FIX FOR RENDER] 🔥
+# สร้างตัวแปรหลอกไว้ให้ Uvicorn ตรวจสอบผ่าน ไม่ปิดเซิฟเวอร์หนี
+async def app(scope, receive, send):
+    if scope['type'] == 'lifespan':
+        while True:
+            message = await receive()
+            if message['type'] == 'lifespan.startup':
+                await send({'type': 'lifespan.startup.complete'})
+            elif message['type'] == 'lifespan.shutdown':
+                await send({'type': 'lifespan.shutdown.complete'})
+                return
+    else:
+        await send({
+            'type': 'http.response.start',
+            'status': 200,
+            'headers': [[b'content-type', b'text/plain']],
+        })
+        await send({
+            'type': 'http.response.body',
+            'body': b'AI Orchestrator Command Center Is Operating Smoothly.',
+        })
+
 # =====================================================================
 # ⏰ [PLAN A - CHRONOS WATCHER TIME-ZONE FIXED] 
 # =====================================================================
@@ -30,11 +52,9 @@ async def autonomous_cron_loop(bot_instance, target_user_id: int):
     
     while True:
         try:
-            # 🌍 บังคับดึงเวลาเป็นฐาน GMT+7 (เวลาประเทศไทย) อย่างเด็ดขาด ไม่สนว่าเซิฟเวอร์ Render อยู่ประเทศไหน
             tz_thailand = datetime.timezone(datetime.timedelta(hours=7))
             now = datetime.datetime.now(tz_thailand)
             
-            # 🔔 ล็อกเป้าหมายยิงรายงานที่เวลา 09:00 น. ตรงของประเทศไทย
             if now.hour == 9 and now.minute == 0:
                 if not has_run_today:
                     print("🔔 [Chronos Trigger] ได้เวลา 09:00 น. ตรงในไทย สั่งเดินเครื่องรายงาน!")
@@ -51,7 +71,7 @@ async def autonomous_cron_loop(bot_instance, target_user_id: int):
                 if now.hour != 9 or now.minute != 0:
                     has_run_today = False
                     
-            await asyncio.sleep(20) # เช็คความถี่ทุกๆ 20 วินาทีเพื่อความแม่นยำ
+            await asyncio.sleep(20)
         except Exception as cron_err:
             print(f"⚠️ [Chronos Warning] ลูปเวลาติดขัด: {cron_err}")
             await asyncio.sleep(30)
@@ -64,7 +84,7 @@ async def send_welcome(message):
     welcome_text = (
         "🤖 **AI Command Center (v2.2)**\n\n"
         "🟢 ระบบความปลอดภัย 5 ชั้น (Active)\n"
-        "🟢 บังคับฐานเวลาประเทศไทน 09:00 น. (Fixed)\n"
+        "🟢 บังคับฐานเวลาประเทศไทย 09:00 น. (Fixed)\n"
         "🟢 ยูนิต Growth Marketing BU (Ready)"
     )
     await bot.reply_to(message, welcome_text)
