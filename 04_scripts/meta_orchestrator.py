@@ -1,4 +1,4 @@
-# Complete file: 04_scripts/meta_orchestrator.py (Routing Optimization & Safe Gateway)
+# Complete file: 04_scripts/meta_orchestrator.py (With Bulletproof Logic & Dynamic Gatekeeper)
 import json
 from pathlib import Path
 import importlib
@@ -42,25 +42,43 @@ class MetaOrchestrator:
     async def route_and_execute(self, user_message: str, user_id: int):
         cmd_lower = user_message.lower().strip()
         
-        # 🛑 1. ตรวจจับคำสั่งระบบอนุมัติ Gatekeeper
-        if cmd_lower.startswith("approve ") or cmd_lower.startswith("reject "):
+        # 🛑 1. ตรวจจับและบริการระบบอนุมัติ Gatekeeper (ปรับปรุงให้รองรับการถามลอยๆ)
+        if "approve" in cmd_lower or "reject" in cmd_lower:
+            parts = cmd_lower.split()
+            # หากพิมพ์แค่คำว่า approve / reject ลอยๆ ไม่มีหมายเลขตามหลัง ให้ลิสต์รายการค้างแสดงผล
+            if len(parts) == 1 or not parts[1].isdigit():
+                return self.list_pending_approvals()
             return await self.process_gatekeeper_decision(user_message)
             
-        # 💰 2. ขยายการเราท์ติ้งหาฝั่งปั๊มเงินโดยตรง ป้องกันการร่วงเข้า Self-Healing
+        # 💰 2. ส่งงานเข้ายูนิต Growth Marketing BU ตรงท่อ
         if any(kw in cmd_lower for kw in ["หาเงิน", "marketing", "ขาย", "content", "คอนเทนต์", "ข้าวสาร", "affiliate"]):
-            print("🎯 [Route Hit] ส่งงานเข้ายูนิต Growth Marketing BU โดยตรง")
+            print("🎯 [Route Hit] ส่งงานเข้ายูนิต Growth Marketing BU")
             try:
                 from teams.growth_marketing_bu.growth_marketing_bu import growth_marketing_bu
                 execution_result = await growth_marketing_bu.research_open_source(cmd_lower, user_id)
-                
-                # นำแผนงานไปเข้าคิว Pending Approval ทันที
                 return self.hold_for_master_approval("growth_marketing_bu", user_message, execution_result)
             except Exception as e_bu:
                 return {"status": "success", "data": {"message": f"⚠️ ยูนิตทำเงินติดขัด: {e_bu}"}}
 
-        # 🤖 3. กรณีเป็นแชทคุยถามไถ่ทั่วไป หรือเรื่องเปิดเกราะ
-        guide_message = f"🤖 **AI Command Center สแตนด์บายครับ!**\n\nนายท่านสามารถสั่งการยูนิตทำเงินได้ทันที เช่น พิมพ์คำว่า: *'วิเคราะห์กลยุทธ์การขายข้าวสารออนไลน์'* ได้เลยครับพ้ม"
+        # 🤖 3. คุยทั่วไป
+        guide_message = f"🤖 **AI Command Center สแตนด์บายครับนายท่าน!**\n\nพร้อมลุยแผนการตลาดแล้วครับ ลองพิมพ์สั่งผมว่า: *'วิเคราะห์กลยุทธ์การขายข้าวสารออนไลน์'* ได้เลยครับพ้ม"
         return {"status": "success", "data": {"message": guide_message}}
+
+    def list_pending_approvals(self) -> dict:
+        """ดึงรายการงานทั้งหมดที่ค้างรอนายท่านอนุมัติขึ้นมาโชว์"""
+        try:
+            queue = json.loads(APPROVAL_QUEUE_PATH.read_text(encoding="utf-8"))
+        except Exception:
+            queue = {"pending": []}
+            
+        if not queue.get("pending"):
+            return {"status": "success", "data": {"message": "✅ ไม่มีงานค้างรออนุมัติในระบบครับนายท่าน! ทุกยูนิตโปร่งใสไร้กังวล"}}
+            
+        msg = "📋 **[รายการแผนงานปั๊มเงินที่ค้างรออนุมัติ]**\n\n"
+        for item in queue["pending"]:
+            msg += f"🆔 **รหัส: {item['id']}** | ยูนิต: `{item['team_id']}`\n🔍 หัวข้อ: {item['topic']}\n────────────────\n"
+        msg += "👉 พิมพ์ **`approve ตามด้วยรหัส`** เพื่ออนุมัติปล่อยโพสต์ลง Base44 ได้เลยครับ"
+        return {"status": "success", "data": {"message": msg}}
 
     def hold_for_master_approval(self, team_id: str, topic: str, result_data: dict) -> dict:
         try:
@@ -120,7 +138,6 @@ class MetaOrchestrator:
             return {"status": "success", "data": {"message": f"❌ **[REJECTED]** สั่งปัดตกรหัส #{req_id} เรียบร้อย แผนงานนี้ถูกทำลายทิ้งทันที"}}
 
     async def execute_scheduled_task(self, user_id: int):
-        # ฟังก์ชันสำหรับส่งรายงานสรุปเวลา 09:00 น.
         return {"status": "success", "data": {"message": "🏆 **[Strategic Morning Briefing]** รายงานสรุปเทรนด์ซอฟต์แวร์และการตลาดระดับโลกประจำวันมาเสิร์ฟแล้วครับนายท่าน! วันนี้ยูนิตทุกส่วนพร้อมสแตนด์บายทำเงินครับ!"}}
 
 meta_orchestrator = MetaOrchestrator()
