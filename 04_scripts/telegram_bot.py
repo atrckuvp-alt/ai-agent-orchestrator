@@ -140,7 +140,7 @@ async def app(scope, receive, send):
                     # 💡 คีย์เวิร์ดพิเศษสำหรับสั่งสุ่ม Content รายวัน
                     if user_text.strip().lower() == "run daily content":
                         print("⏰ [Chronos Active Trigger] นายท่านสั่งรันระบบ Content รายวันอัตโนมัติ!")
-                        bu_result = growth_marketing_orchestrator.generate_strategic_plan("ธุรกิจข้าวสารสุขภาพรายวัน", is_daily_job=True)
+                        bu_result = growth_marketing_orchestrator.generate_strategic_plan("ธุรกิจสินค้าสุขภาพรายวัน", is_daily_job=True)
                         
                         from shared_knowledge import shared_knowledge
                         shared_knowledge.publish_insight(
@@ -154,24 +154,24 @@ async def app(scope, receive, send):
                             text=f"⏰ **[Daily Automation Success]**\nโรงงานสมองกลได้สุ่มสร้างเนื้อหาประจำวัน และดันขึ้นหน้าเว็บ **Base44 Portal** ให้เรียบร้อยแล้วโดยไม่ต้องรออนุมัติครับพ้ม!\n\n🔗 คลิกเปิดดูหน้าเว็บ: https://ai-agent-orchestrator-2vam.onrender.com",
                             parse_mode="Markdown"
                         )
-                    # 💡 ตรวจจับคีย์เวิร์ดพิเศษสำหรับสั่งทดสอบคู่ขนานหลายสินค้าพร้อมกัน
+                    # 💡 คีย์เวิร์ดใหม่: สำหรับทดสอบคู่ขนานหลายสินค้าแบบอิสระ ไม่จำกัดแชมพูหรือข้าวสารอีกต่อไป
                     elif user_text.strip().lower() == "run parallel test":
-                        print("🏎️ [Parallel Engine Active] เริ่มทำการประมวลผลกลยุทธ์ 2 โปรดักก์พร้อมกันขนานกัน!")
+                        print("🏎️ [Parallel Engine Active] กำลังจำลองวิเคราะห์กลยุทธ์ 2 สินค้าใหม่พร้อมกันคู่ขนาน!")
                         
-                        # รันสินค้าชิ้นที่ 1 และ 2 คู่ขนานพร้อมกันแบบ Asynchronous ทันที
+                        # รันสินค้าชิ้นที่ 1 และชิ้นที่ 2 คู่ขนานกันแบบไร้รอยต่อ
                         loop = asyncio.get_event_loop()
-                        task1 = loop.run_in_executor(None, growth_marketing_orchestrator.generate_strategic_plan, "ข้าวสารปลอดสารพิษดัชนีน้ำตาลต่ำ", True)
-                        task2 = loop.run_in_executor(None, growth_marketing_orchestrator.generate_strategic_plan, "แชมพูสมุนไพรออร์แกนิกสกัดเย็นลดผมร่วง", True)
+                        task1 = loop.run_in_executor(None, growth_marketing_orchestrator.generate_strategic_plan, "อาหารเสริมชะลอวัยสำหรับผู้สูงอายุ", True)
+                        task2 = loop.run_in_executor(None, growth_marketing_orchestrator.generate_strategic_plan, "เซรั่มกันแดดสูตรละลายในน้ำสำหรับผิวแพ้ง่าย", True)
                         
                         res1, res2 = await asyncio.gather(task1, task2)
                         
                         from shared_knowledge import shared_knowledge
-                        shared_knowledge.publish_insight(author_team="bu_parallel_1", topic="[Parallel] ธุรกิจข้าวสารสุขภาพ", insight_data={"best_tools": res1["best_tools"], "conclusion": res1["conclusion"]})
-                        shared_knowledge.publish_insight(author_team="bu_parallel_2", topic="[Parallel] ธุรกิจแชมพูออร์แกนิก", insight_data={"best_tools": res2["best_tools"], "conclusion": res2["conclusion"]})
+                        shared_knowledge.publish_insight(author_team="bu_parallel_1", topic="[Parallel Product 1] อาหารเสริมชะลอวัย", insight_data={"best_tools": res1["best_tools"], "conclusion": res1["conclusion"]})
+                        shared_knowledge.publish_insight(author_team="bu_parallel_2", topic="[Parallel Product 2] เซรั่มกันแดดสูตรน้ำ", insight_data={"best_tools": res2["best_tools"], "conclusion": res2["conclusion"]})
                         
                         await bot.send_message(
                             chat_id=chat_id, 
-                            text=f"🏎️ **[Parallel Processing Complete]**\nระบบได้ทำการวิเคราะห์แผนงานของทั้ง **'ข้าวสาร'** และ **'แชมพูสมุนไพร'** พร้อมกันแบบคู่ขนานข้ามอุตสาหกรรมเรียบร้อยแล้ว! ข้อมูลไหลแยกการ์ดกันอย่างอิสระบนหน้าเว็บ\n\n🔗 คลิกเปิดพอร์ตเทิลดูผลลัพธ์คู่ขนาน: https://ai-agent-orchestrator-2vam.onrender.com",
+                            text=f"🏎️ **[Parallel Processing Complete]**\nระบบทำกลยุทธ์ขนานสำเร็จแล้ว! ได้แตกงานของทั้ง **'อาหารเสริมผู้สูงอายุ'** และ **'เซรั่มกันแดด'** ขึ้นไปกระจายการ์ดบนหน้าเว็บพร้อมๆ กันเรียบร้อยครับ\n\n🔗 คลิกดูหน้าพอร์ตเทิล: https://ai-agent-orchestrator-2vam.onrender.com",
                             parse_mode="Markdown"
                         )
                     else:
@@ -208,7 +208,7 @@ async def app(scope, receive, send):
         await send({'type': 'http.response.body', 'body': html_content})
 
 # =====================================================================
-# ⏰ [⏰ CHRONOS WATCHER - TIMEZONE FIXED]
+# ⏰ [⏰ CHRONOS WATCHER]
 # =====================================================================
 async def autonomous_cron_loop(bot_instance, target_user_id: int):
     print("⏳ [Chronos Watcher] ระบบเฝ้าระวังเวลารายงานเช้า เปิดทำงานคู่ขนาน...")
