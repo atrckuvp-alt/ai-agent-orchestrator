@@ -1,4 +1,4 @@
-# Complete file: 04_scripts/meta_orchestrator.py (Definitive Final Edition)
+# Complete file: 04_scripts/meta_orchestrator.py (With Interactive URL Buttons)
 import json
 from pathlib import Path
 import sys
@@ -12,6 +12,9 @@ if str(CURRENT_DIR) not in sys.path:
     sys.path.insert(0, str(CURRENT_DIR))
 
 from shared_knowledge import shared_knowledge
+
+# กำหนด URL คลังความรู้/ฐานข้อมูลหน้าหลักของนายท่านเพื่อใช้ฝังในปุ่ม
+BASE44_URL = "https://ai-agent-orchestrator-2vam.onrender.com"
 
 class MetaOrchestrator:
     def __init__(self):
@@ -52,7 +55,6 @@ class MetaOrchestrator:
         if any(kw in cleaned_msg for kw in marketing_keywords):
             print(f"🎯 [Route Hit] ยูนิต Growth Marketing BU ได้รับโจทย์ยุทธศาสตร์ทำเงิน: {user_message}")
             try:
-                # บังคับสร้างผลลัพธ์แยกก้อนเด็ดขาด ไม่ใช้คำว่า pending เป็น key โครงสร้างชั้นนอกอีกต่อไป
                 secure_payload = {
                     "flag_status": "active",
                     "payload_data": {
@@ -65,11 +67,12 @@ class MetaOrchestrator:
                 print(f"💥 [Critical Error inside Route] เกิดปัญหา: {e_bu}")
                 return {"status": "success", "data": {"message": f"⚠️ ยูนิตทำเงินติดขัดหลังบ้าน: {str(e_bu)}"}}
 
-        # 🤖 3. ข้อความต้อนรับทั่วไป
+        # 🤖 3. ข้อความแนะนำทั่วไป
         guide_message = (
             f"🤖 **AI Command Center (Webhook System Online)**\n\n"
             f"เชื่อมต่อสัญญาณตรงจาก Telegram เสถียร 100% ครับนายท่าน!\n"
             f"👉 พิมพ์สั่งงานวิเคราะห์โปรดัก เช่น: *'ขอไอเดียทำธุรกิจ ข้าวสาร ออนไลน์'* ได้เลยครับ\n"
+            f"👉 หรือเข้าชมคลังเว็บบอร์ดหลักได้ที่นี่: [เปิดหน้าเว็บ Base44]({BASE44_URL})\n"
             f"👉 หรือตรวจสอบรายการค้างพิจารณาโดยพิมพ์คำว่า: *'approve'* ลอยๆ ได้ทันทีครับพ้ม"
         )
         return {"status": "success", "data": {"message": guide_message}}
@@ -98,7 +101,6 @@ class MetaOrchestrator:
             
         req_id = len(queue.get("pending", [])) + 1
         
-        # ถอดรหัสโครงสร้างใหม่หนา 3 ชั้นเพื่อป้องกันการหลุดพังของตัวแปร
         inner_data = result_data.get("payload_data", {})
         best_tools = inner_data.get("best_tools", [{"name": "Base44 Core Suite"}])
         conclusion = inner_data.get("conclusion", f"สกัดผลสำเร็จหัวข้อ {topic}")
@@ -119,13 +121,14 @@ class MetaOrchestrator:
         queue["pending"].append(new_request)
         APPROVAL_QUEUE_PATH.write_text(json.dumps(queue, indent=2, ensure_ascii=False), encoding="utf-8")
         
+        # 🔗 ทำการฝัง Markdown Link ครอบคำว่า Base44 เพื่อให้นายท่านกดจิ้มจากเนื้อหาได้โดยตรง
         msg = (
             f"📡 **[คำร้องขออนุมัติแผนงานปั๊มเงินใหม่]**\n\n"
             f"🆔 **รหัสอนุมัติ:** {req_id}\n"
             f"👤 **ผู้รายงาน:** ยูนิต `{team_id}`\n"
             f"🔍 **โจทย์วิจัยถลุงกำไร:** {topic}\n"
             f"📝 **บทสรุปยุทธศาสตร์:** {conclusion}\n\n"
-            f"⚠️ *ระบบล็อกสถานะพิจารณาไว้บนคลังข้อมูล **Base44** แล้ว*\n"
+            f"⚠️ *ระบบล็อกสถานะพิจารณาไว้บนคลังข้อมูล 🌐 [Base44 Portal]({BASE44_URL}) แล้ว*\n"
             f"👉 พิมพ์ **`approve {req_id}`** เพื่อเปิดไฟเขียวให้ระบบทำงานทันที\n"
             f"👉 พิมพ์ **`reject {req_id}`** เพื่อยกเลิกแผนงานนี้"
         )
@@ -160,7 +163,24 @@ class MetaOrchestrator:
                     "conclusion": res_data.get("conclusion", "")
                 }
             )
-            return {"status": "success", "data": {"message": f"✅ **[APPROVED]** อนุมัติรหัส #{req_id} เรียบร้อย! ข้อมูลยุทธศาสตร์ถูกนำไปอัปเดตลงหน้าระบบ **Base44** พร้อมใช้งานทำเงินทันทีครับพ้ม!"}}
+            
+            # โครงสร้างข้อความตอบกลับแบบพิเศษ พร้อมส่งสัญญาณแนบอินไลน์คีย์บอร์ดไปที่ตัวบอทหลัก
+            msg = (
+                f"✅ **[APPROVED]** อนุมัติรหัส #{req_id} เรียบร้อย!\n"
+                f"ข้อมูลยุทธศาสตร์ถูกนำไปอัปเดตลงหน้าระบบคลังความรู้เรียบร้อยแล้ว\n\n"
+                f"🔗 คลิกดูความสำเร็จที่นี่: [เปิดคลังข้อมูลหน้าเว็บ Base44]({BASE44_URL})"
+            )
+            
+            # ส่งข้อมูลกลับไปแบบมีโครงสร้างปุ่มกด (Inline Keyboard) เพื่อให้ฝั่ง telegram_bot.py นำไป Render เป็นปุ่มใต้แชท
+            return {
+                "status": "success", 
+                "data": {
+                    "message": msg,
+                    "inline_buttons": [
+                        {"text": "🌐 Go to Base44 Web Portal", "url": BASE44_URL}
+                    ]
+                }
+            }
         else:
             return {"status": "success", "data": {"message": f"❌ **[REJECTED]** ลบรายการคำร้องรหัส #{req_id} ออกจากระบบเรียบร้อยครับ"}}
 
