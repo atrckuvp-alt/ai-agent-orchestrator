@@ -1,8 +1,9 @@
-# Complete file: 04_scripts/telegram_bot.py (Pure FastAPI/ASGI Webhook Integration)
+# Complete file: 04_scripts/telegram_bot.py (Robust ASGI Webhook & Strict Event Loop)
 import os
 import sys
 import asyncio
 import datetime
+import json
 from pathlib import Path
 from telebot.types import Update
 from telebot.async_telebot import AsyncTeleBot
@@ -26,12 +27,11 @@ bot = AsyncTeleBot(TELEGRAM_BOT_TOKEN)
 # 🌐 [WEBHOOK ENGINE - ASGI APP FOR RENDER]
 # =====================================================================
 async def app(scope, receive, send):
-    """ Fast Webhook Gateway ดักจับข้อมูลที่ Telegram ยิงเข้าทาง POST /webhook """
+    """ Fast Webhook Gateway ประมวลผลและล็อคลูปให้ Telegram ตอบกลับสำเร็จ """
     if scope['type'] == 'lifespan':
         while True:
             message = await receive()
             if message['type'] == 'lifespan.startup':
-                # ตั้งค่าเปิด Chronos Loop คู่ขนานตอนสตาร์ทระบบ
                 MY_USER_ID = 7238952711
                 asyncio.create_task(autonomous_cron_loop(bot, MY_USER_ID))
                 print("📡 [Webhook Active] ระบบสมองกลตั้งรับสัญญาณผ่านท่อ POST /webhook เรียบร้อย...")
@@ -41,7 +41,6 @@ async def app(scope, receive, send):
                 return
                 
     elif scope['type'] == 'http' and scope['path'] == '/webhook' and scope['method'] == 'POST':
-        # 📥 ดึงข้อมูลดิบ (Body) ที่ Telegram โยนเข้าเซิร์ฟเวอร์
         body = b""
         more_body = True
         while more_body:
@@ -51,12 +50,31 @@ async def app(scope, receive, send):
             
         if body:
             try:
-                # แปลงข้อมูลดิบเข้าสู่ตัวแปรระบบของ Telebot แล้วสั่งประมวลผลทันที
                 json_string = body.decode('utf-8')
-                update = Update.de_json(json_string)
-                await bot.process_new_updates([update])
+                # 🛠️ แตกข้อมูลตรงเพื่อเอาไปยิงตอบทันทีเพื่อความแม่นยำ ไม่ผ่าน Middleware ที่อาจทำข้อมูลหล่น
+                update_dict = json.loads(json_string)
+                if "message" in update_dict:
+                    msg_obj = update_dict["message"]
+                    chat_id = msg_obj["chat"]["id"]
+                    user_id = msg_obj["from"]["id"]
+                    user_text = msg_obj.get("text", "")
+                    
+                    print(f"📥 [Direct Message Trigger] จาก {user_id}: {user_text}")
+                    
+                    # สั่งประมวลผลและรอผลลัพธ์ให้เสร็จสิ้นคาลูป
+                    orchestrator_response = await meta_orchestrator.route_and_execute(user_message=user_text, user_id=user_id)
+                    
+                    if orchestrator_response and "data" in orchestrator_response:
+                        data_payload = orchestrator_response["data"]
+                        if "message" in data_payload:
+                            # 🚀 ยิงข้อความกลับแบบจี้ตัวตรงๆ การันตีข้อความถึงมือแน่นอนร้อยเปอร์เซ็นต์
+                            await bot.send_message(chat_id=chat_id, text=data_payload["message"])
+                else:
+                    # หากเป็น Update รูปแบบอื่น ให้ส่งเข้ากระบวนการปกติของ Telebot
+                    update = Update.de_json(json_string)
+                    await bot.process_new_updates([update])
             except Exception as e:
-                print(f"⚠️ [Webhook Parse Error] ถอดรหัสคำสั่งพลาด: {e}")
+                print(f"⚠️ [Webhook Parse Error] ถอดรหัสหรือส่งคำสั่งพลาด: {e}")
                 
         await send({
             'type': 'http.response.start',
@@ -66,7 +84,6 @@ async def app(scope, receive, send):
         await send({'type': 'http.response.body', 'body': b'OK'})
         
     else:
-        # หน้าแรกแสดงสถานะปกติเมื่อเปิดผ่านเว็บ Browser
         await send({
             'type': 'http.response.start',
             'status': 200,
@@ -75,24 +92,18 @@ async def app(scope, receive, send):
         await send({'type': 'http.response.body', 'body': b'AI Command Center Webhook Status: LIVE'})
 
 # =====================================================================
-# ⏰ [PLAN A - CHRONOS WATCHER TIME-ZONE FIXED]
+# ⏰ [⏰ CHRONOS WATCHER - TIMEZONE FIXED]
 # =====================================================================
 async def autonomous_cron_loop(bot_instance, target_user_id: int):
     print("⏳ [Chronos Watcher] ระบบเฝ้าระวังเวลารายงานเช้า เปิดทำงานคู่ขนาน...")
     has_run_today = False
-    
     while True:
         try:
             tz_thailand = datetime.timezone(datetime.timedelta(hours=7))
             now = datetime.datetime.now(tz_thailand)
-            
             if now.hour == 9 and now.minute == 0:
                 if not has_run_today:
-                    print("🔔 [Chronos Trigger] ได้เวลา 09:00 น. ยิงรายงานเข้า Telegram!")
-                    await bot_instance.send_message(
-                        chat_id=target_user_id, 
-                        text="⏰ **[Morning Briefing]** อรุณสวัสดิ์ครับนายท่าน! ระบบเริ่มประมวลผลรายงานยุทธศาสตร์ประจำวันอัตโนมัติแล้วครับ..."
-                    )
+                    await bot_instance.send_message(chat_id=target_user_id, text="⏰ **[Morning Briefing]** ระบบเริ่มประมวลผลรายงานยุทธศาสตร์ประจำวันแล้วครับ...")
                     scheduled_result = await meta_orchestrator.execute_scheduled_task(user_id=target_user_id)
                     if scheduled_result and "data" in scheduled_result and "message" in scheduled_result["data"]:
                         await bot_instance.send_message(chat_id=target_user_id, text=scheduled_result["data"]["message"])
@@ -100,34 +111,7 @@ async def autonomous_cron_loop(bot_instance, target_user_id: int):
             else:
                 if now.hour != 9 or now.minute != 0:
                     has_run_today = False
-                    
             await asyncio.sleep(20)
         except Exception as cron_err:
             print(f"⚠️ [Chronos Warning] ลูปเวลาติดขัด: {cron_err}")
             await asyncio.sleep(30)
-
-# =====================================================================
-# 💬 [TELEGRAM MESSAGES GATEWAY LOGIC]
-# =====================================================================
-@bot.message_handler(commands=['start', 'help'])
-async def send_welcome(message):
-    welcome_text = (
-        "🤖 **AI Command Center (v3.0 - Pure Webhook)**\n\n"
-        "🟢 เชื่อมท่อสัญญาณตรงยิงเข้าหน้าเซิร์ฟเวอร์ (Connected)\n"
-        "🟢 บังคับฐานเวลาประเทศไทย 09:00 น. (Fixed)\n"
-        "🟢 ยูนิต Growth Marketing BU (Ready)"
-    )
-    await bot.reply_to(message, welcome_text)
-
-@bot.message_handler(func=lambda message: True)
-async def handle_all_messages(message):
-    user_id = message.from_user.id
-    user_text = message.text
-    
-    print(f"📥 [Incoming Message via Webhook] จาก {user_id}: {user_text}")
-    orchestrator_response = await meta_orchestrator.route_and_execute(user_message=user_text, user_id=user_id)
-    
-    if orchestrator_response and "data" in orchestrator_response:
-        data_payload = orchestrator_response["data"]
-        if "message" in data_payload:
-            await bot.send_message(chat_id=message.chat.id, text=data_payload["message"])
