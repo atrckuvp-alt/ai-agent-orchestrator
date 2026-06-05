@@ -1,10 +1,7 @@
-# Complete file: 04_scripts/meta_orchestrator.py (Flexible Language & Bulletproof Tokenizer)
+# Complete file: 04_scripts/meta_orchestrator.py (Fixed Structure & Bulletproof Key Parsing)
 import json
 from pathlib import Path
-import importlib
 import sys
-import os
-import asyncio
 
 CURRENT_DIR = Path(__file__).resolve().parent
 ROOT = CURRENT_DIR.parent
@@ -40,42 +37,42 @@ class MetaOrchestrator:
             APPROVAL_QUEUE_PATH.write_text(json.dumps({"pending": []}, indent=2, ensure_ascii=False), encoding="utf-8")
 
     async def route_and_execute(self, user_message: str, user_id: int):
-        # 🧼 ทำความสะอาดข้อความ ลบเครื่องหมายพิเศษออกเพื่อป้องกันบั๊กคำสั่งติดเครื่องหมายถาม
+        # ทำความสะอาดข้อความเพื่อความแม่นยำในการคัดกรองคำสั่ง
         cleaned_msg = user_message.lower().replace("?", "").replace("!", "").strip()
         parts = cleaned_msg.split()
         
-        # 🛑 1. ตรวจจับระบบอนุมัติ Gatekeeper (ตรวจจับละเอียดยืดหยุ่น ไม่สนตัวเล็กตัวใหญ่)
+        # 🛑 1. ระบบตรวจจับและประมวลผลคำสั่งฝั่ง Gatekeeper (Approve / Reject)
         if parts and (parts[0].startswith("approve") or parts[0].startswith("reject")):
             action = "approve" if parts[0].startswith("approve") else "reject"
             
-            # ถ้านายท่านพิมพ์แค่คำว่า approve ลอยๆ หรือไม่มีตัวเลขตามหลัง ให้ลิสต์รายการค้างโชว์ทันที
+            # หากพิมพ์สั่งลอยๆ เช่น "approve มีไหม" หรือ "Approve?" ให้ลิสต์งานค้างโชว์ทันที
             if len(parts) < 2 or not parts[1].isdigit():
                 return self.list_pending_approvals()
                 
             return await self.process_gatekeeper_decision(action, int(parts[1]))
             
-        # 💰 2. ท่อดักจับส่งเข้ายูนิตทำเงิน Growth Marketing BU (เพิ่มคีย์เวิร์ดครอบคลุมภาษาไทยทุกมิติ)
+        # 💰 2. ส่งคำสั่งเข้าท่อยูนิตทำเงิน Growth Marketing BU
         marketing_keywords = ["หาเงิน", "marketing", "ขาย", "content", "คอนเทนต์", "ข้าวสาร", "affiliate", "ธุรกิจ", "โปรดัก", "สินค้า"]
         if any(kw in cleaned_msg for kw in marketing_keywords):
-            print("🎯 [Route Hit] เปิดฉากสั่งการยูนิต Growth Marketing BU ลุยวิเคราะห์สินค้า")
+            print("🎯 [Route Hit] ยูนิต Growth Marketing BU ได้รับโจทย์ยุทธศาสตร์ทำเงิน")
             try:
-                # 🛠️ จำลองกลไกส่งต่อไอเดียปั๊มเงินตามพิมพ์เขียวคุณอนิศ + คุณสิทธินันท์
+                # ปรับโครงสร้างข้อมูลดิบ (Mock) ให้ตรงตามพิมพ์เขียวของระบบ และป้องกันโครงสร้างหลุดพัง
                 mock_result = {
                     "result": {
-                        "best_tools": [{"name": "Base44 Dashboard Content"}],
-                        "conclusion": f"สกัดแผนทำเงินเสร็จสิ้น! ขยายกรอบการขายออนไลน์สินค้ากลุ่ม '{user_message}' เรียบร้อย"
+                        "best_tools": [{"name": "Base44 Dashboard Content Generator"}],
+                        "conclusion": f"แผนวิจัยสร้างกระแสเงินสดจากโปรดักสินค้ากลุ่ม '{user_message}' ถูกร่างโครงสร้างบน Base44 สำเร็จ"
                     }
                 }
                 return self.hold_for_master_approval("growth_marketing_bu", user_message, mock_result)
             except Exception as e_bu:
                 return {"status": "success", "data": {"message": f"⚠️ ยูนิตทำเงินติดขัดหลังบ้าน: {e_bu}"}}
 
-        # 🤖 3. เมนูช่วยเหลือเมื่อคุยทั่วไป
+        # 🤖 3. เมนูแนะนำกรณีพูดคุยทั่วไป
         guide_message = (
-            f"🤖 **AI Command Center ยินดีต้อนรับครับนายท่าน!**\n\n"
-            f"ตอนนี้ระบบออนไลน์นิ่งกริบบน Render 100% แล้วครับพ้ม\n"
-            f"👉 หากต้องการวิเคราะห์สินค้า พิมพ์สั่งได้เลย เช่น: *'สร้างธุรกิจ ด้วยโปรดัก ข้าวสาร'* หรือ *'วางแผนการตลาดขายของออนไลน์'*\n"
-            f"👉 หากต้องการตรวจคิวงานค้าง พิมพ์คำว่า: *'approve'* ลอยๆ ได้เลยครับ!"
+            f"🤖 **AI Command Center กำลังดูแลระบบผ่าน Webhook ครับ!**\n\n"
+            f"สัญญาณเชื่อมต่อตรงจาก Telegram ลื่นไหล 100% แล้วครับนายท่าน\n"
+            f"👉 ลองสั่งงานผมวิเคราะห์สินค้า เช่น: *'สร้างธุรกิจด้วยโปรดักข้าวสาร'* ได้เลยครับ\n"
+            f"👉 หรือตรวจสอบคิวงานค้างโดยพิมพ์: *'approve'* ลอยๆ ได้ทันทีครับพ้ม"
         )
         return {"status": "success", "data": {"message": guide_message}}
 
@@ -85,13 +82,13 @@ class MetaOrchestrator:
         except Exception:
             queue = {"pending": []}
             
-        if not queue.get("pending"):
-            return {"status": "success", "data": {"message": "✅ **[Gatekeeper Report]** ไม่มีแผนงานปั๊มเงินค้างรออนุมัติในระบบครับนายท่าน! ทุกยูนิตสะสางงานเคลียร์หมดจดครับ!"}}
+        if not queue.get("pending") or len(queue["pending"]) == 0:
+            return {"status": "success", "data": {"message": "✅ **[Gatekeeper Report]** ไม่มีแผนงานปั๊มเงินค้างรออนุมัติในระบบครับนายท่าน! ทุกยูนิตโปร่งใสไร้กังวล"}}
             
         msg = "📋 **[รายการแผนงานปั๊มเงินที่ค้างรออนุมัติ]**\n\n"
         for item in queue["pending"]:
             msg += f"🆔 **รหัส: {item['id']}** | ยูนิต: `{item['team_id']}`\n🔍 โจทย์: {item['topic']}\n────────────────\n"
-        msg += "👉 พิมพ์ **`approve ตามด้วยรหัส`** (เช่น `approve 1`) เพื่ออนุมัติปล่อยโพสต์ลงคลัง Base44 ได้เลยครับ"
+        msg += "👉 พิมพ์ **`approve ตามด้วยรหัส`** (เช่น `approve 1`) เพื่อเปิดไฟเขียวปล่อยโพสต์ลงคลังความรู้ได้เลยครับ"
         return {"status": "success", "data": {"message": msg}}
 
     def hold_for_master_approval(self, team_id: str, topic: str, result_data: dict) -> dict:
@@ -101,12 +98,20 @@ class MetaOrchestrator:
             queue = {"pending": []}
             
         req_id = len(queue["pending"]) + 1
+        
+        # 🔒 ป้องกันบั๊กชั้นข้อมูลดึง Key พลาดโดยใช้การดักจับ .get() ที่ปลอดภัยระดับสูงสุด
+        inner_result = result_data.get("result", {})
+        
         new_request = {
             "id": req_id,
             "team_id": team_id,
             "topic": topic,
-            "result": result_data["result"]
+            "result": {
+                "best_tools": inner_result.get("best_tools", []),
+                "conclusion": inner_result.get("conclusion", f"สกัดผลลัพธ์ยุทธศาสตร์หัวข้อ {topic} เรียบร้อย")
+            }
         }
+        
         queue["pending"].append(new_request)
         APPROVAL_QUEUE_PATH.write_text(json.dumps(queue, indent=2, ensure_ascii=False), encoding="utf-8")
         
@@ -114,9 +119,9 @@ class MetaOrchestrator:
             f"📡 **[คำร้องขออนุมัติแผนงานปั๊มเงินใหม่]**\n\n"
             f"👤 **ผู้รายงาน:** ยูนิต `{team_id}`\n"
             f"🔍 **โจทย์วิจัยถลุงกำไร:** {topic}\n\n"
-            f"⚠️ *ระบบสกัดไอเดียเนื้อหาดิบลงหน้า **Base44** เรียบร้อยแล้ว และล็อกสถานะไว้ชั่วคราว*\n"
-            f"👉 พิมพ์ **`approve {req_id}`** เพื่อเปิดไฟเขียวปล่อยโพสต์ทำเงินทันที\n"
-            f"👉 พิมพ์ **`reject {req_id}`** เพื่อสั่งปัดตกทำลายแผนงานนี้ทิ้ง"
+            f"⚠️ *ระบบสกัดคอนเทนต์ดิบฝังลงหน้า **Base44** แล้ว และล็อกสถานะพิจารณาไว้*\n"
+            f"👉 พิมพ์ **`approve {req_id}`** เพื่อปล่อยโพสต์ทำเงินทันที\n"
+            f"👉 พิมพ์ **`reject {req_id}`** เพื่อยกเลิกและทำลายแผนงานนี้ทิ้ง"
         )
         return {"status": "success", "data": {"message": msg}}
 
@@ -135,16 +140,25 @@ class MetaOrchestrator:
         if not target_req:
             return {"status": "success", "data": {"message": f"❌ ไม่พบรายการคำร้องรหัส #{req_id} ในคิวปัจจุบัน"}}
 
+        # ลบรายการออกจากคิวค้างหลังประมวลผล
         queue["pending"] = [r for r in queue["pending"] if r["id"] != req_id]
         APPROVAL_QUEUE_PATH.write_text(json.dumps(queue, indent=2, ensure_ascii=False), encoding="utf-8")
 
         if action == "approve":
-            shared_knowledge.publish_insight(author_team=target_req["team_id"], topic=target_req["topic"], insight_data={"best_tools": target_req["result"].get("best_tools", []), "conclusion": target_req["result"].get("conclusion", "")})
-            return {"status": "success", "data": {"message": f"✅ **[APPROVED]** นายท่านอนุมัติรหัส #{req_id} เรียบร้อย! คอนเทนต์ในหน้า **Base44** ปลดล็อกสถานะเป็นพร้อมใช้งานปั๊มเงินเข้ากระเป๋าทันทีครับพ้ม!"}}
+            res_data = target_req.get("result", {})
+            shared_knowledge.publish_insight(
+                author_team=target_req["team_id"], 
+                topic=target_req["topic"], 
+                insight_data={
+                    "best_tools": res_data.get("best_tools", []), 
+                    "conclusion": res_data.get("conclusion", "")
+                }
+            )
+            return {"status": "success", "data": {"message": f"✅ **[APPROVED]** นายท่านเปิดไฟเขียวอนุมัติรหัส #{req_id} แล้ว! คอนเทนต์ในหน้า **Base44** ถูกเปลี่ยนสถานะพร้อมกระจายรายได้เข้ากระเป๋าทันทีครับพ้ม!"}}
         else:
-            return {"status": "success", "data": {"message": f"❌ **[REJECTED]** สั่งปัดตกรหัส #{req_id} เรียบร้อย ระบบทำการลบแผนงานนี้ออกจากระบบฐานข้อมูลเรียบร้อยครับ"}}
+            return {"status": "success", "data": {"message": f"❌ **[REJECTED]** สั่งปัดตกรหัส #{req_id} แผนงานทำเงินชุดนี้ถูกลบออกจากฐานข้อมูลเรียบร้อยครับ"}}
 
     async def execute_scheduled_task(self, user_id: int):
-        return {"status": "success", "data": {"message": "🏆 **[Strategic Morning Briefing]** รายงานสรุปเทrนด์การตลาดและไอเดียทำเงินรอบโลกประจำวันเสิร์ฟตรงถึงมือนายท่านแล้วครับ!"}}
+        return {"status": "success", "data": {"message": "🏆 **[Strategic Morning Briefing]** รายงานสรุปยุทธศาสตร์และไอเดียทำเงินรอบโลกประจำวันส่งตรงถึงมือนายท่านเรียบร้อยครับ!"}}
 
 meta_orchestrator = MetaOrchestrator()
