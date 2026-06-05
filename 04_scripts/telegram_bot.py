@@ -1,4 +1,4 @@
-# Complete file: 04_scripts/telegram_bot.py (With Strict Thailand Time Zone & ASGI App Fix)
+# Complete file: 04_scripts/telegram_bot.py (With Webhook Flush Mechanics)
 import os
 import sys
 import asyncio
@@ -21,8 +21,7 @@ if not TELEGRAM_BOT_TOKEN:
 
 bot = AsyncTeleBot(TELEGRAM_BOT_TOKEN)
 
-# 🌐 🔥 [ASGI APP FIX FOR RENDER] 🔥
-# สร้างตัวแปรหลอกไว้ให้ Uvicorn ตรวจสอบผ่าน ไม่ปิดเซิฟเวอร์หนี
+# 🌐 [ASGI APP FOR RENDER]
 async def app(scope, receive, send):
     if scope['type'] == 'lifespan':
         while True:
@@ -44,7 +43,7 @@ async def app(scope, receive, send):
         })
 
 # =====================================================================
-# ⏰ [PLAN A - CHRONOS WATCHER TIME-ZONE FIXED] 
+# ⏰ [⏰ CHRONOS WATCHER - THAI TIMEZONE FIXED]
 # =====================================================================
 async def autonomous_cron_loop(bot_instance, target_user_id: int):
     print("⏳ [Chronos Watcher] ระบบเฝ้าระวังเวลาเปิดทำงานคู่ขนาน...")
@@ -57,13 +56,12 @@ async def autonomous_cron_loop(bot_instance, target_user_id: int):
             
             if now.hour == 9 and now.minute == 0:
                 if not has_run_today:
-                    print("🔔 [Chronos Trigger] ได้เวลา 09:00 น. ตรงในไทย สั่งเดินเครื่องรายงาน!")
+                    print("🔔 [Chronos Trigger] สั่งเดินเครื่องรายงานเช้า!")
                     await bot_instance.send_message(
                         chat_id=target_user_id, 
-                        text="⏰ **[Morning Briefing]** อรุณสวัสดิ์ครับนายท่าน! ระบบเริ่มประมวลผลรายงานยุทธศาสตร์ประจำวันอัตโนมัติแล้วครับ..."
+                        text="⏰ **[Morning Briefing]** อรุณสวัฒดิ์ครับนายท่าน! ระบบเริ่มประมวลผลรายงานยุทธศาสตร์ประจำวันแล้วครับ..."
                     )
                     scheduled_result = await meta_orchestrator.execute_scheduled_task(user_id=target_user_id)
-                    
                     if scheduled_result and "data" in scheduled_result and "message" in scheduled_result["data"]:
                         await bot_instance.send_message(chat_id=target_user_id, text=scheduled_result["data"]["message"])
                     has_run_today = True
@@ -82,8 +80,8 @@ async def autonomous_cron_loop(bot_instance, target_user_id: int):
 @bot.message_handler(commands=['start', 'help'])
 async def send_welcome(message):
     welcome_text = (
-        "🤖 **AI Command Center (v2.2)**\n\n"
-        "🟢 ระบบความปลอดภัย 5 ชั้น (Active)\n"
+        "🤖 **AI Command Center (v2.3)**\n\n"
+        "🟢 ล้างระบบ Webhook เก่าเรียบร้อย (Flushed)\n"
         "🟢 บังคับฐานเวลาประเทศไทย 09:00 น. (Fixed)\n"
         "🟢 ยูนิต Growth Marketing BU (Ready)"
     )
@@ -105,8 +103,13 @@ async def handle_all_messages(message):
 if __name__ == "__main__":
     async def main():
         MY_USER_ID = 7238952711
+        
+        # 🔥 [CRITICAL FIX] สั่งลบล้าง Webhook ค้างเก่าบนระบบของ Telegram ทันที เพื่อเปิดทางให้ Polling ทำงานได้
+        print("🧼 [Webhook Cleaner] กำลังสั่งล้างการลงทะเบียน Webhook เก่าออกจากเซิร์ฟเวอร์ Telegram...")
+        await bot.remove_webhook()
+        
         asyncio.create_task(autonomous_cron_loop(bot_instance=bot, target_user_id=MY_USER_ID))
-        print("📡 [Polling Active] บอทออนไลน์รอคำสั่งนายท่าน 24 ชั่วโมง...")
+        print("📡 [Polling Active] บอทเปลี่ยนมาใช้ระบบดึงข้อมูลตรง รอรับคำสั่งนายท่านแล้ว...")
         await bot.infinity_polling(timeout=60, allowed_updates=["message", "photo"])
     
     asyncio.run(main())
