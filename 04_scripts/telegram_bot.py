@@ -1,4 +1,4 @@
-# Complete file: 04_scripts/telegram_bot.py (FastAPI-Style Web Dashboard & Webhook Integration)
+# Complete file: 04_scripts/telegram_bot.py
 import os
 import sys
 import asyncio
@@ -18,6 +18,7 @@ if str(CURRENT_DIR) not in sys.path:
 
 load_dotenv(dotenv_path=ROOT / ".env")
 from meta_orchestrator import meta_orchestrator
+from growth_marketing_orchestrator import growth_marketing_orchestrator
 
 TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
 if not TELEGRAM_BOT_TOKEN:
@@ -29,7 +30,6 @@ bot = AsyncTeleBot(TELEGRAM_BOT_TOKEN)
 # 🌐 [WEB PORTAL ENGINE - HTML DASHBOARD GENERATOR FOR MASTER]
 # =====================================================================
 def generate_html_dashboard():
-    """ สร้างหน้าแดชบอร์ดระดับพรีเมียม ดึงข้อมูลจากฐานข้อมูลมาโชว์เรียงลำดับอย่างสวยงาม """
     try:
         if KNOWLEDGE_BASE_PATH.exists():
             db = json.loads(KNOWLEDGE_BASE_PATH.read_text(encoding="utf-8"))
@@ -39,12 +39,9 @@ def generate_html_dashboard():
         db = {"insights": []}
 
     insights_list = db.get("insights", [])
-    
-    # ดึงเวลาปัจจุบันในไทยมาแสดงบนหัวเว็บ
     tz_th = datetime.timezone(datetime.timedelta(hours=7))
     update_time = datetime.datetime.now(tz_th).strftime("%Y-%m-%d %H:%M:%S")
 
-    # สร้างการ์ดรายการข้อมูลยุทธศาสตร์ทำเงิน
     cards_html = ""
     if not insights_list:
         cards_html = """
@@ -67,7 +64,7 @@ def generate_html_dashboard():
                 </div>
                 <div style="margin-bottom: 16px;">
                     <strong style="color: #94a3b8; display: block; margin-bottom: 4px;">📝 บทสรุปแผนยุทธศาสตร์ความสำเร็จ:</strong>
-                    <p style="color: #e2e8f0; line-height: 1.6; margin: 0; background: #0f172a; padding: 14px; border-radius: 8px;">{item.get('conclusion','-')}</p>
+                    <div style="color: #e2e8f0; line-height: 1.6; margin: 0; background: #0f172a; padding: 14px; border-radius: 8px; white-space: pre-wrap;">{item.get('conclusion','-')}</div>
                 </div>
                 <div>
                     <strong style="color: #94a3b8; display: block; margin-bottom: 6px;">🎯 เครื่องมือปั๊มเงินคัดสรรพิเศษ (Base44 Automated Dynamic):</strong>
@@ -76,7 +73,6 @@ def generate_html_dashboard():
             </div>
             """
 
-    # หน้าตาโครงสร้าง HTML UI สไตล์แอปพลิเคชันยุคใหม่ (Dark Mode สบายตา)
     full_html = f"""
     <!DOCTYPE html>
     <html lang="th">
@@ -141,37 +137,48 @@ async def app(scope, receive, send):
                     user_id = msg_obj["from"]["id"]
                     user_text = msg_obj.get("text", "")
                     
-                    print(f"📥 [Direct Message Trigger] จาก {user_id}: {user_text}")
-                    orchestrator_response = await meta_orchestrator.route_and_execute(user_message=user_text, user_id=user_id)
-                    
-                    if orchestrator_response and "data" in orchestrator_response:
-                        data_payload = orchestrator_response["data"]
-                        if "message" in data_payload:
-                            # 🚀 ตรวจจับว่าระบบมีแนบการสร้างปุ่มอินไลน์คีย์บอร์ด (Inline Button) มาด้วยหรือไม่
-                            reply_markup = None
-                            if "inline_buttons" in data_payload:
-                                markup = InlineKeyboardMarkup()
-                                for btn in data_payload["inline_buttons"]:
-                                    markup.add(InlineKeyboardButton(text=btn["text"], url=btn["url"]))
-                                reply_markup = markup
-                                
-                            await bot.send_message(chat_id=chat_id, text=data_payload["message"], reply_markup=reply_markup, parse_mode="Markdown")
+                    # 💡 คีย์เวิร์ดพิเศษสำหรับสั่งสุ่ม Content รายวัน
+                    if user_text.strip().lower() == "run daily content":
+                        print("⏰ [Chronos Active Trigger] นายท่านสั่งรันระบบ Content รายวันอัตโนมัติ!")
+                        bu_result = growth_marketing_orchestrator.generate_strategic_plan("ธุรกิจข้าวสารสุขภาพรายวัน", is_daily_job=True)
+                        
+                        from shared_knowledge import shared_knowledge
+                        shared_knowledge.publish_insight(
+                            author_team="growth_marketing_bu_daily",
+                            topic="ระบบสุ่มผลิตเนื้อหารายวันอัตโนมัติ (Automation)",
+                            insight_data={"best_tools": bu_result["best_tools"], "conclusion": bu_result["conclusion"]}
+                        )
+                        
+                        await bot.send_message(
+                            chat_id=chat_id, 
+                            text=f"⏰ **[Daily Automation Success]**\nโรงงานสมองกลได้สุ่มสร้างเนื้อหาประจำวัน และดันขึ้นหน้าเว็บ **Base44 Portal** ให้เรียบร้อยแล้วโดยไม่ต้องรออนุมัติครับพ้ม!\n\n🔗 คลิกเปิดดูหน้าเว็บ: https://ai-agent-orchestrator-2vam.onrender.com",
+                            parse_mode="Markdown"
+                        )
+                    else:
+                        print(f"📥 [Direct Message Trigger] จาก {user_id}: {user_text}")
+                        orchestrator_response = await meta_orchestrator.route_and_execute(user_message=user_text, user_id=user_id)
+                        
+                        if orchestrator_response and "data" in orchestrator_response:
+                            data_payload = orchestrator_response["data"]
+                            if "message" in data_payload:
+                                reply_markup = None
+                                if "inline_buttons" in data_payload:
+                                    markup = InlineKeyboardMarkup()
+                                    for btn in data_payload["inline_buttons"]:
+                                        markup.add(InlineKeyboardButton(text=btn["text"], url=btn["url"]))
+                                    reply_markup = markup
+                                    
+                                await bot.send_message(chat_id=chat_id, text=data_payload["message"], reply_markup=reply_markup, parse_mode="Markdown")
                 else:
                     update = Update.de_json(json_string)
                     await bot.process_new_updates([update])
             except Exception as e:
-                print(f"⚠️ [Webhook Parse Error] ถอดรหัสหรือส่งคำสั่งพลาด: {e}")
+                print(f"⚠️ [Webhook Parse Error] ถอดรหัสพลาด: {e}")
                 
-        await send({
-            'type': 'http.response.start',
-            'status': 200,
-            'headers': [[b'content-type', b'text/plain']],
-        })
+        await send({'type': 'http.response.start', 'status': 200, 'headers': [[b'content-type', b'text/plain']]})
         await send({'type': 'http.response.body', 'body': b'OK'})
         
     else:
-        # 💻 🏠 [หน้าแรกของเว็บไซต์หลัก Base44 Web Portal]
-        # เมื่อนายท่านเปิดผ่านเบราเซอร์ จะเจอหน้าเว็บแสดงผลรายงานสถิติข้อมูลแผนงานทันที!
         html_content = generate_html_dashboard().encode('utf-8')
         await send({
             'type': 'http.response.start',
