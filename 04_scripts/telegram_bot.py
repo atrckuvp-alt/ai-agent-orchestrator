@@ -154,6 +154,26 @@ async def app(scope, receive, send):
                             text=f"⏰ **[Daily Automation Success]**\nโรงงานสมองกลได้สุ่มสร้างเนื้อหาประจำวัน และดันขึ้นหน้าเว็บ **Base44 Portal** ให้เรียบร้อยแล้วโดยไม่ต้องรออนุมัติครับพ้ม!\n\n🔗 คลิกเปิดดูหน้าเว็บ: https://ai-agent-orchestrator-2vam.onrender.com",
                             parse_mode="Markdown"
                         )
+                    # 💡 ตรวจจับคีย์เวิร์ดพิเศษสำหรับสั่งทดสอบคู่ขนานหลายสินค้าพร้อมกัน
+                    elif user_text.strip().lower() == "run parallel test":
+                        print("🏎️ [Parallel Engine Active] เริ่มทำการประมวลผลกลยุทธ์ 2 โปรดักก์พร้อมกันขนานกัน!")
+                        
+                        # รันสินค้าชิ้นที่ 1 และ 2 คู่ขนานพร้อมกันแบบ Asynchronous ทันที
+                        loop = asyncio.get_event_loop()
+                        task1 = loop.run_in_executor(None, growth_marketing_orchestrator.generate_strategic_plan, "ข้าวสารปลอดสารพิษดัชนีน้ำตาลต่ำ", True)
+                        task2 = loop.run_in_executor(None, growth_marketing_orchestrator.generate_strategic_plan, "แชมพูสมุนไพรออร์แกนิกสกัดเย็นลดผมร่วง", True)
+                        
+                        res1, res2 = await asyncio.gather(task1, task2)
+                        
+                        from shared_knowledge import shared_knowledge
+                        shared_knowledge.publish_insight(author_team="bu_parallel_1", topic="[Parallel] ธุรกิจข้าวสารสุขภาพ", insight_data={"best_tools": res1["best_tools"], "conclusion": res1["conclusion"]})
+                        shared_knowledge.publish_insight(author_team="bu_parallel_2", topic="[Parallel] ธุรกิจแชมพูออร์แกนิก", insight_data={"best_tools": res2["best_tools"], "conclusion": res2["conclusion"]})
+                        
+                        await bot.send_message(
+                            chat_id=chat_id, 
+                            text=f"🏎️ **[Parallel Processing Complete]**\nระบบได้ทำการวิเคราะห์แผนงานของทั้ง **'ข้าวสาร'** และ **'แชมพูสมุนไพร'** พร้อมกันแบบคู่ขนานข้ามอุตสาหกรรมเรียบร้อยแล้ว! ข้อมูลไหลแยกการ์ดกันอย่างอิสระบนหน้าเว็บ\n\n🔗 คลิกเปิดพอร์ตเทิลดูผลลัพธ์คู่ขนาน: https://ai-agent-orchestrator-2vam.onrender.com",
+                            parse_mode="Markdown"
+                        )
                     else:
                         print(f"📥 [Direct Message Trigger] จาก {user_id}: {user_text}")
                         orchestrator_response = await meta_orchestrator.route_and_execute(user_message=user_text, user_id=user_id)
