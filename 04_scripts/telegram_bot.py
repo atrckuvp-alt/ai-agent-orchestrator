@@ -1,14 +1,11 @@
 import os
 import sys
-import asyncio
-from datetime import datetime
-import json
 from pathlib import Path
 
-# 🔌 ฝังระบบเข็มทิศพิกัด Path ของ Root และโมดูลภายใน
 CURRENT_DIR = Path(__file__).resolve().parent
 ROOT = CURRENT_DIR.parent
 
+# บังคับเพิ่มเส้นทางให้ครอบคลุมรอบทิศทาง
 for path in [str(CURRENT_DIR), str(ROOT)]:
     if path not in sys.path:
         sys.path.insert(0, path)
