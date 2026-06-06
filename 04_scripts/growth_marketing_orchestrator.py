@@ -1,12 +1,14 @@
 # Complete file: 04_scripts/growth_marketing_orchestrator.py
 import os
 import sys
-import requests
+from pathlib import Path
 
-# 🔌 [Senior Path Injection] บังคับให้ระบบมองเห็นไฟล์ทั้งหมดในโฟลเดอร์นี้เพื่อแก้ปัญหาเลข 04_
-current_dir = os.path.dirname(os.path.abspath(__file__))
-if current_dir not in sys.path:
-    sys.path.insert(0, current_dir)
+# 🔌 [Orchestrator Path Defender] บังคับฉีดเส้นทางให้ระบบค้นหาโมเดลเจอเสมอไม่ว่าจะโดนเรียกจากที่ใด
+CURRENT_DIR = Path(__file__).resolve().parent
+if os.path.dirname(os.path.abspath(__file__)) not in sys.path:
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+if str(CURRENT_DIR) not in sys.path:
+    sys.path.insert(0, str(CURRENT_DIR))
 
 # ตอนนี้สามารถ import ตรง ๆ ได้เลย ไม่ติดบั๊กทางเดินไฟล์แล้วครับ
 from ai_model_registry import model_registry  

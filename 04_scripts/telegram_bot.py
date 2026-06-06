@@ -11,6 +11,8 @@ from pathlib import Path
 CURRENT_DIR = Path(__file__).resolve().parent
 if os.path.dirname(os.path.abspath(__file__)) not in sys.path:
     sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+if str(CURRENT_DIR) not in sys.path:
+    sys.path.insert(0, str(CURRENT_DIR))
 
 # ตั้งค่าเส้นทางฐานข้อมูลเดิมของนายท่าน
 ROOT = CURRENT_DIR.parent
