@@ -133,7 +133,7 @@ async def handle_all_messages(message):
             pass
 
 # =====================================================================
-# ⏰ [Section 3] ระบบตั้งเวลาออกล่าข้อมูลและแจ้งเตือนอัตโนมัติ (ชุดไร้พ่าย)
+# ⏰ [Section 3] ระบบตั้งเวลาออกล่าข้อมูลและแจ้งเตือนอัตโนมัติ (ชุดสมบูรณ์แบบข้ามคลาวด์)
 # =====================================================================
 async def automated_hunting_loop():
     TARGET_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID", "7238952711") 
@@ -144,16 +144,17 @@ async def automated_hunting_loop():
     while True:
         try:
             print("🕒 [Automation System] ถึงรอบเวลาตรวจสอบ... สั่งการตลาดควบสายสืบออกทำงาน")
-            marketing_reports = growth_marketing_orchestrator.analyze_scraped_leads()
             
-# ... (โค้ดดักจับ None คลีนเดิมด้านบนปล่อยไว้ปกติ) ...
+            # ✨ [จุดแก้ไขเด็ดขาด] เติม await นำหน้าฟังก์ชัน เพื่อให้ได้ข้อมูลรายงานจริง ๆ ไม่ติด coroutine/NoneType
+            marketing_reports = await growth_marketing_orchestrator.analyze_scraped_leads()
+            
+            # ดักทางเผื่อกรณีระบบส่งค่า None กลับมา
             if marketing_reports is None or not isinstance(marketing_reports, list):
                 print("⚠️ [Automation System Warning] โมดูลการตลาดส่งค่า None กลับมา แปลงเป็นรายการว่างเปล่าให้อัตโนมัติ")
                 marketing_reports = []
             
             for report in marketing_reports:
-                # ✨ [จุดเคลียร์ขาดสุดท้าย] ตรวจสอบว่า report มีข้อความจริงหรือไม่ 
-                # .strip() เอาไว้ลบช่องว่าง (Spacebar) ออกให้หมด ถ้าลบแล้วยังว่างเปล่า ให้ข้าม (skip) ไปเลย ไม่ต้องส่ง!
+                # ตรวจสอบความว่างเปล่าของเนื้อหา
                 if not report or not str(report).strip():
                     print("⚠️ [Automation System Warning] ตรวจพบรายงานว่างเปล่า (Empty Text) สั่งข้ามการส่งข่าวนัดนี้")
                     continue
@@ -170,7 +171,7 @@ async def automated_hunting_loop():
             
         except Exception as e:
             print(f"⚠️ [Automation System Error] เกิดข้อผิดพลาดในลูปหลัก: {e}")
-            # ถ้าเกิดเอเรอร์ร้ายแรง ให้พักแค่ 60 วินาทีแล้วตื่นมาลองใหม่ ไม่ปล่อยให้ระบบตายยาว
+            # ป้องกันลูปค้าง ถ้าเอเรอร์ให้รอ 60 วินาทีแล้วเริ่มวนใหม่
             await asyncio.sleep(60)
 
 # =====================================================================
