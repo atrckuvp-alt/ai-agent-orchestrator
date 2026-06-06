@@ -116,10 +116,10 @@ async def handle_all_messages(message):
     print(f"💬 [Telegram Message Received] From {sender_id}: {user_msg}")
     
     try:
-        # 🏎️ ส่ง 2 ค่าเรียงตามตำแหน่ง (ตำแหน่งที่ 1: ข้อความ, ตำแหน่งที่ 2: ไอดีผู้ส่ง)
-        # ไม่ใส่คำว่า user_id= เพื่อให้ตรงตามหลัก Positional Argument ที่ตัวแม่ร้องขอเป๊ะๆ
+        # 🔥 ทะลวงช่องส่ง 2 ค่าตามตำแหน่งเข้าสมองกลหลัก ผ่านฉลุยแล้วตามภาพที่ 2!
         reply_content = meta_orchestrator.route_and_execute(user_msg, sender_id)
             
+        # ถ้าสมองกลหลักประมวลผลเสร็จแล้วไม่มีการ return string กลับมา (เป็น None)
         if reply_content is None:
             reply_content = f"🤖 [System Echo] บอทได้รับคำสั่งเรื่อง '{user_msg}' และส่งเข้าสมองกลหลักเรียบร้อยแล้วครับพ้ม!"
             
