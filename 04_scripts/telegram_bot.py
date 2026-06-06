@@ -4,8 +4,8 @@ import sys
 import asyncio
 import json
 from pathlib import Path
-import datetime
 from datetime import datetime, timezone, timedelta
+from contextlib import asynccontextmanager
 
 # 🔌 [Infra] ระบบล็อกพิกัดจัดเส้นทาง Path ให้รองรับระบบ Linux บน Cloud (Render)
 CURRENT_DIR = Path(__file__).resolve().parent
@@ -15,7 +15,7 @@ for path in [str(CURRENT_DIR), str(ROOT)]:
     if path not in sys.path:
         sys.path.insert(0, path)
 
-# โหลดสภาพแวดล้อมสภาพแวดล้อมระบบ (.env)
+# โหลดสภาพแวดล้อมระบบ (.env)
 from dotenv import load_dotenv
 load_dotenv(dotenv_path=ROOT / ".env")
 
@@ -28,10 +28,9 @@ from telebot.async_telebot import AsyncTeleBot
 from meta_orchestrator import meta_orchestrator
 from growth_marketing_orchestrator import growth_marketing_orchestrator
 
-# 🤖 [Initialization] ตั้งค่าบอทและแอปพลิเคชันหลัก
+# 🤖 [Initialization] ตั้งค่าบอทหลัก
 TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
 bot = AsyncTeleBot(TOKEN)
-app = FastAPI()
 
 # 📂 พิกัดคลังข้อมูลจำลองภายใน
 KNOWLEDGE_BASE_PATH = ROOT / "shared_knowledge_base.json"
@@ -40,17 +39,12 @@ KNOWLEDGE_BASE_PATH = ROOT / "shared_knowledge_base.json"
 # 📊 [Section 1] ฟังก์ชันแดชบอร์ดสังเกตการณ์ผ่านหน้าเว็บ Portal หลัก
 # =====================================================================
 def generate_html_dashboard():
-    """
-    สร้างหน้าเว็บรายงานสถานะ โดยดึงข้อมูลจากไฟล์ความรู้ภายในมาแสดงผล
-    """
     db = {}
     if KNOWLEDGE_BASE_PATH.exists():
         with open(KNOWLEDGE_BASE_PATH, "r", encoding="utf-8") as f:
             db = json.load(f)
             
     insights_list = db.get("insights", [])
-    
-    # 🎯 แก้ไขท่อนโครงสร้างเวลาไทย คลีนเสร็จสรรพไม่มีเอเรอร์ตัวแดง
     tz_th = timezone(timedelta(hours=7))
     update_time = datetime.now(tz_th).strftime("%Y-%m-%d %H:%M:%S")
     
@@ -101,11 +95,6 @@ def generate_html_dashboard():
     """
     return html_content
 
-@app.get("/")
-async def root_portal():
-    from fastapi.responses import HTMLResponse
-    return HTMLResponse(content=generate_html_dashboard(), status_code=200)
-
 # =====================================================================
 # 📥 [Section 2] ระบบควบคุมคำสั่งแชทจากหน้าบ้าน Telegram Bot
 # =====================================================================
@@ -121,54 +110,71 @@ async def send_welcome(message):
 @bot.message_handler(func=lambda message: True)
 async def handle_all_messages(message):
     print(f"💬 [Telegram Message Received]: {message.text}")
-    # โยนงานเข้าตัวสลับสายงานแกนหลัก (Meta Orchestrator) ประมวลผลตรรกะ
     reply_content = meta_orchestrator.route_and_execute(message.text)
     await bot.reply_to(message, reply_content, parse_mode="Markdown")
 
 # =====================================================================
-# ⏰ [Section 3] Feature Expansion: ระบบตั้งเวลาออกล่าข้อมูลและแจ้งเตือนอัตโนมัติ
+# ⏰ [Section 3] ระบบตั้งเวลาออกล่าข้อมูลและแจ้งเตือนอัตโนมัติ (Safe Mode)
 # =====================================================================
 async def automated_hunting_loop():
     """
     ฟังก์ชันผู้พิทักษ์หลังบ้าน แอบทำงานเงียบๆ ทุกๆ ช่วงเวลาเพื่อส่งดีลเด็ดแจ้งเตือนนายท่าน
     """
-    # ดึง Chat ID จริงที่บันทึกไว้ใน .env หากไม่มีจะล็อก Default ไว้คุยผ่านระบบบอทหลัก
-    TARGET_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID", "5174095400") # หรือแก้เลข ID นายท่านใส่ตรงนี้ได้เลยครับ
+    TARGET_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID", "5174095400") 
     
-    await asyncio.sleep(15) # ให้บอทสแตนด์บายระบบหลักให้พร้อม 15 วินาทีแรก
+    await asyncio.sleep(20) 
     print("🚀 [Automation System] ลูปตั้งเวลาสแกนข้อมูลเชิงรุก เริ่มทำงานเบื้องหลังแล้ว...")
     
     while True:
         try:
             print("🕒 [Automation System] ถึงรอบเวลาตรวจสอบ... สั่งการตลาดควบสายสืบออกทำงาน")
-            
-            # สั่งตัวแม่การตลาดไปดึงข้อมูลสายสืบและถอดรหัสวิเคราะห์แอดโฆษณา
             marketing_reports = growth_marketing_orchestrator.analyze_scraped_leads()
             
             for report in marketing_reports:
-                # สั่งยิงกระสุนเตือนภัยเด้งเข้าแชทส่วนตัวของนายท่านโดยตรง!
-                await bot.send_message(chat_id=TARGET_CHAT_ID, text=report, parse_mode="Markdown")
-                await asyncio.sleep(2) # กันโดน Telegram บล็อกความถี่ (Rate Limit)
+                try:
+                    await bot.send_message(chat_id=TARGET_CHAT_ID, text=report, parse_mode="Markdown")
+                    print(f"📢 [Automation System] ส่งรายงานเข้า Chat ID {TARGET_CHAT_ID} สำเร็จ!")
+                    await asyncio.sleep(2)
+                except Exception as send_err:
+                    print(f"⚠️ [Automation System Sub-Error] ส่งข้อความไม่สำเร็จ (เช็กแชทบอทหรือ ID): {send_err}")
                 
-            print("✅ [Automation System] ส่งรายงานแจ้งเตือนเรียบร้อย เข้านอนรอสแกนรอบถัดไป")
-            
-            # ตั้งเวลาวนลูปซ้ำ: 3600 วินาที = 1 ชั่วโมง (ปรับเพิ่ม/ลดได้ตามใจชอบครับนายท่าน)
+            print("✅ [Automation System] จบรอบการทำงาน เข้านอนรอสแกนรอบถัดไป")
             await asyncio.sleep(3600)
             
         except Exception as e:
-            print(f"⚠️ [Automation System Error] เกิดข้อผิดพลาดในลูปอัตโนมัติ: {e}")
+            print(f"⚠️ [Automation System Error] เกิดข้อผิดพลาดในลูปหลัก: {e}")
             await asyncio.sleep(60)
 
 # =====================================================================
-# 🛫 [Section 4] ระบบผสานโครงสร้างสตาร์ทอัปคู่ขนาน (Uvicorn / FastAPI Startup)
+# 🛫 [Section 4] ระบบผสานโครงสร้างสตาร์ทอัปยุคใหม่ (FastAPI Lifespan Engine)
 # =====================================================================
-@app.on_event("startup")
-async def startup_event():
-    print("⚡ [System Core Startup] เริ่มต้นโครงสร้างระบบนิเวศบอท...")
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    """
+    🚀 ระบบจัดการวงจรชีวิตแอปพลิเคชันยุคใหม่ ทดแทน @app.on_event ที่โดนขีดฆ่าทิ้ง
+    """
+    print("⚡ [System Core Startup] เริ่มต้นโครงสร้างระบบนิเวศบอท (ผ่านระบบ Lifespan)...")
     
-    # 1. ปลดล็อกระบบวนลูปแจ้งเตือนอัตโนมัติ (Background Task) ให้ทำงานขนานกันไป ไม่ขัดขาใคร
+    try:
+        print("🧹 [System Core Startup] กำลังเคลียร์ระบบ Webhook เก่าออกจากเซิร์ฟเวอร์ Telegram...")
+        await bot.delete_webhook(drop_pending_updates=True)
+        print("✅ [System Core Startup] ล้างประวัติ Webhook เก่าเรียบร้อยแล้ว!")
+    except Exception as webhook_err:
+        print(f"⚠️ [System Core Warning] ไม่สามารถลบ Webhook ได้: {webhook_err}")
+        
+    # สั่งเปิด Task หลังบ้านขนานกันไปตอนสตาร์ทอัป
     asyncio.create_task(automated_hunting_loop())
-    
-    # 2. ปลดล็อก Webhook / Polling สั่งให้บอทเริ่มเงี่ยหูฟังคำสั่งคนพิมพ์แชท
     asyncio.create_task(bot.polling(non_stop=True, timeout=60))
     print("✅ [System Core Startup] สั่งเริ่มงาน Polling บอท และระบบ Automation เรียบร้อย!")
+    
+    yield # ◄ ช่วงรอยต่อตรงนี้คือจุดที่เซิร์ฟเวอร์รันอยู่
+    
+    print("🛑 [System Core Shutdown] ปิดระบบเซิร์ฟเวอร์เรียบร้อย")
+
+# ประกาศตัวแอป FastAPI ครอบระบบ Lifespan ใหม่ลงไปแบบคลีนๆ
+app = FastAPI(lifespan=lifespan)
+
+@app.get("/")
+async def root_portal():
+    from fastapi.responses import HTMLResponse
+    return HTMLResponse(content=generate_html_dashboard(), status_code=200)
