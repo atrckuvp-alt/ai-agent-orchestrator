@@ -55,7 +55,11 @@ def generate_html_dashboard():
         db = {"insights": []}
 
     insights_list = db.get("insights", [])
-    tz_th = datetime.timezone(datetime.timedelta(hours=7))
+    tz_th = datetime.timezone(datetime.timedelta(hours=7))# ❌ ของเดิมที่พัง:
+# tz_th = datetime.timezone(datetime.timedelta(hours=7))
+
+# 🎯 แก้ไขใหม่เป็นแบบนี้ (เรียกผ่านคลาสย่อยตรงๆ ผ่านชื่อที่เราเตรียมไว้):
+    tz_th = timezone(timedelta(hours=7))
     update_time = datetime.now(tz_th).strftime("%Y-%m-%d %H:%M:%S")
 
     cards_html = ""
