@@ -11,7 +11,7 @@ if str(CURRENT_DIR) not in sys.path:
     sys.path.insert(0, str(CURRENT_DIR))
 
 # ตอนนี้สามารถ import ตรง ๆ ได้เลย ไม่ติดบั๊กทางเดินไฟล์แล้วครับ
-from ai_model_registry import model_registry  
+from .ai_model_registry import model_registry
 
 class MarketingAgent:
     def execute_marketing_analysis(self, topic: str, core_skill: str, segmentation_skill: str) -> str:
