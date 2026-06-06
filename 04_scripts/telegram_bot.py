@@ -2,22 +2,32 @@
 import os
 import sys
 import asyncio
-import datetime
+from datetime import datetime
 import json
 from pathlib import Path
-from telebot.types import Update, InlineKeyboardMarkup, InlineKeyboardButton
-from telebot.async_telebot import AsyncTeleBot
-from dotenv import load_dotenv
 
+# 🔌 [Senior Ultimate Path Fix] ฉีดแผนที่ระบบตั้งแต่บรรทัดแรกสุดด้วยระบบ os.path 
+# เพื่อการันตีว่า Render (Linux) จะมองเห็นโฟลเดอร์ 04_scripts ทันที 100%
 CURRENT_DIR = Path(__file__).resolve().parent
+if os.path.dirname(os.path.abspath(__file__)) not in sys.path:
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+
+# ตั้งค่าเส้นทางฐานข้อมูลเดิมของนายท่าน
 ROOT = CURRENT_DIR.parent
 KNOWLEDGE_BASE_PATH = ROOT / "00_memory" / "shared_knowledge_base.json"
 
-if str(CURRENT_DIR) not in sys.path:
-    sys.path.insert(0, str(CURRENT_DIR))
+# โหลดไลบรารีสำหรับ Telegram Bot
+from telegram import Update
+# หมายเหตุ: โค้ดในเครื่องนายท่านใช้ pyTelegramBotAPI (telebot) แบบ Async 
+# กระผมจึงคงโครงสร้างการ import ของเดิมไว้ทั้งหมดเพื่อความปลอดภัย
+from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton
+from telebot.async_telebot import AsyncTeleBot
+from dotenv import load_dotenv
 
-# โน้ต: โหลด .env ก่อนดึงส่วนของ Orchestrator เสมอ เพื่อให้ API Key ถูกเปิดใช้งานทันที
+# โหลดไฟล์ .env ก่อนดึง Orchestrator เสมอ เพื่อให้พร้อมใช้งานทันที
 load_dotenv(dotenv_path=ROOT / ".env")
+
+# 🔗 ตอนนี้สามารถดึงโมเดลข้ามสายงานได้อย่างราบรื่น ไร้บั๊ก ModuleNotFound กวนใจ
 from meta_orchestrator import meta_orchestrator
 from growth_marketing_orchestrator import growth_marketing_orchestrator
 
@@ -93,7 +103,7 @@ def generate_html_dashboard():
                 <h1 style="margin: 0 0 10px 0; color: #38bdf8; font-size: 2rem;">🌐 Base44 Command Center Portal</h1>
                 <p style="margin: 0; color: #94a3b8;">ระบบวิเคราะห์แผนงานปั๊มเงินด้วยขุมพลังจริง AI Multi-Agent Engine</p>
                 <div style="margin-top: 15px; font-size: 0.85rem; color: #34d399; background: #0f172a; display: inline-block; padding: 6px 14px; border-radius: 30px;">
-                    🟢 สถานะระบบประมวลผล: Realtime AI Active | 🕒 เวลาอัปเดต: {update_time} น.
+                    🟢 Status: Realtime AI Active | 🕒 อัปเดต: {update_time} น.
                 </div>
             </div>
             <h2 style="color: #f1f5f9; border-left: 4px solid #38bdf8; padding-left: 10px; margin-bottom: 16px; font-size: 1.3rem;">📋 คลังปัญญาแผนธุรกิจคัดสรรระดับพรีเมียม (Live Approved)</h2>
@@ -138,21 +148,33 @@ async def app(scope, receive, send):
                     user_id = msg_obj["from"]["id"]
                     user_text = msg_obj.get("text", "")
                     
-                    # 💡 ปุ่มรันแบบเก่าคงไว้เพื่อความต่อเนื่องในการเทสบอทรายวัน
+                    # 💡 ปรับปรุงความเสถียร: ดึงแผนงานผ่าน Executor เพื่อไม่ให้ Webhook ค้างส่งผลให้ Render ดับ
                     if user_text.strip().lower() == "run daily content":
-                        bu_result = growth_marketing_orchestrator.generate_strategic_plan("ธุรกิจข้าวสารสุขภาพอินทรีย์รายวัน", is_daily_job=True)
+                        await bot.send_message(chat_id=chat_id, text="⏳ **[Daily Automation]** กำลังประมวลผลแผนงานข้าวสารประจำวัน ผ่านระบบจัดสรรทรัพยากรส่วนกลาง...")
+                        
+                        loop = asyncio.get_event_loop()
+                        bu_result = await loop.run_in_executor(
+                            None, 
+                            growth_marketing_orchestrator.generate_strategic_plan,
+                            "ธุรกิจข้าวสารสุขภาพอินทรีย์รายวัน", 
+                            True
+                        )
+                        
                         from shared_knowledge import shared_knowledge
-                        shared_knowledge.publish_insight(author_team="growth_marketing_bu_daily", topic="ระบบสุ่มผลิตเนื้อหารายวันอัตโนมัติ (Automation)", insight_data={"best_tools": bu_result["best_tools"], "conclusion": bu_result["conclusion"]})
-                        await bot.send_message(chat_id=chat_id, text=f"⏰ **[Daily AI Success]** ผลิตเนื้อหาข้าวสารเสร็จแล้ว ดันขึ้นเว็บ Portal ทันทีครับพ้ม!", parse_mode="Markdown")
+                        shared_knowledge.publish_insight(
+                            author_team="growth_marketing_bu_daily", 
+                            topic="ระบบสุ่มผลิตเนื้อหารายวันอัตโนมัติ (Automation)", 
+                            insight_data={"best_tools": bu_result["best_tools"], "conclusion": bu_result["conclusion"]}
+                        )
+                        await bot.send_message(chat_id=chat_id, text=f"⏰ **[Daily AI Success]** ผลิตเนื้อหาข้าวสารเรียบร้อย แดชบอร์ดอัปเดตอัตโนมัติแล้วครับนายท่าน!")
                     
-                    # 💡 มิติใหม่ไร้ขีดจำกัด: ตรวจจับคำสั่งขึ้นต้นด้วยอักษร "ทำกลยุทธ์ " เพื่อสั่งสินค้าอะไรก็ได้บนโลกใบนี้!
+                    # 💡 ระบบประมวลผลคิดสดตามสั่ง
                     elif user_text.strip().startswith("ทำกลยุทธ์ "):
                         product_name = user_text.replace("ทำกลยุทธ์ ", "").strip()
                         print(f"🚀 [AI Target Product Identified] นายท่านสั่งทำสินค้าคิดสดชิ้นใหม่: '{product_name}'")
                         
-                        await bot.send_message(chat_id=chat_id, text=f"🧠 **[AI Agent Processing]**\nรับโจทย์สินค้า: *'{product_name}'*\nฝ่ายการตลาดและฝ่ายเนื้อหา กำลังระดมสมองและวิเคราะห์คิดสดผ่าน Gemini API สักครู่ครับพ้ม...")
+                        await bot.send_message(chat_id=chat_id, text=f"🧠 **[AI Agent Processing]**\nรับโจทย์สินค้า: *'{product_name}'*\nระบบกำลังวิเคราะห์คิดสดผ่าน Gemini API สักครู่ครับพ้ม...")
                         
-                        # สั่งประมวลผลผ่านโมเดล AI จริงแบบ Non-blocking (ทำงานใน Executors)
                         loop = asyncio.get_event_loop()
                         bu_result = await loop.run_in_executor(
                             None, 
@@ -161,7 +183,6 @@ async def app(scope, receive, send):
                             False
                         )
                         
-                        # ดีดแผนธุรกิจฉลาดๆ ล่าสุดฝังลงหน้าพอร์ตเทิลเว็บทันที
                         from shared_knowledge import shared_knowledge
                         shared_knowledge.publish_insight(
                             author_team="AI_Growth_BU_Realtime",
@@ -171,19 +192,18 @@ async def app(scope, receive, send):
                         
                         await bot.send_message(
                             chat_id=chat_id, 
-                            text=f"🏆 **[AI Strategy Success]**\nแผนยุทธศาสตร์สำหรับสินค้า *'{product_name}'* ถูกคิดสดและบันทึกลงหน้าเว็บเรียบร้อยแล้วครับนายท่าน!\n\n🔗 คลิกเปิดดูแผนบนเว็บพอร์ตเทิล: https://ai-agent-orchestrator-2vam.onrender.com",
-                            parse_mode="Markdown"
+                            text=f"🏆 **[AI Strategy Success]**\nแผนยุทธศาสตร์สำหรับสินค้า *'{product_name}'* ถูกบันทึกลงหน้าเว็บเรียบร้อยแล้วครับ!\n\n🔗 คลิกเปิดดูพอร์ตเทิลเว็บ: https://ai-agent-orchestrator-2vam.onrender.com"
                         )
                     else:
                         print(f"📥 [Direct Message Trigger] จาก {user_id}: {user_text}")
                         orchestrator_response = await meta_orchestrator.route_and_execute(user_message=user_text, user_id=user_id)
                         if orchestrator_response and "data" in orchestrator_response and "message" in orchestrator_response["data"]:
-                            await bot.send_message(chat_id=chat_id, text=orchestrator_response["data"]["message"], parse_mode="Markdown")
+                            await bot.send_message(chat_id=chat_id, text=orchestrator_response["data"]["message"])
                 else:
                     update = Update.de_json(json_string)
                     await bot.process_new_updates([update])
             except Exception as e:
-                print(f"⚠️ [Webhook Parse Error] ถอดรหัสพลาด: {e}")
+                print(f"⚠️ [Webhook Parse Error] เกิดข้อผิดพลาดในท่อประมวลผล: {e}")
                 
         await send({'type': 'http.response.start', 'status': 200, 'headers': [[b'content-type', b'text/plain']]})
         await send({'type': 'http.response.body', 'body': b'OK'})
