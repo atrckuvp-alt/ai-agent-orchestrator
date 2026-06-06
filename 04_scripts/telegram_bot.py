@@ -97,7 +97,7 @@ def generate_html_dashboard():
     return html_content
 
 # =====================================================================
-# 📥 [Section 2] ระบบควบคุมคำสั่งแชทจากหน้าบ้าน Telegram Bot (ชุดทลายบั๊ก NoneType)
+# 📥 [Section 2] ระบบควบคุมคำสั่งแชทจากหน้าบ้าน Telegram Bot (ชุดแก้ทางผ่านชัวร์)
 # =====================================================================
 @bot.message_handler(commands=['start', 'help'])
 async def send_welcome(message):
@@ -118,20 +118,21 @@ async def handle_all_messages(message):
     try:
         # 🧠 [Dynamic Check] ตรวจสอบสดๆ ว่าฟังก์ชันตัวแม่เป็น Async หรือฟังก์ชันธรรมดา
         if inspect.iscoroutinefunction(meta_orchestrator.route_and_execute):
-            reply_content = await meta_orchestrator.route_and_execute(user_msg)
+            # ✨ [จุดแก้ไขสำคัญ] ส่ง 2 ค่าเรียงตามตำแหน่ง (user_msg, sender_id) โดยไม่ใส่ keyword
+            reply_content = await meta_orchestrator.route_and_execute(user_msg, sender_id)
         else:
-            reply_content = meta_orchestrator.route_and_execute(user_msg)
+            # ✨ [จุดแก้ไขสำคัญ] ส่ง 2 ค่าเรียงตามตำแหน่งสำหรับฟังก์ชันธรรมดาเช่นกัน
+            reply_content = meta_orchestrator.route_and_execute(user_msg, sender_id)
             
-        # 🛡️ ดักทางเผื่อตัวแม่ไม่ส่งข้อมูลอะไรกลับมาเลย (None) ให้มีข้อความตอบกลับนายท่านเสมอ
         if reply_content is None:
-            reply_content = f"🤖 [System Echo] รับทราบคำสั่งจากนายท่านแล้วครับพ้ม ระบบได้นำข้อมูลเรื่อง '{user_msg}' เข้าสู่สวิตช์แกนหลักเรียบร้อยแล้ว!"
+            reply_content = f"🤖 [System Echo] รับทราบคำสั่งเรื่อง '{user_msg}' และบันทึกเข้าประวัติแชท {sender_id} เรียบร้อยแล้วครับพ้ม!"
             
         await bot.reply_to(message, reply_content, parse_mode="Markdown")
         
     except Exception as e:
         print(f"⚠️ [Bot Reply Error] เกิดข้อผิดพลาดขณะประมวลผลคำสั่งแชท: {e}")
         try:
-            await bot.reply_to(message, "🤖 บอทได้รับคำสั่งแล้วครับพ้ม! กำลังเร่งส่งต่อข้อมูลให้โมดูลหลังบ้าน")
+            await bot.reply_to(message, "🤖 บอทได้รับคำสั่งแล้วครับพ้ม! เกิดความล่าช้าในการสลับสายงานเล็กน้อย")
         except:
             pass
 
