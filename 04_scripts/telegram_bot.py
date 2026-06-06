@@ -146,13 +146,18 @@ async def automated_hunting_loop():
             print("🕒 [Automation System] ถึงรอบเวลาตรวจสอบ... สั่งการตลาดควบสายสืบออกทำงาน")
             marketing_reports = growth_marketing_orchestrator.analyze_scraped_leads()
             
-            # ✨ [จุดเคลียร์ขาด] ดักทางไว้ล่วงหน้า ถ้าผลลัพธ์ส่งกลับมาเป็น None หรือไม่ใช่ List
-            # ให้แปลงค่าให้เป็น List ว่างเปล่า [] ทันที เพื่อไม่ให้ระบบเกิดอาการ 'NoneType' object is not iterable
+# ... (โค้ดดักจับ None คลีนเดิมด้านบนปล่อยไว้ปกติ) ...
             if marketing_reports is None or not isinstance(marketing_reports, list):
                 print("⚠️ [Automation System Warning] โมดูลการตลาดส่งค่า None กลับมา แปลงเป็นรายการว่างเปล่าให้อัตโนมัติ")
                 marketing_reports = []
             
             for report in marketing_reports:
+                # ✨ [จุดเคลียร์ขาดสุดท้าย] ตรวจสอบว่า report มีข้อความจริงหรือไม่ 
+                # .strip() เอาไว้ลบช่องว่าง (Spacebar) ออกให้หมด ถ้าลบแล้วยังว่างเปล่า ให้ข้าม (skip) ไปเลย ไม่ต้องส่ง!
+                if not report or not str(report).strip():
+                    print("⚠️ [Automation System Warning] ตรวจพบรายงานว่างเปล่า (Empty Text) สั่งข้ามการส่งข่าวนัดนี้")
+                    continue
+                    
                 try:
                     await bot.send_message(chat_id=TARGET_CHAT_ID, text=report, parse_mode="Markdown")
                     print(f"📢 [Automation System] ส่งรายงานเข้า Chat ID {TARGET_CHAT_ID} สำเร็จ!")
