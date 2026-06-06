@@ -8,13 +8,43 @@ class MetaOrchestrator:
 
     async def route_and_execute(self, user_message: str, user_id: int) -> dict:
         """ ระบบรับคำสั่งทั่วไปแปลงข้อความ (Fall-back Message Selector) """
-        # หากนายท่านพิมพ์คำสั่งขอดู Report ทั่วไป ให้แสดงแดชบอร์ดสรุป
         msg_clean = user_message.strip().lower()
+        
+        # 🚨 [คำสั่งใหม่สำหรับเทส] สั่งให้หน่วยล่าของฟรีออกทำงานทันที
+        if "รันระบบล่าของฟรี" in msg_clean or "test evolution" in msg_clean:
+            try:
+                from ai_evolution_orchestrator import ai_evolution_orchestrator
+                # สั่งรันลูปตรวจจับและทดสอบโมเดล Sandbox สดๆ
+                is_triggered = ai_evolution_orchestrator.run_evolution_check()
+                
+                if is_triggered:
+                    return {
+                        "status": "success",
+                        "data": {
+                            "message": "🔍 🚨 **[BU_AI_Evolution_Hub]** ออกปฏิบัติการคัดกรองโมเดลเสร็จสิ้น!\n\n🤖 ตรวจพบโมเดลฟรีตัวใหม่ที่ผ่านเกณฑ์กฎเหล็ก และได้ส่ง **'การ์ดคำขออนุมัติสีแดง'** ขึ้นไปลอยเด่นบนหน้าเว็บ Base44 Portal เรียบร้อยแล้วครับนายท่าน! ไปเปิดตรวจดูได้เลยครับพ้ม!"
+                        }
+                    }
+                else:
+                    return {
+                        "status": "success",
+                        "data": {
+                            "message": "🔍 **[BU_AI_Evolution_Hub]** ออกปฏิบัติการแล้ว แต่โมเดลใหม่ๆ ในตลาดยังทดสอบ Sandbox ไม่ผ่านเกณฑ์กฎเหล็กในรอบนี้ครับ!"
+                        }
+                    }
+            except Exception as e:
+                return {
+                    "status": "error",
+                    "data": {
+                        "message": f"⚠️ เกิดข้อผิดพลาดในระบบล่าของฟรี: {e}"
+                    }
+                }
+
+        # หากนายท่านพิมพ์คำสั่งขอดู Report ทั่วไป ให้แสดงแดชบอร์ดสรุป
         if "ขอดู report" in msg_clean or "report" in msg_clean:
             return {
                 "status": "success",
                 "data": {
-                    "message": "📊 **[Base44 AI Command Center]**\n\nยินดีต้อนรับครับนายท่าน! ขณะนี้ระบบคิดสด Multi-Agent 4 ค่ายพร้อมใช้งานเต็มรูปแบบแล้ว\n\n💡 **วิธีการสั่งงานคิดสด:**\nพิมพ์คำว่า `ทำกลยุทธ์ [ตามด้วยสินค้า]` เช่น *'ทำกลยุทธ์ ครีมกันแดดสูตรน้ำ'* ระบบจะระดมสมองเจนแผนให้ทันทีครับ!\n\n🔗 หรือเปิดดูพอร์ตเทิลอัปเดตเรียลไทม์: https://ai-agent-orchestrator-2vam.onrender.com"
+                    "message": "📊 **[Base44 AI Command Center]**\n\nยินดีต้อนรับครับนายท่าน! ขณะนี้ระบบคิดสด Multi-Agent พร้อมใช้งานเต็มรูปแบบแล้ว\n\n💡 **วิธีการสั่งงานคิดสด:**\nพิมพ์คำว่า `ทำกลยุทธ์ [ตามด้วยสินค้า]` เช่น *'ทำกลยุทธ์ ครีมกันแดดสูตรน้ำ'*\n\n🛠️ **คำสั่งทดสอบระบบสายล่าของฟรี:**\nพิมพ์คำว่า `รันระบบล่าของฟรี` เพื่อสั่งให้บอทคัดกรองโมเดลใหม่ขึ้นหน้าเว็บ\n\n🔗 เปิดดูพอร์ตเทิลเว็บ: https://ai-agent-orchestrator-2vam.onrender.com"
                 }
             }
             
@@ -26,10 +56,8 @@ class MetaOrchestrator:
         }
 
     async def execute_scheduled_task(self, user_id: int) -> dict:
-        """ ⏰ [สมองกลางตั้งเวลา 9 โมงเช้า] สั่งการให้ AI 4 ค่ายแอบประมวลผลสรุปเนื้อหาอัจฉริยะส่งตรงหานายท่าน """
+        """ ⏰ [สมองกลางตั้งเวลา 9 โมงเช้า] สั่งการให้ AI 4 ค่ายสรุปเนื้อหาส่งตรงหานายท่าน """
         print("⏰ [Meta Orchestrator] เริ่มขบวนการผลิตรายงาน 9 โมงเช้าผ่านขุมพลัง AI คิดสด...")
-        
-        # คลังสินค้าต้นแบบสำหรับสุ่มส่งรายงานให้นายท่านตรวจไอเดียทุกเช้าแบบไม่ซ้ำจำเจ
         morning_ideas = [
             "อาหารเสริมสกัดพรีเมียมจากถั่งเช่าและโสมสกัดสำหรับผู้บริหารยุคใหม่",
             "ยาสระผมสมุนไพรสูตรลดการหลุดร่วงของเส้นผมชะลอวัย",
@@ -39,19 +67,15 @@ class MetaOrchestrator:
         selected_product = random.choice(morning_ideas)
 
         try:
-            # ดึงผู้จัดการยูนิตการตลาดเข้ามาสั่งงานคิดสดข้ามค่ายทันที
             from growth_marketing_orchestrator import growth_marketing_orchestrator
-            
-            # รันการคิดวิเคราะห์กลยุทธ์และการสร้างเนื้อหาจาก AI จริงแบบหลังบ้าน
             loop = asyncio.get_event_loop()
             bu_result = await loop.run_in_executor(
                 None, 
                 growth_marketing_orchestrator.generate_strategic_plan, 
                 selected_product, 
-                True  # รันในโหมด Daily Job
+                True
             )
             
-            # บันทึกเข้าแชร์คลังความรู้ส่วนกลาง ดันขึ้นหน้าเว็บ Portal
             from shared_knowledge import shared_knowledge
             shared_knowledge.publish_insight(
                 author_team="Morning_Chronos_AI_Best",
@@ -61,26 +85,13 @@ class MetaOrchestrator:
 
             report_message = (
                 f"☀️ 📢 **[Morning Briefing Report - 09:00 AM]**\n"
-                f"อรุณสวัสดิ์ครับนายท่าน! บอทตั้งเวลาตื่นมาเสิร์ฟไอเดียทำเงินประจำเช้านี้ในหัวข้อ:\n"
+                f"อรุณสวัสดิ์ครับนายท่าน! บอทตั้งเวลาตื่นมาเสิร์ฟไอเดียประจำเช้านี้ในหัวข้อ:\n"
                 f"👉 *'{selected_product}'*\n\n"
                 f"{bu_result['conclusion']}\n\n"
-                f"🔗 แผนงานนี้ถูกอัปโหลดขึ้นหน้าเว็บหลักเรียบร้อยแล้ว ตรวจสอบได้ที่: https://ai-agent-orchestrator-2vam.onrender.com"
+                f"🔗 ตรวจสอบได้ที่: https://ai-agent-orchestrator-2vam.onrender.com"
             )
-            
-            return {
-                "status": "success",
-                "data": {
-                    "message": report_message
-                }
-            }
-
+            return {"status": "success", "data": {"message": report_message}}
         except Exception as e:
-            print(f"⚠️ [Scheduled Task Error] ไหลลื่นติดขัด: {e}")
-            return {
-                "status": "error",
-                "data": {
-                    "message": f"☀️ ⏰ **[Morning Briefing]** เกิดข้อผิดพลาดในการดึงสมองกลด่วน: {e}"
-                }
-            }
+            return {"status": "error", "data": {"message": f"☀️ ⏰ **[Morning Briefing]** ข้อผิดพลาด: {e}"}}
 
 meta_orchestrator = MetaOrchestrator()
