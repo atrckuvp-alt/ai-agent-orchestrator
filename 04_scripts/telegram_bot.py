@@ -16,10 +16,7 @@ if os.path.dirname(os.path.abspath(__file__)) not in sys.path:
 ROOT = CURRENT_DIR.parent
 KNOWLEDGE_BASE_PATH = ROOT / "00_memory" / "shared_knowledge_base.json"
 
-# โหลดไลบรารีสำหรับ Telegram Bot
-from telegram import Update
-# หมายเหตุ: โค้ดในเครื่องนายท่านใช้ pyTelegramBotAPI (telebot) แบบ Async 
-# กระผมจึงคงโครงสร้างการ import ของเดิมไว้ทั้งหมดเพื่อความปลอดภัย
+# โหลดไลบรารีสำหรับ Telegram Bot (ใช้ pyTelegramBotAPI เพียวๆ ตามโครงสร้างหลักของนายท่าน)
 from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton
 from telebot.async_telebot import AsyncTeleBot
 from dotenv import load_dotenv
@@ -51,7 +48,7 @@ def generate_html_dashboard():
 
     insights_list = db.get("insights", [])
     tz_th = datetime.timezone(datetime.timedelta(hours=7))
-    update_time = datetime.datetime.now(tz_th).strftime("%Y-%m-%d %H:%M:%S")
+    update_time = datetime.now(tz_th).strftime("%Y-%m-%d %H:%M:%S")
 
     cards_html = ""
     if not insights_list:
@@ -103,7 +100,7 @@ def generate_html_dashboard():
                 <h1 style="margin: 0 0 10px 0; color: #38bdf8; font-size: 2rem;">🌐 Base44 Command Center Portal</h1>
                 <p style="margin: 0; color: #94a3b8;">ระบบวิเคราะห์แผนงานปั๊มเงินด้วยขุมพลังจริง AI Multi-Agent Engine</p>
                 <div style="margin-top: 15px; font-size: 0.85rem; color: #34d399; background: #0f172a; display: inline-block; padding: 6px 14px; border-radius: 30px;">
-                    🟢 Status: Realtime AI Active | 🕒 อัปเดต: {update_time} น.
+                    🟢 สถานะระบบประมวลผล: Realtime AI Active | 🕒 เวลาอัปเดต: {update_time} น.
                 </div>
             </div>
             <h2 style="color: #f1f5f9; border-left: 4px solid #38bdf8; padding-left: 10px; margin-bottom: 16px; font-size: 1.3rem;">📋 คลังปัญญาแผนธุรกิจคัดสรรระดับพรีเมียม (Live Approved)</h2>
@@ -148,9 +145,9 @@ async def app(scope, receive, send):
                     user_id = msg_obj["from"]["id"]
                     user_text = msg_obj.get("text", "")
                     
-                    # 💡 ปรับปรุงความเสถียร: ดึงแผนงานผ่าน Executor เพื่อไม่ให้ Webhook ค้างส่งผลให้ Render ดับ
+                    # 💡 ปุ่มรันแบบเก่า: ปรับปรุงความเสถียรเป็น Non-blocking Async เพื่อไม่ให้ Webhook ค้างส่งผลให้ Render ดับ
                     if user_text.strip().lower() == "run daily content":
-                        await bot.send_message(chat_id=chat_id, text="⏳ **[Daily Automation]** กำลังประมวลผลแผนงานข้าวสารประจำวัน ผ่านระบบจัดสรรทรัพยากรส่วนกลาง...")
+                        await bot.send_message(chat_id=chat_id, text="⏳ [Daily Automation] กำลังประมวลผลแผนงานข้าวสารประจำวัน ผ่านระบบจัดสรรทรัพยากรส่วนกลาง...")
                         
                         loop = asyncio.get_event_loop()
                         bu_result = await loop.run_in_executor(
@@ -166,15 +163,16 @@ async def app(scope, receive, send):
                             topic="ระบบสุ่มผลิตเนื้อหารายวันอัตโนมัติ (Automation)", 
                             insight_data={"best_tools": bu_result["best_tools"], "conclusion": bu_result["conclusion"]}
                         )
-                        await bot.send_message(chat_id=chat_id, text=f"⏰ **[Daily AI Success]** ผลิตเนื้อหาข้าวสารเรียบร้อย แดชบอร์ดอัปเดตอัตโนมัติแล้วครับนายท่าน!")
+                        await bot.send_message(chat_id=chat_id, text="⏰ [Daily AI Success] ผลิตเนื้อหาข้าวสารเสร็จแล้ว ดันขึ้นเว็บ Portal ทันทีครับพ้ม!")
                     
-                    # 💡 ระบบประมวลผลคิดสดตามสั่ง
+                    # 💡 มิติใหม่ไร้ขีดจำกัด: ตรวจจับคำสั่งขึ้นต้นด้วยอักษร "ทำกลยุทธ์ " เพื่อสั่งสินค้าอะไรก็ได้บนโลกใบนี้!
                     elif user_text.strip().startswith("ทำกลยุทธ์ "):
                         product_name = user_text.replace("ทำกลยุทธ์ ", "").strip()
                         print(f"🚀 [AI Target Product Identified] นายท่านสั่งทำสินค้าคิดสดชิ้นใหม่: '{product_name}'")
                         
-                        await bot.send_message(chat_id=chat_id, text=f"🧠 **[AI Agent Processing]**\nรับโจทย์สินค้า: *'{product_name}'*\nระบบกำลังวิเคราะห์คิดสดผ่าน Gemini API สักครู่ครับพ้ม...")
+                        await bot.send_message(chat_id=chat_id, text=f"🧠 [AI Agent Processing]\nรับโจทย์สินค้า: '{product_name}'\nฝ่ายการตลาดและฝ่ายเนื้อหา กำลังระดมสมองและวิเคราะห์คิดสดผ่าน Gemini API สักครู่ครับพ้ม...")
                         
+                        # สั่งประมวลผลผ่านโมเดล AI จริงแบบ Non-blocking (ทำงานใน Executors)
                         loop = asyncio.get_event_loop()
                         bu_result = await loop.run_in_executor(
                             None, 
@@ -183,6 +181,7 @@ async def app(scope, receive, send):
                             False
                         )
                         
+                        # ดีดแผนธุรกิจฉลาดๆ ล่าสุดฝังลงหน้าพอร์ตเทิลเว็บทันที
                         from shared_knowledge import shared_knowledge
                         shared_knowledge.publish_insight(
                             author_team="AI_Growth_BU_Realtime",
@@ -192,7 +191,7 @@ async def app(scope, receive, send):
                         
                         await bot.send_message(
                             chat_id=chat_id, 
-                            text=f"🏆 **[AI Strategy Success]**\nแผนยุทธศาสตร์สำหรับสินค้า *'{product_name}'* ถูกบันทึกลงหน้าเว็บเรียบร้อยแล้วครับ!\n\n🔗 คลิกเปิดดูพอร์ตเทิลเว็บ: https://ai-agent-orchestrator-2vam.onrender.com"
+                            text=f"🏆 [AI Strategy Success]\nแผนยุทธศาสตร์สำหรับสินค้า '{product_name}' ถูกคิดสดและบันทึกลงหน้าเว็บเรียบร้อยแล้วครับนายท่าน!\n\n🔗 คลิกเปิดดูแผนบนเว็บพอร์ตเทิล: https://ai-agent-orchestrator-2vam.onrender.com"
                         )
                     else:
                         print(f"📥 [Direct Message Trigger] จาก {user_id}: {user_text}")
@@ -200,10 +199,12 @@ async def app(scope, receive, send):
                         if orchestrator_response and "data" in orchestrator_response and "message" in orchestrator_response["data"]:
                             await bot.send_message(chat_id=chat_id, text=orchestrator_response["data"]["message"])
                 else:
-                    update = Update.de_json(json_string)
+                    # ใช้ไส้ในของระบบ telebot ถอดรหัส JSON แปลงเข้า Engine โดยตรงอย่างปลอดภัย
+                    from telebot.types import Update as TelebotUpdate
+                    update = TelebotUpdate.de_json(json_string)
                     await bot.process_new_updates([update])
             except Exception as e:
-                print(f"⚠️ [Webhook Parse Error] เกิดข้อผิดพลาดในท่อประมวลผล: {e}")
+                print(f"⚠️ [Webhook Parse Error] ถอดรหัสพลาด: {e}")
                 
         await send({'type': 'http.response.start', 'status': 200, 'headers': [[b'content-type', b'text/plain']]})
         await send({'type': 'http.response.body', 'body': b'OK'})
@@ -221,7 +222,7 @@ async def autonomous_cron_loop(bot_instance, target_user_id: int):
     while True:
         try:
             tz_thailand = datetime.timezone(datetime.timedelta(hours=7))
-            now = datetime.datetime.now(tz_thailand)
+            now = datetime.now(tz_thailand)
             if now.hour == 9 and now.minute == 0:
                 if not has_run_today:
                     scheduled_result = await meta_orchestrator.execute_scheduled_task(user_id=target_user_id)
@@ -232,5 +233,5 @@ async def autonomous_cron_loop(bot_instance, target_user_id: int):
                 if now.hour != 9 or now.minute != 0:
                     has_run_today = False
             await asyncio.sleep(20)
-        except Exception as cron_err:
+        except Exception:
             await asyncio.sleep(30)
