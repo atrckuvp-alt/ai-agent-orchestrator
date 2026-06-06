@@ -112,19 +112,18 @@ async def send_welcome(message):
 
 @bot.message_handler(func=lambda message: True)
 async def handle_all_messages(message):
-    # 🆔 ดึงข้อมูลข้อความดิบ และรหัส ID ของผู้ใช้งานที่ทักเข้ามา
     user_msg = message.text
-    sender_id = str(message.from_user.id) # ดึงรหัส Telegram User ID มาแปลงเป็น String
+    sender_id = str(message.from_user.id)
     
     print(f"💬 [Telegram Message Received] From {sender_id}: {user_msg}")
     
     try:
-        # 🏎️ ส่งทั้งข้อความ และแนบ user_id เข้าไปในวงจรออร์เคสเตรเตอร์ตามที่ระบบต้องการ
-        reply_content = meta_orchestrator.route_and_execute(user_msg, user_id=sender_id)
+        # เติม await นำหน้าฟังก์ชัน เพื่อเคลียร์ RuntimeWarning ครับพ้ม!
+        reply_content = await meta_orchestrator.route_and_execute(user_msg, user_id=sender_id)
         await bot.reply_to(message, reply_content, parse_mode="Markdown")
     except Exception as e:
         print(f"⚠️ [Bot Reply Error] เกิดข้อผิดพลาดขณะประมวลผลคำสั่ง: {e}")
-        await bot.reply_to(message, "⚠️ บอทได้รับคำสั่งแล้ว แต่เกิดข้อผิดพลาดภายในระบบอัจฉริยะหลังบ้านครับพ้ม")
+        await bot.reply_to(message, "⚠️ เกิดข้อผิดพลาดภายในระบบอัจฉริยะหลังบ้านครับพ้ม")
 
 # =====================================================================
 # ⏰ [Section 3] ระบบตั้งเวลาออกล่าข้อมูลและแจ้งเตือนอัตโนมัติ (Safe Mode)
@@ -133,7 +132,7 @@ async def automated_hunting_loop():
     """
     ฟังก์ชันผู้พิทักษ์หลังบ้าน แอบทำงานเงียบๆ ทุกๆ ช่วงเวลาเพื่อส่งดีลเด็ดแจ้งเตือนนายท่าน
     """
-    TARGET_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID", "5174095400") 
+    TARGET_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID", "7238952711")
     
     await asyncio.sleep(20) 
     print("🚀 [Automation System] ลูปตั้งเวลาสแกนข้อมูลเชิงรุก เริ่มทำงานเบื้องหลังแล้ว...")
