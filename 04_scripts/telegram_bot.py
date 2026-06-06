@@ -7,7 +7,7 @@ from datetime import datetime
 import json
 from pathlib import Path
 
-# 🔌 [Senior Ultimate Path Fix] ฉีดแผนที่ระบบให้มองเห็นทั้งข้างในโฟลเดอร์และ Root ด้านนอกสุด
+# 🔌 [Senior Ultimate Path Fix] จัดการแผนที่ระบบให้มองเห็นโฟลเดอร์ Root ด้านนอกสุดก่อนสิ่งอื่นใด
 CURRENT_DIR = Path(__file__).resolve().parent
 ROOT = CURRENT_DIR.parent
 
@@ -18,16 +18,21 @@ if str(CURRENT_DIR) not in sys.path:
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-# ตั้งค่าเส้นทางฐานข้อมูลเดิมของนายท่าน
+# โหลดไฟล์คอนฟิกสภาพแวดล้อม (.env) ให้เรียบร้อยตั้งแต่ต้นน้ำ
+from dotenv import load_dotenv
+load_dotenv(dotenv_path=ROOT / ".env")
+
+# ตั้งค่าเส้นทางฐานข้อมูล
 KNOWLEDGE_BASE_PATH = ROOT / "00_memory" / "shared_knowledge_base.json"
 
-# โหลดไลบรารีสำหรับ Telegram Bot
+# 📥 ย้ายกลุ่ม Import ไลบรารีบอทมาไว้ตรงนี้ หลังจากระบบ Path และ Env นิ่งสนิทแล้ว
 from telegram import Update
-# หมายเหตุ: โค้ดในเครื่องนายท่านใช้ pyTelegramBotAPI (telebot) แบบ Async 
-# กระผมจึงคงโครงสร้างการ import ของเดิมไว้ทั้งหมดเพื่อความปลอดภัย
 from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton
 from telebot.async_telebot import AsyncTeleBot
-from dotenv import load_dotenv
+
+# 🔗 ดึงโมเดลแกนหลักที่อยู่ Root ด้านนอกมาเชื่อมวงจรแบบคลีนๆ
+from meta_orchestrator import meta_orchestrator
+from growth_marketing_orchestrator import growth_marketing_orchestrator
 
 # โหลดไฟล์ .env ก่อนดึง Orchestrator เสมอ เพื่อให้พร้อมใช้งานทันที
 load_dotenv(dotenv_path=ROOT / ".env")
