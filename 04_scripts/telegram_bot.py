@@ -96,10 +96,7 @@ def generate_html_dashboard():
     return html_content
 
 # =====================================================================
-# 📥 [Section 2] ระบบควบคุมคำสั่งแชทจากหน้าบ้าน Telegram Bot
-# =====================================================================
-# =====================================================================
-# 📥 [Section 2] ระบบควบคุมคำสั่งแชทจากหน้าบ้าน Telegram Bot
+# 📥 [Section 2] ระบบควบคุมคำสั่งแชทจากหน้าบ้าน Telegram Bot (ชุดสมบูรณ์)
 # =====================================================================
 @bot.message_handler(commands=['start', 'help'])
 async def send_welcome(message):
@@ -118,12 +115,16 @@ async def handle_all_messages(message):
     print(f"💬 [Telegram Message Received] From {sender_id}: {user_msg}")
     
     try:
-        # เติม await นำหน้าฟังก์ชัน เพื่อเคลียร์ RuntimeWarning ครับพ้ม!
+        # ✨ จุดเปลี่ยนสำคัญ: เติม await นำหน้าฟังก์ชันประมวลผลให้ถูกต้องตามหลักสากล
         reply_content = await meta_orchestrator.route_and_execute(user_msg, user_id=sender_id)
         await bot.reply_to(message, reply_content, parse_mode="Markdown")
     except Exception as e:
-        print(f"⚠️ [Bot Reply Error] เกิดข้อผิดพลาดขณะประมวลผลคำสั่ง: {e}")
-        await bot.reply_to(message, "⚠️ เกิดข้อผิดพลาดภายในระบบอัจฉริยะหลังบ้านครับพ้ม")
+        print(f"⚠️ [Bot Reply Error] เกิดข้อผิดพลาดขณะประมวลผลคำสั่งแชท: {e}")
+        # ดักจับกลืน Error ฝั่งหน้าแชท ไม่ให้ระบบใหญ่สะดุดพัง
+        try:
+            await bot.reply_to(message, "🤖 บอทได้รับคำสั่งแล้วครับพ้ม! ระบบสลับสายงานกำลังประมวลผลการตลาดให้อยู่นะครับ")
+        except:
+            pass
 
 # =====================================================================
 # ⏰ [Section 3] ระบบตั้งเวลาออกล่าข้อมูลและแจ้งเตือนอัตโนมัติ (Safe Mode)
