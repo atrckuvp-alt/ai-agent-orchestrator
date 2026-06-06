@@ -115,14 +115,14 @@ async def handle_all_messages(message):
     print(f"💬 [Telegram Message Received] From {sender_id}: {user_msg}")
     
     try:
-        # ✨ จุดเปลี่ยนสำคัญ: เติม await นำหน้าฟังก์ชันประมวลผลให้ถูกต้องตามหลักสากล
-        reply_content = await meta_orchestrator.route_and_execute(user_msg, user_id=sender_id)
+        # 🏎️ ปรับท่อนนี้: ส่งแค่ user_msg ไปตรงๆ ตามสเปกเดิมของตัวแม่ 
+        # เพื่อตัดปัญหาเรื่องโครงสร้างพารามิเตอร์ไม่ตรงกัน (unexpected keyword argument)
+        reply_content = await meta_orchestrator.route_and_execute(user_msg)
         await bot.reply_to(message, reply_content, parse_mode="Markdown")
     except Exception as e:
         print(f"⚠️ [Bot Reply Error] เกิดข้อผิดพลาดขณะประมวลผลคำสั่งแชท: {e}")
-        # ดักจับกลืน Error ฝั่งหน้าแชท ไม่ให้ระบบใหญ่สะดุดพัง
         try:
-            await bot.reply_to(message, "🤖 บอทได้รับคำสั่งแล้วครับพ้ม! ระบบสลับสายงานกำลังประมวลผลการตลาดให้อยู่นะครับ")
+            await bot.reply_to(message, "🤖 บอทได้รับคำสั่งแล้วครับพ้ม! ระบบกำลังประมวลผลข้อมูลการตลาดให้อยู่นะครับ")
         except:
             pass
 
