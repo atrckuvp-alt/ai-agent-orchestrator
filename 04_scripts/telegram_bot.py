@@ -1,5 +1,3 @@
-# Complete file: 04_scripts/telegram_bot.py
-# Complete file: 04_scripts/telegram_bot.py
 import os
 import sys
 import asyncio
@@ -7,30 +5,23 @@ from datetime import datetime
 import json
 from pathlib import Path
 
-# 🔌 [Senior Ultimate Path Fix] จัดการแผนที่ระบบให้มองเห็นโฟลเดอร์ Root ด้านนอกสุดก่อนสิ่งอื่นใด
+# 🔌 ฝังระบบเข็มทิศพิกัด Path ของ Root และโมดูลภายใน
 CURRENT_DIR = Path(__file__).resolve().parent
 ROOT = CURRENT_DIR.parent
 
-if os.path.dirname(os.path.abspath(__file__)) not in sys.path:
-    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-if str(CURRENT_DIR) not in sys.path:
-    sys.path.insert(0, str(CURRENT_DIR))
-if str(ROOT) not in sys.path:
-    sys.path.insert(0, str(ROOT))
+for path in [str(CURRENT_DIR), str(ROOT)]:
+    if path not in sys.path:
+        sys.path.insert(0, path)
 
-# โหลดไฟล์คอนฟิกสภาพแวดล้อม (.env) ให้เรียบร้อยตั้งแต่ต้นน้ำ
+# โหลดสภาพแวดล้อมระบบ
 from dotenv import load_dotenv
 load_dotenv(dotenv_path=ROOT / ".env")
 
-# ตั้งค่าเส้นทางฐานข้อมูล
-KNOWLEDGE_BASE_PATH = ROOT / "00_memory" / "shared_knowledge_base.json"
-
-# 📥 ย้ายกลุ่ม Import ไลบรารีบอทมาไว้ตรงนี้ หลังจากระบบ Path และ Env นิ่งสนิทแล้ว
-from telegram import Update
+# 📥 โหลดไลบรารีบอทที่ถูกต้องตามหลักสารบบเสบียง (ตัด from telegram import Update ออกแล้ว!)
 from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton
 from telebot.async_telebot import AsyncTeleBot
 
-# 🔗 ดึงโมเดลแกนหลักที่อยู่ Root ด้านนอกมาเชื่อมวงจรแบบคลีนๆ
+# 🔗 ล็อกเป้าหาโมดูลที่ย้ายมาอยู่ข้างนอก
 from meta_orchestrator import meta_orchestrator
 from growth_marketing_orchestrator import growth_marketing_orchestrator
 
