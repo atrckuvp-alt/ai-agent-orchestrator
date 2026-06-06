@@ -116,23 +116,19 @@ async def handle_all_messages(message):
     print(f"💬 [Telegram Message Received] From {sender_id}: {user_msg}")
     
     try:
-        # 🧠 [Dynamic Check] ตรวจสอบสดๆ ว่าฟังก์ชันตัวแม่เป็น Async หรือฟังก์ชันธรรมดา
-        if inspect.iscoroutinefunction(meta_orchestrator.route_and_execute):
-            # ✨ [จุดแก้ไขสำคัญ] ส่ง 2 ค่าเรียงตามตำแหน่ง (user_msg, sender_id) โดยไม่ใส่ keyword
-            reply_content = await meta_orchestrator.route_and_execute(user_msg, sender_id)
-        else:
-            # ✨ [จุดแก้ไขสำคัญ] ส่ง 2 ค่าเรียงตามตำแหน่งสำหรับฟังก์ชันธรรมดาเช่นกัน
-            reply_content = meta_orchestrator.route_and_execute(user_msg, sender_id)
+        # 🏎️ ส่ง 2 ค่าเรียงตามตำแหน่ง (ตำแหน่งที่ 1: ข้อความ, ตำแหน่งที่ 2: ไอดีผู้ส่ง)
+        # ไม่ใส่คำว่า user_id= เพื่อให้ตรงตามหลัก Positional Argument ที่ตัวแม่ร้องขอเป๊ะๆ
+        reply_content = meta_orchestrator.route_and_execute(user_msg, sender_id)
             
         if reply_content is None:
-            reply_content = f"🤖 [System Echo] รับทราบคำสั่งเรื่อง '{user_msg}' และบันทึกเข้าประวัติแชท {sender_id} เรียบร้อยแล้วครับพ้ม!"
+            reply_content = f"🤖 [System Echo] บอทได้รับคำสั่งเรื่อง '{user_msg}' และส่งเข้าสมองกลหลักเรียบร้อยแล้วครับพ้ม!"
             
         await bot.reply_to(message, reply_content, parse_mode="Markdown")
         
     except Exception as e:
         print(f"⚠️ [Bot Reply Error] เกิดข้อผิดพลาดขณะประมวลผลคำสั่งแชท: {e}")
         try:
-            await bot.reply_to(message, "🤖 บอทได้รับคำสั่งแล้วครับพ้ม! เกิดความล่าช้าในการสลับสายงานเล็กน้อย")
+            await bot.reply_to(message, "🤖 บอทได้รับคำสั่งแล้วครับพ้ม! ระบบสลับสายงานกำลังประมวลผลหลังบ้าน")
         except:
             pass
 
