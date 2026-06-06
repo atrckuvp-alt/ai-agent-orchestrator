@@ -133,7 +133,7 @@ async def handle_all_messages(message):
             pass
 
 # =====================================================================
-# ⏰ [Section 3] ระบบตั้งเวลาออกล่าข้อมูลและแจ้งเตือนอัตโนมัติ (ชุดทลายบั๊ก NoneType ถาวร)
+# ⏰ [Section 3] ระบบตั้งเวลาออกล่าข้อมูลและแจ้งเตือนอัตโนมัติ (ชุดเกราะเหล็ก 100%)
 # =====================================================================
 async def automated_hunting_loop():
     TARGET_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID", "7238952711") 
@@ -145,21 +145,27 @@ async def automated_hunting_loop():
         try:
             print("🕒 [Automation System] ถึงรอบเวลาตรวจสอบ... สั่งการตลาดควบสายสืบออกทำงาน")
             
-            # 🧠 [Dynamic Check] ส่องสดๆ ว่าโมดูลการตลาดเป็น Async หรือฟังก์ชันธรรมดา เพื่อตัดปัญหาเรื่องการใช้ await ผิดฝั่ง
-            if inspect.iscoroutinefunction(growth_marketing_orchestrator.analyze_scraped_leads):
-                marketing_reports = await growth_marketing_orchestrator.analyze_scraped_leads()
-            else:
-                marketing_reports = growth_marketing_orchestrator.analyze_scraped_leads()
+            # 🛡️ สร้างอ่างล้างแผลเฉพาะกิจ: แยกส่วนประมวลผลการตลาดออกจากลูปหลัก
+            marketing_reports = []
+            try:
+                if inspect.iscoroutinefunction(growth_marketing_orchestrator.analyze_scraped_leads):
+                    marketing_reports = await growth_marketing_orchestrator.analyze_scraped_leads()
+                else:
+                    marketing_reports = growth_marketing_orchestrator.analyze_scraped_leads()
+            except Exception as core_module_err:
+                # 🚨 ดักจับระเบิด NoneType จากข้างในโมดูลย่อย ไม่ให้หลุดมาทำลูปใหญ่พัง
+                print(f"⚠️ [Automation Core Warning] โมดูลภายในระเบิดคามือ: {core_module_err}")
+                marketing_reports = []
             
-            # 🛡️ [ดักทางชั้นที่ 2] ถ้าทำงานเสร็จแล้วได้ค่า None หรือไม่ใช่ List ให้แปลงเป็นรายการว่างเปล่าทันที
+            # 🛡️ ดักทางชั้นที่ 2: เช็กความสมบูรณ์ของ List
             if marketing_reports is None or not isinstance(marketing_reports, list):
-                print("⚠️ [Automation System Warning] โมดูลการตลาดส่งค่า None หรือข้อมูลไม่ใช่รายการ แปลงเป็นรายการว่างเปล่าให้อัตโนมัติ")
+                print("⚠️ [Automation System Warning] ข้อมูลไม่ใช่รายการ แปลงเป็นรายการว่างเปล่าให้อัตโนมัติ")
                 marketing_reports = []
             
             for report in marketing_reports:
-                # 🛡️ [ดักทางชั้นที่ 3] ตรวจสอบความว่างเปล่าของเนื้อหาข้อความ
+                # 🛡️ ดักทางชั้นที่ 3: เช็กข้อความว่างเปล่า
                 if not report or not str(report).strip():
-                    print("⚠️ [Automation System Warning] ตรวจพบรายงานว่างเปล่า (Empty Text) สั่งข้ามการส่งข่าวนัดนี้")
+                    print("⚠️ [Automation System Warning] ตรวจพบรายงานว่างเปล่า สั่งข้ามการส่งข่าวนัดนี้")
                     continue
                     
                 try:
@@ -173,8 +179,8 @@ async def automated_hunting_loop():
             await asyncio.sleep(3600)
             
         except Exception as e:
-            print(f"⚠️ [Automation System Error] เกิดข้อผิดพลาดในลูปหลัก: {e}")
-            # ถ้าเกิดเอเรอร์หนัก ให้พัก 60 วินาทีแล้วตื่นมารันใหม่ ไม่ปล่อยให้ลูปตายถาวร
+            # 🎯 ดักจับไฟลุกขั้นสุดท้าย ลูปใหญ่จะไม่มีวันดับเด็ดขาด!
+            print(f"⚠️ [Automation System Error] เกิดข้อผิดพลาดร้ายแรงในลูปหลัก: {e}")
             await asyncio.sleep(60)
 
 # =====================================================================
