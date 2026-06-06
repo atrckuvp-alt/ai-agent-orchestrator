@@ -1,8 +1,14 @@
 # Complete file: 04_scripts/growth_marketing_orchestrator.py
-# แก้ไขบรรทัดที่ 3-4 ของไฟล์ให้เป็นแบบนี้ครับ:
 import os
+import sys
 import requests
-from 04_scripts.ai_model_registry import model_registry  # 🔌 เติม 04_scripts. นำหน้าเพื่อชี้ทางให้ Render
+
+# 🔌 ใช้ทางลัดระบุแผนที่โฟลเดอร์ ดึงโมเดลในกลุ่มมาใช้งานแบบไร้บั๊กตัวเลข
+current_dir = os.path.dirname(os.path.abspath(__file__))
+if current_dir not in sys.path:
+    sys.path.append(current_dir)
+
+from ai_model_registry import model_registry
 
 class MarketingAgent:
     def execute_marketing_analysis(self, topic: str, core_skill: str, segmentation_skill: str) -> str:

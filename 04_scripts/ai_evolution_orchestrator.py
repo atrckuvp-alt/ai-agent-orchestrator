@@ -1,8 +1,15 @@
 # Complete file: 04_scripts/ai_evolution_orchestrator.py
-# แก้ไขบรรทัดที่ 3-4 ของไฟล์ให้เป็นแบบนี้ครับ:
+import os
+import sys
 import requests
 import json
-from 04_scripts.shared_knowledge import shared_knowledge  # 🔌 เติม 04_scripts. นำหน้า
+
+# 🔌 ใช้ทางลัดระบุแผนที่โฟลเดอร์ ดึงโมเดลในกลุ่มมาใช้งานแบบไร้บั๊กตัวเลข
+current_dir = os.getenv("PYTHONPATH", os.path.dirname(os.path.abspath(__file__)))
+if current_dir not in sys.path:
+    sys.path.append(current_dir)
+
+from shared_knowledge import shared_knowledge
 
 class AIResearchAgent:
     def find_new_free_models(self):
