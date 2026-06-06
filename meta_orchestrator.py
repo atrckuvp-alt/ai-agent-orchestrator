@@ -20,8 +20,8 @@ class MetaOrchestrator:
         if "รันระบบล่าของฟรี" in msg_clean or "test evolution" in msg_clean:
             try:
                 # 🔌 ตอนนี้สามารถเรียกหาโมเดลในระดับเดียวกันได้โดยตรงแล้วครับ ไม่ติดขัด
-                from .ai_evolution_orchestrator import ai_evolution_orchestrator
-                from .growth_marketing_orchestrator import growth_marketing_orchestrator
+                from ai_evolution_orchestrator import ai_evolution_orchestrator
+                from growth_marketing_orchestrator import growth_marketing_orchestrator
                 is_triggered = ai_evolution_orchestrator.run_evolution_check()
                 
                 if is_triggered:
