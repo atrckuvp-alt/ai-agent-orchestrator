@@ -133,7 +133,7 @@ async def handle_all_messages(message):
             pass
 
 # =====================================================================
-# ⏰ [Section 3] ระบบตั้งเวลาออกล่าข้อมูลและแจ้งเตือนอัตโนมัติ (Safe Mode)
+# ⏰ [Section 3] ระบบตั้งเวลาออกล่าข้อมูลและแจ้งเตือนอัตโนมัติ (ชุดไร้พ่าย)
 # =====================================================================
 async def automated_hunting_loop():
     TARGET_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID", "7238952711") 
@@ -145,6 +145,12 @@ async def automated_hunting_loop():
         try:
             print("🕒 [Automation System] ถึงรอบเวลาตรวจสอบ... สั่งการตลาดควบสายสืบออกทำงาน")
             marketing_reports = growth_marketing_orchestrator.analyze_scraped_leads()
+            
+            # ✨ [จุดเคลียร์ขาด] ดักทางไว้ล่วงหน้า ถ้าผลลัพธ์ส่งกลับมาเป็น None หรือไม่ใช่ List
+            # ให้แปลงค่าให้เป็น List ว่างเปล่า [] ทันที เพื่อไม่ให้ระบบเกิดอาการ 'NoneType' object is not iterable
+            if marketing_reports is None or not isinstance(marketing_reports, list):
+                print("⚠️ [Automation System Warning] โมดูลการตลาดส่งค่า None กลับมา แปลงเป็นรายการว่างเปล่าให้อัตโนมัติ")
+                marketing_reports = []
             
             for report in marketing_reports:
                 try:
@@ -159,6 +165,7 @@ async def automated_hunting_loop():
             
         except Exception as e:
             print(f"⚠️ [Automation System Error] เกิดข้อผิดพลาดในลูปหลัก: {e}")
+            # ถ้าเกิดเอเรอร์ร้ายแรง ให้พักแค่ 60 วินาทีแล้วตื่นมาลองใหม่ ไม่ปล่อยให้ระบบตายยาว
             await asyncio.sleep(60)
 
 # =====================================================================
