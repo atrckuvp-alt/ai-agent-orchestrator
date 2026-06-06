@@ -1,5 +1,8 @@
 import os
 import sys
+import asyncio
+from datetime import datetime, timezone, timedelta  # <-- ต้องมี timezone กับ timedelta พ่วงท้ายตรงนี้ด้วยนะครับพ้ม!
+import json
 from pathlib import Path
 
 CURRENT_DIR = Path(__file__).resolve().parent
@@ -54,11 +57,10 @@ def generate_html_dashboard():
     except Exception:
         db = {"insights": []}
 
+# 🎯 บล็อกเนื้อในฟังก์ชัน generate_html_dashboard ให้เหลือแค่นี้พอครับ:
     insights_list = db.get("insights", [])
-    tz_th = datetime.timezone(datetime.timedelta(hours=7))# ❌ ของเดิมที่พัง:
-# tz_th = datetime.timezone(datetime.timedelta(hours=7))
-
-# 🎯 แก้ไขใหม่เป็นแบบนี้ (เรียกผ่านคลาสย่อยตรงๆ ผ่านชื่อที่เราเตรียมไว้):
+    
+    # ใช้ตัวแปร timezone และ timedelta ที่เรา import มารองรับได้เลย 
     tz_th = timezone(timedelta(hours=7))
     update_time = datetime.now(tz_th).strftime("%Y-%m-%d %H:%M:%S")
 
