@@ -16,6 +16,7 @@ KNOWLEDGE_BASE_PATH = ROOT / "00_memory" / "shared_knowledge_base.json"
 if str(CURRENT_DIR) not in sys.path:
     sys.path.insert(0, str(CURRENT_DIR))
 
+# โน้ต: โหลด .env ก่อนดึงส่วนของ Orchestrator เสมอ เพื่อให้ API Key ถูกเปิดใช้งานทันที
 load_dotenv(dotenv_path=ROOT / ".env")
 from meta_orchestrator import meta_orchestrator
 from growth_marketing_orchestrator import growth_marketing_orchestrator
@@ -59,15 +60,15 @@ def generate_html_dashboard():
                     <span style="background: #0f172a; color: #34d399; padding: 4px 12px; border-radius: 6px; font-size: 0.85rem; font-family: monospace;">⚙️ {item.get('author_team','Unknown BU')}</span>
                 </div>
                 <div style="margin-bottom: 12px;">
-                    <strong style="color: #94a3b8; display: block; margin-bottom: 4px;">🔍 โจทย์วิจัย:</strong>
+                    <strong style="color: #94a3b8; display: block; margin-bottom: 4px;">🔍 ผลิตภัณฑ์ / สินค้าเป้าหมาย:</strong>
                     <span style="color: #f8fafc; font-size: 1.05rem;">{item.get('topic','N/A')}</span>
                 </div>
                 <div style="margin-bottom: 16px;">
-                    <strong style="color: #94a3b8; display: block; margin-bottom: 4px;">📝 บทสรุปแผนยุทธศาสตร์ความสำเร็จ:</strong>
+                    <strong style="color: #94a3b8; display: block; margin-bottom: 4px;">📝 ยุทธศาสตร์ความสำเร็จจาก AI (คิดสดตามจริง):</strong>
                     <div style="color: #e2e8f0; line-height: 1.6; margin: 0; background: #0f172a; padding: 14px; border-radius: 8px; white-space: pre-wrap;">{item.get('conclusion','-')}</div>
                 </div>
                 <div>
-                    <strong style="color: #94a3b8; display: block; margin-bottom: 6px;">🎯 เครื่องมือปั๊มเงินคัดสรรพิเศษ (Base44 Automated Dynamic):</strong>
+                    <strong style="color: #94a3b8; display: block; margin-bottom: 6px;">🎯 ระบบนิเวศเทคโนโลยีคัดสรรประจำสินค้า:</strong>
                     {tools_badges if tools_badges else '<span style="color: #64748b;">ไม่มีการใช้เครื่องมือพิเศษ</span>'}
                 </div>
             </div>
@@ -90,12 +91,12 @@ def generate_html_dashboard():
         <div class="container">
             <div class="header">
                 <h1 style="margin: 0 0 10px 0; color: #38bdf8; font-size: 2rem;">🌐 Base44 Command Center Portal</h1>
-                <p style="margin: 0; color: #94a3b8;">ระบบรายงานผลลัพธ์ข้อมูลแผนงานปั๊มเงินและไอเดียธุรกิจดิจิทัลของนายท่าน</p>
+                <p style="margin: 0; color: #94a3b8;">ระบบวิเคราะห์แผนงานปั๊มเงินด้วยขุมพลังจริง AI Multi-Agent Engine</p>
                 <div style="margin-top: 15px; font-size: 0.85rem; color: #34d399; background: #0f172a; display: inline-block; padding: 6px 14px; border-radius: 30px;">
-                    🟢 สถานะระบบหลังบ้าน: Live & Connected | 🕒 อัปเดตล่าสุด: {update_time} น.
+                    🟢 สถานะระบบประมวลผล: Realtime AI Active | 🕒 เวลาอัปเดต: {update_time} น.
                 </div>
             </div>
-            <h2 style="color: #f1f5f9; border-left: 4px solid #38bdf8; padding-left: 10px; margin-bottom: 16px; font-size: 1.3rem;">📋 รายการข้อมูลความรู้ยุทธศาสตร์ปั๊มเงิน (Approved)</h2>
+            <h2 style="color: #f1f5f9; border-left: 4px solid #38bdf8; padding-left: 10px; margin-bottom: 16px; font-size: 1.3rem;">📋 คลังปัญญาแผนธุรกิจคัดสรรระดับพรีเมียม (Live Approved)</h2>
             {cards_html}
         </div>
     </body>
@@ -113,7 +114,7 @@ async def app(scope, receive, send):
             if message['type'] == 'lifespan.startup':
                 MY_USER_ID = 7238952711
                 asyncio.create_task(autonomous_cron_loop(bot, MY_USER_ID))
-                print("📡 [Webhook Active] ระบบสมองกลและหน้าเว็บ Portal เปิดทำงานแล้ว...")
+                print("📡 [Webhook Realtime AI] หน้าเว็บ Portal เชื่อมต่อโครงสร้างคิดสดพร้อมทำงานแล้ว...")
                 await send({'type': 'lifespan.startup.complete'})
             elif message['type'] == 'lifespan.shutdown':
                 await send({'type': 'lifespan.shutdown.complete'})
@@ -137,58 +138,47 @@ async def app(scope, receive, send):
                     user_id = msg_obj["from"]["id"]
                     user_text = msg_obj.get("text", "")
                     
-                    # 💡 คีย์เวิร์ดพิเศษสำหรับสั่งสุ่ม Content รายวัน
+                    # 💡 ปุ่มรันแบบเก่าคงไว้เพื่อความต่อเนื่องในการเทสบอทรายวัน
                     if user_text.strip().lower() == "run daily content":
-                        print("⏰ [Chronos Active Trigger] นายท่านสั่งรันระบบ Content รายวันอัตโนมัติ!")
-                        bu_result = growth_marketing_orchestrator.generate_strategic_plan("ธุรกิจสินค้าสุขภาพรายวัน", is_daily_job=True)
+                        bu_result = growth_marketing_orchestrator.generate_strategic_plan("ธุรกิจข้าวสารสุขภาพอินทรีย์รายวัน", is_daily_job=True)
+                        from shared_knowledge import shared_knowledge
+                        shared_knowledge.publish_insight(author_team="growth_marketing_bu_daily", topic="ระบบสุ่มผลิตเนื้อหารายวันอัตโนมัติ (Automation)", insight_data={"best_tools": bu_result["best_tools"], "conclusion": bu_result["conclusion"]})
+                        await bot.send_message(chat_id=chat_id, text=f"⏰ **[Daily AI Success]** ผลิตเนื้อหาข้าวสารเสร็จแล้ว ดันขึ้นเว็บ Portal ทันทีครับพ้ม!", parse_mode="Markdown")
+                    
+                    # 💡 มิติใหม่ไร้ขีดจำกัด: ตรวจจับคำสั่งขึ้นต้นด้วยอักษร "ทำกลยุทธ์ " เพื่อสั่งสินค้าอะไรก็ได้บนโลกใบนี้!
+                    elif user_text.strip().startswith("ทำกลยุทธ์ "):
+                        product_name = user_text.replace("ทำกลยุทธ์ ", "").strip()
+                        print(f"🚀 [AI Target Product Identified] นายท่านสั่งทำสินค้าคิดสดชิ้นใหม่: '{product_name}'")
                         
+                        await bot.send_message(chat_id=chat_id, text=f"🧠 **[AI Agent Processing]**\nรับโจทย์สินค้า: *'{product_name}'*\nฝ่ายการตลาดและฝ่ายเนื้อหา กำลังระดมสมองและวิเคราะห์คิดสดผ่าน Gemini API สักครู่ครับพ้ม...")
+                        
+                        # สั่งประมวลผลผ่านโมเดล AI จริงแบบ Non-blocking (ทำงานใน Executors)
+                        loop = asyncio.get_event_loop()
+                        bu_result = await loop.run_in_executor(
+                            None, 
+                            growth_marketing_orchestrator.generate_strategic_plan, 
+                            product_name, 
+                            False
+                        )
+                        
+                        # ดีดแผนธุรกิจฉลาดๆ ล่าสุดฝังลงหน้าพอร์ตเทิลเว็บทันที
                         from shared_knowledge import shared_knowledge
                         shared_knowledge.publish_insight(
-                            author_team="growth_marketing_bu_daily",
-                            topic="ระบบสุ่มผลิตเนื้อหารายวันอัตโนมัติ (Automation)",
+                            author_team="AI_Growth_BU_Realtime",
+                            topic=product_name,
                             insight_data={"best_tools": bu_result["best_tools"], "conclusion": bu_result["conclusion"]}
                         )
                         
                         await bot.send_message(
                             chat_id=chat_id, 
-                            text=f"⏰ **[Daily Automation Success]**\nโรงงานสมองกลได้สุ่มสร้างเนื้อหาประจำวัน และดันขึ้นหน้าเว็บ **Base44 Portal** ให้เรียบร้อยแล้วโดยไม่ต้องรออนุมัติครับพ้ม!\n\n🔗 คลิกเปิดดูหน้าเว็บ: https://ai-agent-orchestrator-2vam.onrender.com",
-                            parse_mode="Markdown"
-                        )
-                    # 💡 คีย์เวิร์ดใหม่: สำหรับทดสอบคู่ขนานหลายสินค้าแบบอิสระ ไม่จำกัดแชมพูหรือข้าวสารอีกต่อไป
-                    elif user_text.strip().lower() == "run parallel test":
-                        print("🏎️ [Parallel Engine Active] กำลังจำลองวิเคราะห์กลยุทธ์ 2 สินค้าใหม่พร้อมกันคู่ขนาน!")
-                        
-                        # รันสินค้าชิ้นที่ 1 และชิ้นที่ 2 คู่ขนานกันแบบไร้รอยต่อ
-                        loop = asyncio.get_event_loop()
-                        task1 = loop.run_in_executor(None, growth_marketing_orchestrator.generate_strategic_plan, "อาหารเสริมชะลอวัยสำหรับผู้สูงอายุ", True)
-                        task2 = loop.run_in_executor(None, growth_marketing_orchestrator.generate_strategic_plan, "เซรั่มกันแดดสูตรละลายในน้ำสำหรับผิวแพ้ง่าย", True)
-                        
-                        res1, res2 = await asyncio.gather(task1, task2)
-                        
-                        from shared_knowledge import shared_knowledge
-                        shared_knowledge.publish_insight(author_team="bu_parallel_1", topic="[Parallel Product 1] อาหารเสริมชะลอวัย", insight_data={"best_tools": res1["best_tools"], "conclusion": res1["conclusion"]})
-                        shared_knowledge.publish_insight(author_team="bu_parallel_2", topic="[Parallel Product 2] เซรั่มกันแดดสูตรน้ำ", insight_data={"best_tools": res2["best_tools"], "conclusion": res2["conclusion"]})
-                        
-                        await bot.send_message(
-                            chat_id=chat_id, 
-                            text=f"🏎️ **[Parallel Processing Complete]**\nระบบทำกลยุทธ์ขนานสำเร็จแล้ว! ได้แตกงานของทั้ง **'อาหารเสริมผู้สูงอายุ'** และ **'เซรั่มกันแดด'** ขึ้นไปกระจายการ์ดบนหน้าเว็บพร้อมๆ กันเรียบร้อยครับ\n\n🔗 คลิกดูหน้าพอร์ตเทิล: https://ai-agent-orchestrator-2vam.onrender.com",
+                            text=f"🏆 **[AI Strategy Success]**\nแผนยุทธศาสตร์สำหรับสินค้า *'{product_name}'* ถูกคิดสดและบันทึกลงหน้าเว็บเรียบร้อยแล้วครับนายท่าน!\n\n🔗 คลิกเปิดดูแผนบนเว็บพอร์ตเทิล: https://ai-agent-orchestrator-2vam.onrender.com",
                             parse_mode="Markdown"
                         )
                     else:
                         print(f"📥 [Direct Message Trigger] จาก {user_id}: {user_text}")
                         orchestrator_response = await meta_orchestrator.route_and_execute(user_message=user_text, user_id=user_id)
-                        
-                        if orchestrator_response and "data" in orchestrator_response:
-                            data_payload = orchestrator_response["data"]
-                            if "message" in data_payload:
-                                reply_markup = None
-                                if "inline_buttons" in data_payload:
-                                    markup = InlineKeyboardMarkup()
-                                    for btn in data_payload["inline_buttons"]:
-                                        markup.add(InlineKeyboardButton(text=btn["text"], url=btn["url"]))
-                                    reply_markup = markup
-                                    
-                                await bot.send_message(chat_id=chat_id, text=data_payload["message"], reply_markup=reply_markup, parse_mode="Markdown")
+                        if orchestrator_response and "data" in orchestrator_response and "message" in orchestrator_response["data"]:
+                            await bot.send_message(chat_id=chat_id, text=orchestrator_response["data"]["message"], parse_mode="Markdown")
                 else:
                     update = Update.de_json(json_string)
                     await bot.process_new_updates([update])
@@ -200,18 +190,13 @@ async def app(scope, receive, send):
         
     else:
         html_content = generate_html_dashboard().encode('utf-8')
-        await send({
-            'type': 'http.response.start',
-            'status': 200,
-            'headers': [[b'content-type', b'text/html; charset=utf-8']],
-        })
+        await send({'type': 'http.response.start', 'status': 200, 'headers': [[b'content-type', b'text/html; charset=utf-8']]})
         await send({'type': 'http.response.body', 'body': html_content})
 
 # =====================================================================
 # ⏰ [⏰ CHRONOS WATCHER]
 # =====================================================================
 async def autonomous_cron_loop(bot_instance, target_user_id: int):
-    print("⏳ [Chronos Watcher] ระบบเฝ้าระวังเวลารายงานเช้า เปิดทำงานคู่ขนาน...")
     has_run_today = False
     while True:
         try:
@@ -219,7 +204,6 @@ async def autonomous_cron_loop(bot_instance, target_user_id: int):
             now = datetime.datetime.now(tz_thailand)
             if now.hour == 9 and now.minute == 0:
                 if not has_run_today:
-                    await bot_instance.send_message(chat_id=target_user_id, text="⏰ **[Morning Briefing]** ระบบเริ่มประมวลผลรายงานยุทธศาสตร์ประจำวันแล้วครับ...")
                     scheduled_result = await meta_orchestrator.execute_scheduled_task(user_id=target_user_id)
                     if scheduled_result and "data" in scheduled_result and "message" in scheduled_result["data"]:
                         await bot_instance.send_message(chat_id=target_user_id, text=scheduled_result["data"]["message"])
@@ -229,5 +213,4 @@ async def autonomous_cron_loop(bot_instance, target_user_id: int):
                     has_run_today = False
             await asyncio.sleep(20)
         except Exception as cron_err:
-            print(f"⚠️ [Chronos Warning] ลูปเวลาติดขัด: {cron_err}")
             await asyncio.sleep(30)
