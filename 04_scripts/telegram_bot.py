@@ -133,7 +133,7 @@ async def handle_all_messages(message):
             pass
 
 # =====================================================================
-# ⏰ [Section 3] ระบบตั้งเวลาออกล่าข้อมูลและแจ้งเตือนอัตโนมัติ (ชุดสมบูรณ์แบบข้ามคลาวด์)
+# ⏰ [Section 3] ระบบตั้งเวลาออกล่าข้อมูลและแจ้งเตือนอัตโนมัติ (ชุดทลายบั๊ก NoneType ถาวร)
 # =====================================================================
 async def automated_hunting_loop():
     TARGET_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID", "7238952711") 
@@ -145,16 +145,19 @@ async def automated_hunting_loop():
         try:
             print("🕒 [Automation System] ถึงรอบเวลาตรวจสอบ... สั่งการตลาดควบสายสืบออกทำงาน")
             
-            # ✨ [จุดแก้ไขเด็ดขาด] เติม await นำหน้าฟังก์ชัน เพื่อให้ได้ข้อมูลรายงานจริง ๆ ไม่ติด coroutine/NoneType
-            marketing_reports = await growth_marketing_orchestrator.analyze_scraped_leads()
+            # 🧠 [Dynamic Check] ส่องสดๆ ว่าโมดูลการตลาดเป็น Async หรือฟังก์ชันธรรมดา เพื่อตัดปัญหาเรื่องการใช้ await ผิดฝั่ง
+            if inspect.iscoroutinefunction(growth_marketing_orchestrator.analyze_scraped_leads):
+                marketing_reports = await growth_marketing_orchestrator.analyze_scraped_leads()
+            else:
+                marketing_reports = growth_marketing_orchestrator.analyze_scraped_leads()
             
-            # ดักทางเผื่อกรณีระบบส่งค่า None กลับมา
+            # 🛡️ [ดักทางชั้นที่ 2] ถ้าทำงานเสร็จแล้วได้ค่า None หรือไม่ใช่ List ให้แปลงเป็นรายการว่างเปล่าทันที
             if marketing_reports is None or not isinstance(marketing_reports, list):
-                print("⚠️ [Automation System Warning] โมดูลการตลาดส่งค่า None กลับมา แปลงเป็นรายการว่างเปล่าให้อัตโนมัติ")
+                print("⚠️ [Automation System Warning] โมดูลการตลาดส่งค่า None หรือข้อมูลไม่ใช่รายการ แปลงเป็นรายการว่างเปล่าให้อัตโนมัติ")
                 marketing_reports = []
             
             for report in marketing_reports:
-                # ตรวจสอบความว่างเปล่าของเนื้อหา
+                # 🛡️ [ดักทางชั้นที่ 3] ตรวจสอบความว่างเปล่าของเนื้อหาข้อความ
                 if not report or not str(report).strip():
                     print("⚠️ [Automation System Warning] ตรวจพบรายงานว่างเปล่า (Empty Text) สั่งข้ามการส่งข่าวนัดนี้")
                     continue
@@ -171,7 +174,7 @@ async def automated_hunting_loop():
             
         except Exception as e:
             print(f"⚠️ [Automation System Error] เกิดข้อผิดพลาดในลูปหลัก: {e}")
-            # ป้องกันลูปค้าง ถ้าเอเรอร์ให้รอ 60 วินาทีแล้วเริ่มวนใหม่
+            # ถ้าเกิดเอเรอร์หนัก ให้พัก 60 วินาทีแล้วตื่นมารันใหม่ ไม่ปล่อยให้ลูปตายถาวร
             await asyncio.sleep(60)
 
 # =====================================================================
