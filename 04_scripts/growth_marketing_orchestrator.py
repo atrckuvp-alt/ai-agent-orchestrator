@@ -3,12 +3,13 @@ import os
 import sys
 import requests
 
-# 🔌 [Senior Path Fix] แก้ปัญหาตัวเลข 04 ด้วยการดึง path โฟลเดอร์ปัจจุบันเข้าสู่ระบบโดยตรง
+# 🔌 [Senior Path Injection] บังคับให้ระบบมองเห็นไฟล์ทั้งหมดในโฟลเดอร์นี้เพื่อแก้ปัญหาเลข 04_
 current_dir = os.path.dirname(os.path.abspath(__file__))
 if current_dir not in sys.path:
-    sys.path.append(current_dir)
+    sys.path.insert(0, current_dir)
 
-from ai_model_registry import model_registry  # คุยกันในโฟลเดอร์เดียวกันได้ฉลุยแล้ว
+# ตอนนี้สามารถ import ตรง ๆ ได้เลย ไม่ติดบั๊กทางเดินไฟล์แล้วครับ
+from ai_model_registry import model_registry  
 
 class MarketingAgent:
     def execute_marketing_analysis(self, topic: str, core_skill: str, segmentation_skill: str) -> str:
@@ -125,7 +126,7 @@ class GrowthMarketingOrchestrator:
             "strategy_core": "Niche Market & Premium Differentiation (สร้างความต่างในตลาดเฉพาะกลุ่ม ไม่แข่งสงครามราคา)",
             "segmentation": "Deep Segmentation (มองหา Pain Point ที่ซ่อนอยู่ของกลุ่มเป้าหมายขนาดเล็กแต่มีกำลังซื้อสูง)",
             "product_value": "Functional + Emotional Value (สินค้าต้องแก้ปัญหาได้จริง และแบรนด์ต้องมอบความรู้สึกพรีเมียม)",
-            "marketing_tactics": "Word-of-Mouth & Storytelling (ใช้การบอกต่อจากผู้ใช้จริงและการเล่าเรื่องที่กระทบใจ ไม่เน้นงบโฆษณาหватьแห)"
+            "marketing_tactics": "Word-of-Mouth & Storytelling (ใช้การบอกต่อจากผู้ใช้จริงและการเล่าเรื่องที่กระทบใจ ไม่เน้นงบโฆษณาหว่านแห)"
         }
         print(f"📡 [Base44 Centralized Switch Engine] ดึงแผนควบคุมจาก Model Registry เรียบร้อยแล้ว")
 

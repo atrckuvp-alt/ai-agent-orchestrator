@@ -4,10 +4,10 @@ import sys
 import requests
 import json
 
-# 🔌 [Senior Path Fix] ดึง path โฟลเดอร์ปัจจุบันเข้าสู่ระบบโดยตรง
+# 🔌 [Senior Path Injection] บังคับให้ระบบมองเห็นไฟล์ทั้งหมดในโฟลเดอร์นี้เพื่อแก้ปัญหาเลข 04_
 current_dir = os.path.dirname(os.path.abspath(__file__))
 if current_dir not in sys.path:
-    sys.path.append(current_dir)
+    sys.path.insert(0, current_dir)
 
 from shared_knowledge import shared_knowledge
 

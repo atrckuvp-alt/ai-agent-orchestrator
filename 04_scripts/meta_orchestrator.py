@@ -4,10 +4,10 @@ import sys
 import asyncio
 import random
 
-# 🔌 [Senior Path Fix] บังคับให้มองเห็นคลังในโฟลเดอร์เดียวกันก่อน
+# 🔌 [Senior Path Injection] บังคับให้ระบบมองเห็นไฟล์ทั้งหมดในโฟลเดอร์นี้เพื่อแก้ปัญหาเลข 04_
 current_dir = os.path.dirname(os.path.abspath(__file__))
 if current_dir not in sys.path:
-    sys.path.append(current_dir)
+    sys.path.insert(0, current_dir)
 
 class MetaOrchestrator:
     def __init__(self):
@@ -19,7 +19,7 @@ class MetaOrchestrator:
         
         if "รันระบบล่าของฟรี" in msg_clean or "test evolution" in msg_clean:
             try:
-                # 🔌 สับจากในโฟลเดอร์เดียวกันได้โดยตรง ไม่ติดปัญหา Syntax ตัวเลขนำหน้าแล้ว
+                # 🔌 ตอนนี้สามารถเรียกหาโมเดลในระดับเดียวกันได้โดยตรงแล้วครับ ไม่ติดขัด
                 from ai_evolution_orchestrator import ai_evolution_orchestrator
                 is_triggered = ai_evolution_orchestrator.run_evolution_check()
                 
