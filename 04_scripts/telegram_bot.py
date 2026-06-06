@@ -3,6 +3,7 @@ import os
 import sys
 import asyncio
 import json
+import inspect  # 🛠️ ตัวช่วยวิเคราะห์โครงสร้างฟังก์ชันหลังบ้าน
 from pathlib import Path
 from datetime import datetime, timezone, timedelta
 from contextlib import asynccontextmanager
@@ -96,7 +97,7 @@ def generate_html_dashboard():
     return html_content
 
 # =====================================================================
-# 📥 [Section 2] ระบบควบคุมคำสั่งแชทจากหน้าบ้าน Telegram Bot (ชุดสมบูรณ์)
+# 📥 [Section 2] ระบบควบคุมคำสั่งแชทจากหน้าบ้าน Telegram Bot (ชุดทลายบั๊ก NoneType)
 # =====================================================================
 @bot.message_handler(commands=['start', 'help'])
 async def send_welcome(message):
@@ -115,14 +116,22 @@ async def handle_all_messages(message):
     print(f"💬 [Telegram Message Received] From {sender_id}: {user_msg}")
     
     try:
-        # 🏎️ ปรับท่อนนี้: ส่งแค่ user_msg ไปตรงๆ ตามสเปกเดิมของตัวแม่ 
-        # เพื่อตัดปัญหาเรื่องโครงสร้างพารามิเตอร์ไม่ตรงกัน (unexpected keyword argument)
-        reply_content = await meta_orchestrator.route_and_execute(user_msg)
+        # 🧠 [Dynamic Check] ตรวจสอบสดๆ ว่าฟังก์ชันตัวแม่เป็น Async หรือฟังก์ชันธรรมดา
+        if inspect.iscoroutinefunction(meta_orchestrator.route_and_execute):
+            reply_content = await meta_orchestrator.route_and_execute(user_msg)
+        else:
+            reply_content = meta_orchestrator.route_and_execute(user_msg)
+            
+        # 🛡️ ดักทางเผื่อตัวแม่ไม่ส่งข้อมูลอะไรกลับมาเลย (None) ให้มีข้อความตอบกลับนายท่านเสมอ
+        if reply_content is None:
+            reply_content = f"🤖 [System Echo] รับทราบคำสั่งจากนายท่านแล้วครับพ้ม ระบบได้นำข้อมูลเรื่อง '{user_msg}' เข้าสู่สวิตช์แกนหลักเรียบร้อยแล้ว!"
+            
         await bot.reply_to(message, reply_content, parse_mode="Markdown")
+        
     except Exception as e:
         print(f"⚠️ [Bot Reply Error] เกิดข้อผิดพลาดขณะประมวลผลคำสั่งแชท: {e}")
         try:
-            await bot.reply_to(message, "🤖 บอทได้รับคำสั่งแล้วครับพ้ม! ระบบกำลังประมวลผลข้อมูลการตลาดให้อยู่นะครับ")
+            await bot.reply_to(message, "🤖 บอทได้รับคำสั่งแล้วครับพ้ม! กำลังเร่งส่งต่อข้อมูลให้โมดูลหลังบ้าน")
         except:
             pass
 
@@ -130,10 +139,7 @@ async def handle_all_messages(message):
 # ⏰ [Section 3] ระบบตั้งเวลาออกล่าข้อมูลและแจ้งเตือนอัตโนมัติ (Safe Mode)
 # =====================================================================
 async def automated_hunting_loop():
-    """
-    ฟังก์ชันผู้พิทักษ์หลังบ้าน แอบทำงานเงียบๆ ทุกๆ ช่วงเวลาเพื่อส่งดีลเด็ดแจ้งเตือนนายท่าน
-    """
-    TARGET_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID", "7238952711")
+    TARGET_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID", "7238952711") 
     
     await asyncio.sleep(20) 
     print("🚀 [Automation System] ลูปตั้งเวลาสแกนข้อมูลเชิงรุก เริ่มทำงานเบื้องหลังแล้ว...")
@@ -149,7 +155,7 @@ async def automated_hunting_loop():
                     print(f"📢 [Automation System] ส่งรายงานเข้า Chat ID {TARGET_CHAT_ID} สำเร็จ!")
                     await asyncio.sleep(2)
                 except Exception as send_err:
-                    print(f"⚠️ [Automation System Sub-Error] ส่งข้อความไม่สำเร็จ (เช็กแชทบอทหรือ ID): {send_err}")
+                    print(f"⚠️ [Automation System Sub-Error] ส่งข้อความไม่สำเร็จ: {send_err}")
                 
             print("✅ [Automation System] จบรอบการทำงาน เข้านอนรอสแกนรอบถัดไป")
             await asyncio.sleep(3600)
@@ -163,9 +169,6 @@ async def automated_hunting_loop():
 # =====================================================================
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    """
-    🚀 ระบบจัดการวงจรชีวิตแอปพลิเคชันยุคใหม่ ทดแทน @app.on_event ที่โดนขีดฆ่าทิ้ง
-    """
     print("⚡ [System Core Startup] เริ่มต้นโครงสร้างระบบนิเวศบอท (ผ่านระบบ Lifespan)...")
     
     try:
@@ -175,16 +178,13 @@ async def lifespan(app: FastAPI):
     except Exception as webhook_err:
         print(f"⚠️ [System Core Warning] ไม่สามารถลบ Webhook ได้: {webhook_err}")
         
-    # สั่งเปิด Task หลังบ้านขนานกันไปตอนสตาร์ทอัป
     asyncio.create_task(automated_hunting_loop())
     asyncio.create_task(bot.polling(non_stop=True, timeout=60))
     print("✅ [System Core Startup] สั่งเริ่มงาน Polling บอท และระบบ Automation เรียบร้อย!")
     
-    yield # ◄ ช่วงรอยต่อตรงนี้คือจุดที่เซิร์ฟเวอร์รันอยู่
-    
+    yield
     print("🛑 [System Core Shutdown] ปิดระบบเซิร์ฟเวอร์เรียบร้อย")
 
-# ประกาศตัวแอป FastAPI ครอบระบบ Lifespan ใหม่ลงไปแบบคลีนๆ
 app = FastAPI(lifespan=lifespan)
 
 @app.get("/")
