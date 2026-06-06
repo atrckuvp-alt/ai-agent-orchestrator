@@ -1,110 +1,76 @@
-# Complete file: 04_scripts/telegram_bot.py
 import os
 import sys
 import asyncio
 import json
-import inspect  # 🛠️ ตัวช่วยวิเคราะห์โครงสร้างฟังก์ชันหลังบ้าน
+import inspect  
 from pathlib import Path
 from datetime import datetime, timezone, timedelta
 from contextlib import asynccontextmanager
 
-# 🔌 [Infra] ระบบล็อกพิกัดจัดเส้นทาง Path ให้รองรับระบบ Linux บน Cloud (Render)
-CURRENT_DIR = Path(__file__).resolve().parent
-ROOT = CURRENT_DIR.parent
-
-for path in [str(CURRENT_DIR), str(ROOT)]:
-    if path not in sys.path:
-        sys.path.insert(0, path)
-
-# โหลดสภาพแวดล้อมระบบ (.env)
-from dotenv import load_dotenv
-load_dotenv(dotenv_path=ROOT / ".env")
-
-# 📥 [Dependencies] โหลดไลบรารีบอทและเซิร์ฟเวอร์ตามหลักเสบียงที่ถูกต้อง
-from fastapi import FastAPI
-from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton
+from fastapi import FastAPI, Request, Response
 from telebot.async_telebot import AsyncTeleBot
 
-# 🔗 [Modules Link] ดึงตัวแม่การจัดการระบบที่อยู่ด้านนอกมาร่วมวงจร
-from meta_orchestrator import meta_orchestrator
-from growth_marketing_orchestrator import growth_marketing_orchestrator
+# 📦 Import ออเคสเตรเตอร์หลักหลังบ้านของทีม Base44
+sys.path.append(str(Path(__file__).parent.parent))
+from core.meta_orchestrator import meta_orchestrator
+from core.growth_marketing_orchestrator import growth_marketing_orchestrator
 
-# 🤖 [Initialization] ตั้งค่าบอทหลัก
-TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
-bot = AsyncTeleBot(TOKEN)
+# 🔑 โหลดโทเค็นจาก Environment Variables
+BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
+if not BOT_TOKEN:
+    raise ValueError("❌ ไม่พบ TELEGRAM_BOT_TOKEN ใน Environment Variables หลังบ้าน!")
 
-# 📂 พิกัดคลังข้อมูลจำลองภายใน
-KNOWLEDGE_BASE_PATH = ROOT / "shared_knowledge_base.json"
+bot = AsyncTeleBot(BOT_TOKEN)
+app = FastAPI(title="Base44 Multi-Agent Telegram Command Center")
 
 # =====================================================================
-# 📊 [Section 1] ฟังก์ชันแดชบอร์ดสังเกตการณ์ผ่านหน้าเว็บ Portal หลัก
+# 🌐 [Section 1] ระบบควบคุมวงจรอายุแอปพลิเคชัน (FastAPI Lifespan)
 # =====================================================================
-def generate_html_dashboard():
-    db = {}
-    if KNOWLEDGE_BASE_PATH.exists():
-        with open(KNOWLEDGE_BASE_PATH, "r", encoding="utf-8") as f:
-            db = json.load(f)
-            
-    insights_list = db.get("insights", [])
-    tz_th = timezone(timedelta(hours=7))
-    update_time = datetime.now(tz_th).strftime("%Y-%m-%d %H:%M:%S")
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # 🛫 ช่วงเริ่มต้นโปรแกรม (Startup)
+    print("📌 [Infra Path Configured] ตั้งค่าเส้นทางระบบนิเวศโมดูลสำเร็จ")
     
-    cards_html = ""
-    for idx, insight in enumerate(insights_list):
-        cards_html += f"""
-        <div class='card'>
-            <h3>💡 ข้อมูลคัดสรร #{idx+1}</h3>
-            <p><strong>หัวข้อ:</strong> {insight.get('topic', 'N/A')}</p>
-            <p>{insight.get('summary', 'ไม่มีข้อมูลสรุป')}</p>
-            <p><small>📅 บันทึกเมื่อ: {insight.get('timestamp', 'N/A')}</small></p>
-        </div>
-        """
+    try:
+        print("🧹 [System Core Startup] กำลังเคลียร์ระบบ Webhook เก่าออกจากเซิร์ฟเวอร์ Telegram...")
+        await bot.remove_webhook()
+        await asyncio.sleep(1)
         
-    if not cards_html:
-        cards_html = "<p style='text-align:center; color:#888;'>ยังไม่มีข้อมูลคัดสรรในระบบขณะนี้</p>"
+        # 🎯 เริ่มต้นรันลูปรายงานยุทธศาสตร์เช้า 09:00 น. ทำงานเบื้องหลัง
+        asyncio.create_task(automated_hunting_loop())
+        print("🚀 [Automation Infrastructure] ขาจราจรลูปอัตโนมัติประจำวันพร้อมสแตนด์บายเรียบร้อย")
+        
+        # รันระบบรับแชทแบบ Polling คลีน ๆ ไร้ความขัดแย้งของสายสัญญาน
+        asyncio.create_task(bot.polling(non_stop=True, allowed_updates=['message']))
+        print("📡 [Inbound Polling] ระบบดักรับคำสั่งแชทหน้าบ้านเปิดใช้งานสำเร็จ")
+        
+    except Exception as e:
+        print(f"❌ [Critical Startup Error] ระบบวงจรหลักทำงานขัดข้องในช่วงเริ่ม: {e}")
+        
+    yield
+    # 🛬 ช่วงปิดโปรแกรม (Shutdown)
+    print("🛑 [System Core Shutdown] กำลังปิดสวิตช์วงจรบอทอย่างปลอดภัย...")
 
-    html_content = f"""
-    <!DOCTYPE html>
-    <html>
-    <head>
-        <title>Base44 Realtime AI Portal</title>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <style>
-            body {{ font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f6f9; color: #333; margin: 0; padding: 20px; }}
-            .container {{ max-width: 900px; margin: 0 auto; }}
-            header {{ text-align: center; margin-bottom: 30px; background: linear-gradient(135deg, #1e3c72, #2a5298); color: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }}
-            .card {{ background: white; padding: 20px; margin-bottom: 15px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); border-left: 5px solid #1e3c72; }}
-            footer {{ text-align: center; margin-top: 30px; font-size: 12px; color: #777; }}
-        </style>
-    </head>
-    <body>
-        <div class="container">
-            <header>
-                <h1>🚀 Base44 Centralized Switch Engine</h1>
-                <p>ระบบควบคุม Multi-Agent อัจฉริยะสถานะ Live พร้อมทำงาน</p>
-            </header>
-            <main>
-                {cards_html}
-            </main>
-            <footer>
-                อัปเดตระบบเรียบร้อย (เวลาไทย): {update_time} | โหมดตรวจสอบสถานะหลังบ้านปราศจากข้อผิดพลาด
-            </footer>
-        </div>
-    </body>
-    </html>
-    """
-    return html_content
+app.router.lifespan_context = lifespan
+
+@app.get("/")
+async def root():
+    return {
+        "status": "online",
+        "agent": "Base44 Multi-Agent Core",
+        "mode": "Daily Strategic Intelligence Enabled"
+    }
 
 # =====================================================================
-# 📥 [Section 2] ระบบควบคุมคำสั่งแชทจากหน้าบ้าน Telegram Bot (ชุดแก้ทางผ่านชัวร์)
+# 📥 [Section 2] ระบบควบคุมคำสั่งแชทจากหน้าบ้าน Telegram Bot (Interactive Mode)
 # =====================================================================
 @bot.message_handler(commands=['start', 'help'])
 async def send_welcome(message):
     welcome_text = (
         "🤖 **ยินดีต้อนรับเข้าสู่กองบัญชาการ Base44 Multi-Agent** 🚀\n\n"
         "ตอนนี้ระบบหลังบ้านเชื่อมต่อวงจรอย่างสมบูรณ์แบบแล้วครับพ้ม!\n"
-        "นายท่านสามารถพิมพ์สั่งงานระบบการตลาด หรือทดสอบระบบได้ทันที"
+        "• ระบบสรุปยุทธศาสตร์จะส่งรายงาน **09:00 น.** ของทุกวัน\n"
+        "• นายท่านสามารถพิมพ์ทักแชทสั่งงาน AI สมองกลหลักได้ทันที"
     )
     await bot.reply_to(message, welcome_text, parse_mode="Markdown")
 
@@ -116,10 +82,12 @@ async def handle_all_messages(message):
     print(f"💬 [Telegram Message Received] From {sender_id}: {user_msg}")
     
     try:
-        # 🔥 ทะลวงช่องส่ง 2 ค่าตามตำแหน่งเข้าสมองกลหลัก ผ่านฉลุยแล้วตามภาพที่ 2!
-        reply_content = meta_orchestrator.route_and_execute(user_msg, sender_id)
+        # 🧠 [Dynamic Check ขาเข้า] แยกแยะสาย Async/Sync คุยกับตัวแม่ราบรื่น
+        if inspect.iscoroutinefunction(meta_orchestrator.route_and_execute):
+            reply_content = await meta_orchestrator.route_and_execute(user_msg, sender_id)
+        else:
+            reply_content = meta_orchestrator.route_and_execute(user_msg, sender_id)
             
-        # ถ้าสมองกลหลักประมวลผลเสร็จแล้วไม่มีการ return string กลับมา (เป็น None)
         if reply_content is None:
             reply_content = f"🤖 [System Echo] บอทได้รับคำสั่งเรื่อง '{user_msg}' และส่งเข้าสมองกลหลักเรียบร้อยแล้วครับพ้ม!"
             
@@ -133,80 +101,72 @@ async def handle_all_messages(message):
             pass
 
 # =====================================================================
-# ⏰ [Section 3] ระบบตั้งเวลาออกล่าข้อมูลและแจ้งเตือนอัตโนมัติ (ชุดเกราะเหล็ก 100%)
+# ⏰ [Section 3] ลูปตั้งเวลารายงานยุทธศาสตร์รอบ 09:00 น. (ชุดเกราะ Sandbox 100%)
 # =====================================================================
 async def automated_hunting_loop():
+    # ดึง ID ของนายท่านจาก Env (Fallback เป็นไอดีหลักของนายท่านชัวร์ที่สุด)
     TARGET_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID", "7238952711") 
     
+    # พักหายใจตอนเปิดเครื่องครั้งแรก 20 วินาที เพื่อให้ระบบเน็ตเวิร์ก Render นิ่งก่อน
     await asyncio.sleep(20) 
-    print("🚀 [Automation System] ลูปตั้งเวลาสแกนข้อมูลเชิงรุก เริ่มทำงานเบื้องหลังแล้ว...")
+    print("🚀 [Automation System] ลูปตั้งเวลารายงาน Pain Point 09:00 น. เริ่มสแตนด์บายเบื้องหลังแล้ว...")
     
     while True:
         try:
-            print("🕒 [Automation System] ถึงรอบเวลาตรวจสอบ... สั่งการตลาดควบสายสืบออกทำงาน")
+            # 🕒 ตรรกะคำนวณเวลานอนและตื่นอ้างอิง เวลาประเทศไทย (GMT+7)
+            tz_th = timezone(timedelta(hours=7))
+            now = datetime.now(tz_th)
             
-            # 🛡️ สร้างอ่างล้างแผลเฉพาะกิจ: แยกส่วนประมวลผลการตลาดออกจากลูปหลัก
+            # ตั้งเป้าหมายไปที่ 09:00 น. ตรงของวันนี้
+            target_time = now.replace(hour=9, minute=0, second=0, microsecond=0)
+            
+            # ถ้าวันนี้เลย 9 โมงเช้าไปแล้ว ให้เลื่อนเป้าหมายไปเป็น 9 โมงเช้าของวันพรุ่งนี้
+            if now >= target_time:
+                target_time += timedelta(days=1)
+                
+            sleep_seconds = (target_time - now).total_seconds()
+            print(f"💤 [Automation System] เข้านอนชั่วคราว รอเวลาตื่นในอีก {sleep_seconds/3600:.2f} ชั่วโมง (เจอกัน 09:00 น. ตรง)")
+            
+            # สั่งให้ระบบ Sleep ยาวไปจนถึง 09:00 น.
+            await asyncio.sleep(sleep_seconds)
+            
+            print("☀️ [Automation System] เวลา 09:00 น. แล้ว! เริ่มปลุกทีมควบสายสืบออกล่า Pain Point ธุรกิจประจำวัน...")
+            
+            # 🛡️ [เกราะ Sandbox ขั้นสูงสุด] แยกอ่างล้างแผลเฉพาะกิจ ขังความวินาศสันตะโรของโมดูลภายใน
             marketing_reports = []
             try:
+                # ส่ง Parameter พิเศษบอกโมดูลให้เข้าโหมดกลั่นกรองเฉพาะ Pain Point คัดสรรทำธุรกิจได้ตามสั่ง
                 if inspect.iscoroutinefunction(growth_marketing_orchestrator.analyze_scraped_leads):
-                    marketing_reports = await growth_marketing_orchestrator.analyze_scraped_leads()
+                    marketing_reports = await growth_marketing_orchestrator.analyze_scraped_leads(mode="strategic_pain_point")
                 else:
-                    marketing_reports = growth_marketing_orchestrator.analyze_scraped_leads()
+                    marketing_reports = growth_marketing_orchestrator.analyze_scraped_leads(mode="strategic_pain_point")
             except Exception as core_module_err:
-                # 🚨 ดักจับระเบิด NoneType จากข้างในโมดูลย่อย ไม่ให้หลุดมาทำลูปใหญ่พัง
-                print(f"⚠️ [Automation Core Warning] โมดูลภายในระเบิดคามือ: {core_module_err}")
+                # ดักจับและกลืนระเบิด NoneType/Await ทุกรูปแบบ ไม่ให้มีสิทธิ์หลุดมาทำลูปหลักพังเด็ดขาด!
+                print(f"⚠️ [Automation Core Warning] โมดูลภายในแอบระเบิดสะดุดขาตัวเอง: {core_module_err}")
                 marketing_reports = []
             
-            # 🛡️ ดักทางชั้นที่ 2: เช็กความสมบูรณ์ของ List
+            # 🛡️ [ดักทางชั้นที่ 2] ป้องกันอาการ 'NoneType' object is not iterable
             if marketing_reports is None or not isinstance(marketing_reports, list):
-                print("⚠️ [Automation System Warning] ข้อมูลไม่ใช่รายการ แปลงเป็นรายการว่างเปล่าให้อัตโนมัติ")
+                print("⚠️ [Automation System Warning] ผลลัพธ์ไม่ใช่รูปแบบรายการ แปลงเป็นรายการว่างเปล่าให้อัตโนมัติ")
                 marketing_reports = []
             
+            # 📡 วนลูปส่งรายงานระดับหัวกะทิให้นายท่าน
             for report in marketing_reports:
-                # 🛡️ ดักทางชั้นที่ 3: เช็กข้อความว่างเปล่า
+                # 🛡️ [ดักทางชั้นที่ 3] คัดกรองและสแกนสตริงว่างเปล่า ป้องกัน Telegram เอเรอร์กลับมา
                 if not report or not str(report).strip():
-                    print("⚠️ [Automation System Warning] ตรวจพบรายงานว่างเปล่า สั่งข้ามการส่งข่าวนัดนี้")
+                    print("⚠️ [Automation System Warning] ตรวจพบรายงานว่างเปล่า (Empty) สั่งข้ามไม่ส่งออกไปให้ติดไฟแดง")
                     continue
                     
                 try:
                     await bot.send_message(chat_id=TARGET_CHAT_ID, text=report, parse_mode="Markdown")
-                    print(f"📢 [Automation System] ส่งรายงานเข้า Chat ID {TARGET_CHAT_ID} สำเร็จ!")
-                    await asyncio.sleep(2)
+                    print(f"📢 [Automation System] ยิงรายงานยุทธศาสตร์ธุรกิจเข้า Chat ID {TARGET_CHAT_ID} สำเร็จ!")
+                    await asyncio.sleep(2) # เว้นจังหวะความถี่เพื่อถนอม Telegram API Rate Limit
                 except Exception as send_err:
-                    print(f"⚠️ [Automation System Sub-Error] ส่งข้อความไม่สำเร็จ: {send_err}")
+                    print(f"⚠️ [Automation System Sub-Error] ท่อส่งข้อความย่อยมีปัญหา: {send_err}")
                 
-            print("✅ [Automation System] จบรอบการทำงาน เข้านอนรอสแกนรอบถัดไป")
-            await asyncio.sleep(3600)
+            print("✅ [Automation System] จบรอบรายงานประจำวันอย่างงดงาม เข้านอนรอสแกนรอบ 9 โมงเช้าวันถัดไป")
             
         except Exception as e:
-            # 🎯 ดักจับไฟลุกขั้นสุดท้าย ลูปใหญ่จะไม่มีวันดับเด็ดขาด!
+            # 🎯 ดักจับเหตุสุดวิสัยชั้นนอกสุด ลูปใหญ่จะไม่มีวันล่มและดับไปจากระบบตลอดกาล!
             print(f"⚠️ [Automation System Error] เกิดข้อผิดพลาดร้ายแรงในลูปหลัก: {e}")
-            await asyncio.sleep(60)
-
-# =====================================================================
-# 🛫 [Section 4] ระบบผสานโครงสร้างสตาร์ทอัปยุคใหม่ (FastAPI Lifespan Engine)
-# =====================================================================
-@asynccontextmanager
-async def lifespan(app: FastAPI):
-    print("⚡ [System Core Startup] เริ่มต้นโครงสร้างระบบนิเวศบอท (ผ่านระบบ Lifespan)...")
-    
-    try:
-        print("🧹 [System Core Startup] กำลังเคลียร์ระบบ Webhook เก่าออกจากเซิร์ฟเวอร์ Telegram...")
-        await bot.delete_webhook(drop_pending_updates=True)
-        print("✅ [System Core Startup] ล้างประวัติ Webhook เก่าเรียบร้อยแล้ว!")
-    except Exception as webhook_err:
-        print(f"⚠️ [System Core Warning] ไม่สามารถลบ Webhook ได้: {webhook_err}")
-        
-    asyncio.create_task(automated_hunting_loop())
-    asyncio.create_task(bot.polling(non_stop=True, timeout=60))
-    print("✅ [System Core Startup] สั่งเริ่มงาน Polling บอท และระบบ Automation เรียบร้อย!")
-    
-    yield
-    print("🛑 [System Core Shutdown] ปิดระบบเซิร์ฟเวอร์เรียบร้อย")
-
-app = FastAPI(lifespan=lifespan)
-
-@app.get("/")
-async def root_portal():
-    from fastapi.responses import HTMLResponse
-    return HTMLResponse(content=generate_html_dashboard(), status_code=200)
+            await asyncio.sleep(60) # พักหายใจ 1 นาทีแล้วเริ่มต้นวนชีวิตใหม่
