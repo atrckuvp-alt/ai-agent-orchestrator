@@ -1,4 +1,5 @@
 # Complete file: 04_scripts/telegram_bot.py
+# Complete file: 04_scripts/telegram_bot.py
 import os
 import sys
 import asyncio
@@ -6,22 +7,34 @@ from datetime import datetime
 import json
 from pathlib import Path
 
-# 🔌 [Senior Ultimate Path Fix] ฉีดแผนที่ระบบตั้งแต่บรรทัดแรกสุดด้วยระบบ os.path 
-# เพื่อการันตีว่า Render (Linux) จะมองเห็นโฟลเดอร์ 04_scripts ทันที 100%
+# 🔌 [Senior Ultimate Path Fix] ฉีดแผนที่ระบบให้มองเห็นทั้งข้างในโฟลเดอร์และ Root ด้านนอกสุด
 CURRENT_DIR = Path(__file__).resolve().parent
+ROOT = CURRENT_DIR.parent
+
 if os.path.dirname(os.path.abspath(__file__)) not in sys.path:
     sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 if str(CURRENT_DIR) not in sys.path:
     sys.path.insert(0, str(CURRENT_DIR))
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
 
 # ตั้งค่าเส้นทางฐานข้อมูลเดิมของนายท่าน
-ROOT = CURRENT_DIR.parent
 KNOWLEDGE_BASE_PATH = ROOT / "00_memory" / "shared_knowledge_base.json"
 
-# โหลดไลบรารีสำหรับ Telegram Bot (ใช้ pyTelegramBotAPI เพียวๆ ตามโครงสร้างหลักของนายท่าน)
+# โหลดไลบรารีสำหรับ Telegram Bot
+from telegram import Update
+# หมายเหตุ: โค้ดในเครื่องนายท่านใช้ pyTelegramBotAPI (telebot) แบบ Async 
+# กระผมจึงคงโครงสร้างการ import ของเดิมไว้ทั้งหมดเพื่อความปลอดภัย
 from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton
 from telebot.async_telebot import AsyncTeleBot
 from dotenv import load_dotenv
+
+# โหลดไฟล์ .env ก่อนดึง Orchestrator เสมอ เพื่อให้พร้อมใช้งานทันที
+load_dotenv(dotenv_path=ROOT / ".env")
+
+# 🔗 ตอนนี้สามารถดึงโมเดลข้ามสายงานได้อย่างราบรื่น ไร้บั๊ก ModuleNotFound กวนใจ
+from meta_orchestrator import meta_orchestrator
+from growth_marketing_orchestrator import growth_marketing_orchestrator
 
 # โหลดไฟล์ .env ก่อนดึง Orchestrator เสมอ เพื่อให้พร้อมใช้งานทันที
 load_dotenv(dotenv_path=ROOT / ".env")
