@@ -98,6 +98,9 @@ def generate_html_dashboard():
 # =====================================================================
 # 📥 [Section 2] ระบบควบคุมคำสั่งแชทจากหน้าบ้าน Telegram Bot
 # =====================================================================
+# =====================================================================
+# 📥 [Section 2] ระบบควบคุมคำสั่งแชทจากหน้าบ้าน Telegram Bot
+# =====================================================================
 @bot.message_handler(commands=['start', 'help'])
 async def send_welcome(message):
     welcome_text = (
@@ -109,9 +112,19 @@ async def send_welcome(message):
 
 @bot.message_handler(func=lambda message: True)
 async def handle_all_messages(message):
-    print(f"💬 [Telegram Message Received]: {message.text}")
-    reply_content = meta_orchestrator.route_and_execute(message.text)
-    await bot.reply_to(message, reply_content, parse_mode="Markdown")
+    # 🆔 ดึงข้อมูลข้อความดิบ และรหัส ID ของผู้ใช้งานที่ทักเข้ามา
+    user_msg = message.text
+    sender_id = str(message.from_user.id) # ดึงรหัส Telegram User ID มาแปลงเป็น String
+    
+    print(f"💬 [Telegram Message Received] From {sender_id}: {user_msg}")
+    
+    try:
+        # 🏎️ ส่งทั้งข้อความ และแนบ user_id เข้าไปในวงจรออร์เคสเตรเตอร์ตามที่ระบบต้องการ
+        reply_content = meta_orchestrator.route_and_execute(user_msg, user_id=sender_id)
+        await bot.reply_to(message, reply_content, parse_mode="Markdown")
+    except Exception as e:
+        print(f"⚠️ [Bot Reply Error] เกิดข้อผิดพลาดขณะประมวลผลคำสั่ง: {e}")
+        await bot.reply_to(message, "⚠️ บอทได้รับคำสั่งแล้ว แต่เกิดข้อผิดพลาดภายในระบบอัจฉริยะหลังบ้านครับพ้ม")
 
 # =====================================================================
 # ⏰ [Section 3] ระบบตั้งเวลาออกล่าข้อมูลและแจ้งเตือนอัตโนมัติ (Safe Mode)
