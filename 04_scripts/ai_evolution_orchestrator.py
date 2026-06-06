@@ -1,7 +1,8 @@
 # Complete file: 04_scripts/ai_evolution_orchestrator.py
+# แก้ไขบรรทัดที่ 3-4 ของไฟล์ให้เป็นแบบนี้ครับ:
 import requests
 import json
-from shared_knowledge import shared_knowledge  # 🔌 ต่อท่อตรงเข้าคลังความรู้ส่วนกลาง
+from 04_scripts.shared_knowledge import shared_knowledge  # 🔌 เติม 04_scripts. นำหน้า
 
 class AIResearchAgent:
     def find_new_free_models(self):

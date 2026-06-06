@@ -1,7 +1,8 @@
 # Complete file: 04_scripts/growth_marketing_orchestrator.py
+# แก้ไขบรรทัดที่ 3-4 ของไฟล์ให้เป็นแบบนี้ครับ:
 import os
 import requests
-from ai_model_registry import model_registry  # 🔌 ต่อท่อเชื่อมสวิตช์ไฟส่วนกลาง
+from 04_scripts.ai_model_registry import model_registry  # 🔌 เติม 04_scripts. นำหน้าเพื่อชี้ทางให้ Render
 
 class MarketingAgent:
     def execute_marketing_analysis(self, topic: str, core_skill: str, segmentation_skill: str) -> str:

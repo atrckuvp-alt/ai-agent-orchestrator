@@ -11,9 +11,10 @@ class MetaOrchestrator:
         msg_clean = user_message.strip().lower()
         
         # 🚨 [คำสั่งใหม่สำหรับเทส] สั่งให้หน่วยล่าของฟรีออกทำงานทันที
+# เลื่อนลงมาแถวๆ บรรทัดที่ 12-13 ในฟังก์ชันเลือกรันระบบล่าของฟรี แก้เป็น:
         if "รันระบบล่าของฟรี" in msg_clean or "test evolution" in msg_clean:
             try:
-                from ai_evolution_orchestrator import ai_evolution_orchestrator
+                from 04_scripts.ai_evolution_orchestrator import ai_evolution_orchestrator  # 🔌 เติม 04_scripts. นำหน้า
                 # สั่งรันลูปตรวจจับและทดสอบโมเดล Sandbox สดๆ
                 is_triggered = ai_evolution_orchestrator.run_evolution_check()
                 
