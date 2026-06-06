@@ -1,6 +1,13 @@
 # Complete file: 04_scripts/meta_orchestrator.py
+import os
+import sys
 import asyncio
 import random
+
+# 🔌 [Senior Path Fix] บังคับให้มองเห็นคลังในโฟลเดอร์เดียวกันก่อน
+current_dir = os.path.dirname(os.path.abspath(__file__))
+if current_dir not in sys.path:
+    sys.path.append(current_dir)
 
 class MetaOrchestrator:
     def __init__(self):
@@ -10,13 +17,10 @@ class MetaOrchestrator:
         """ ระบบรับคำสั่งทั่วไปแปลงข้อความ (Fall-back Message Selector) """
         msg_clean = user_message.strip().lower()
         
-        # 🚨 [คำสั่งใหม่สำหรับเทส] สั่งให้หน่วยล่าของฟรีออกทำงานทันที
         if "รันระบบล่าของฟรี" in msg_clean or "test evolution" in msg_clean:
             try:
-                # 🔌 สั่งดึงไฟล์ตรงๆ ในโฟลเดอร์เดียวกันได้เลยหลังจากแก้ระบบแผนที่แล้ว
+                # 🔌 สับจากในโฟลเดอร์เดียวกันได้โดยตรง ไม่ติดปัญหา Syntax ตัวเลขนำหน้าแล้ว
                 from ai_evolution_orchestrator import ai_evolution_orchestrator
-                is_triggered = ai_evolution_orchestrator.run_evolution_check()
-                # สั่งรันลูปตรวจจับและทดสอบโมเดล Sandbox สดๆ
                 is_triggered = ai_evolution_orchestrator.run_evolution_check()
                 
                 if is_triggered:
@@ -41,7 +45,6 @@ class MetaOrchestrator:
                     }
                 }
 
-        # หากนายท่านพิมพ์คำสั่งขอดู Report ทั่วไป ให้แสดงแดชบอร์ดสรุป
         if "ขอดู report" in msg_clean or "report" in msg_clean:
             return {
                 "status": "success",

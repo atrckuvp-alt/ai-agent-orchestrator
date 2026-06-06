@@ -3,19 +3,18 @@ import os
 import sys
 import requests
 
-# 🔌 ใช้ทางลัดระบุแผนที่โฟลเดอร์ ดึงโมเดลในกลุ่มมาใช้งานแบบไร้บั๊กตัวเลข
+# 🔌 [Senior Path Fix] แก้ปัญหาตัวเลข 04 ด้วยการดึง path โฟลเดอร์ปัจจุบันเข้าสู่ระบบโดยตรง
 current_dir = os.path.dirname(os.path.abspath(__file__))
 if current_dir not in sys.path:
     sys.path.append(current_dir)
 
-from ai_model_registry import model_registry
+from ai_model_registry import model_registry  # คุยกันในโฟลเดอร์เดียวกันได้ฉลุยแล้ว
 
 class MarketingAgent:
     def execute_marketing_analysis(self, topic: str, core_skill: str, segmentation_skill: str) -> str:
         """ [ลูกทีมที่ 1 - AI การตลาด] วิเคราะห์แผนผ่านระบบสลับค่าย โดยเช็กโมเดลอนุมัติจากสวิตช์กลาง """
         print(f"📊 [Marketing Agent] เริ่มการวิเคราะห์กลยุทธ์สำหรับ: '{topic}'...")
 
-        # 🕹️ เปลี่ยนมาดึง Config ชื่อโมเดลและคีย์ผ่านสวิตช์ส่วนกลาง
         config = model_registry.get_config("marketing")
         active_model = config["model"]
         active_key = config["key"]
@@ -36,7 +35,6 @@ class MarketingAgent:
         • **แผนการปั๊มเงิน (Product Execution):** (บอก Action Plan 1-2 ข้อชัดๆ ว่าจะดึงเงินออกจากกระเป๋าเขาอย่างไรโดยไม่แข่งลดราคา)
         """
 
-        # 🔄 ตรรกะการยิง API สลับค่ายอัตโนมัติ (ขึ้นอยู่กับว่านายท่านสับสวิตช์ส่วนกลางให้ใช้ค่ายไหน)
         if provider == "google" and active_key:
             try:
                 url = f"https://generativelanguage.googleapis.com/v1beta/models/{active_model}:generateContent?key={active_key}"
@@ -56,11 +54,9 @@ class MarketingAgent:
             except Exception as e:
                 print(f"⚠️ [Failover] สวิตช์หลัก DeepSeek มีปัญหา: {e} -> ดีดไปเข้า OpenRouter")
 
-        # 🛡️ แผนสำรองสุดท้าย: ถ้าค่ายหลักที่นายท่านเลือกในสวิตช์ล่ม หรือตั้งค่าค่ายอื่น ระบบจะวิ่งเข้า OpenRouter เฝ้าระวังให้ทันที
         openrouter_key = os.getenv("OPENROUTER_API_KEY")
         if openrouter_key:
             try:
-                # ถ้าเป็นค่าย Google หรือ DeepSeek ล่ม ให้แปลงชื่อโมเดลเป็นมาตรฐานสากลเพื่อยิงผ่าน OpenRouter
                 fallback_model = "google/gemini-2.5-flash" if provider == "google" else "deepseek/deepseek-chat"
                 headers = {"Authorization": f"Bearer {openrouter_key}", "Content-Type": "application/json"}
                 payload = {"model": fallback_model, "messages": [{"role": "user", "content": prompt}]}
@@ -78,7 +74,6 @@ class ContentCreatorAgent:
         """ [ลูกทีมที่ 2 - AI นักครีเอทีฟ] รังสรรค์สคริปต์คอนเทนต์ เช็กโมเดลจากสวิตช์ส่วนกลาง """
         print(f"🎬 [Content Creator Agent] กำลังทำแผนสื่อสารและไอเดียคอนเทนต์สำหรับ: '{topic}'...")
 
-        # 🕹️ ดึงโครงสร้างผ่านสวิตช์ส่วนกลาง
         config = model_registry.get_config("content")
         active_model = config["model"]
         active_key = config["key"]
@@ -100,7 +95,6 @@ class ContentCreatorAgent:
         • **Conversion Funnel:** (วิธีดึงคนดูจากคลิปสั้นให้กดทัก Line OA เพื่อปิดการขายหรือสมัครสมาชิก)
         """
 
-        # ⚡ สปีดสายฟ้า: ถ้านายท่านสับสวิตช์ให้ใช้ Groq
         if provider == "groq" and active_key:
             try:
                 headers = {"Authorization": f"Bearer {active_key}", "Content-Type": "application/json"}
@@ -111,7 +105,6 @@ class ContentCreatorAgent:
             except Exception as e:
                 print(f"⚠️ [Failover] โครงข่าย Groq ติดขัด: {e} -> ส่งไปพึ่งพากองหนุน OpenRouter")
 
-        # 🛡️ แผนสำรองฝั่งคอนเทนต์: ยิงผ่าน OpenRouter ด้วยโมเดล Llama ตัวแรง
         openrouter_key = os.getenv("OPENROUTER_API_KEY")
         if openrouter_key:
             try:
@@ -132,7 +125,7 @@ class GrowthMarketingOrchestrator:
             "strategy_core": "Niche Market & Premium Differentiation (สร้างความต่างในตลาดเฉพาะกลุ่ม ไม่แข่งสงครามราคา)",
             "segmentation": "Deep Segmentation (มองหา Pain Point ที่ซ่อนอยู่ของกลุ่มเป้าหมายขนาดเล็กแต่มีกำลังซื้อสูง)",
             "product_value": "Functional + Emotional Value (สินค้าต้องแก้ปัญหาได้จริง และแบรนด์ต้องมอบความรู้สึกพรีเมียม)",
-            "marketing_tactics": "Word-of-Mouth & Storytelling (ใช้การบอกต่อจากผู้ใช้จริงและการเล่าเรื่องที่กระทบใจ ไม่เน้นงบโฆษณาหว่านแห)"
+            "marketing_tactics": "Word-of-Mouth & Storytelling (ใช้การบอกต่อจากผู้ใช้จริงและการเล่าเรื่องที่กระทบใจ ไม่เน้นงบโฆษณาหватьแห)"
         }
         print(f"📡 [Base44 Centralized Switch Engine] ดึงแผนควบคุมจาก Model Registry เรียบร้อยแล้ว")
 
