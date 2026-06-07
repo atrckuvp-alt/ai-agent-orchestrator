@@ -31,12 +31,19 @@ app = FastAPI(title="Base44 Multi-Agent Telegram Command Center")
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     if bot:
+        print("🧹 [System] กำลังล้าง Webhook และเคลียร์คิวข้อความค้างทั้งหมด...")
+        # 1. ลบ Webhook
         await bot.remove_webhook()
+        # 2. เคลียร์ข้อความค้าง (Offset = -1 จะบอกให้ Telegram ส่งเฉพาะข้อความใหม่ล่าสุด)
+        try:
+            await bot.get_updates(offset=-1, timeout=1) 
+        except:
+            pass
+        
+        # เริ่ม Polling
         asyncio.create_task(bot.polling(non_stop=True, allowed_updates=['message']))
         asyncio.create_task(automated_hunting_loop())
     yield
-
-app.router.lifespan_context = lifespan
 
 # =====================================================================
 # ⏰ [Section 2] ลูปตั้งเวลารายงานยุทธศาสตร์รอบ 09:00 น.
