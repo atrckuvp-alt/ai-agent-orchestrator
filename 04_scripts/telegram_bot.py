@@ -1,24 +1,24 @@
-# 🚨 สำคัญที่สุด: ต้องเพิ่ม Path ก่อน import ทุกอย่าง
 import sys
 from pathlib import Path
 
-# ปักหมุด Root Directory ของโปรเจกต์
+# 🚨 ล็อกตำแหน่ง Root ให้แม่น: คือโฟลเดอร์ที่อยู่เหนือ 04_scripts ขึ้นไป 1 ชั้น
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(PROJECT_ROOT))
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
 
-# ตอนนี้ Import จาก core จะทำงานได้แน่นอน
+# 🎯 Import จาก Root โดยตรง (ไม่ต้องผ่าน core)
+from meta_orchestrator import meta_orchestrator
+from growth_marketing_orchestrator import growth_marketing_orchestrator
+
 import os
 import asyncio
-import json
 import inspect
 from datetime import datetime, timezone, timedelta
 from contextlib import asynccontextmanager
-
-from core.meta_orchestrator import meta_orchestrator
-from core.growth_marketing_orchestrator import growth_marketing_orchestrator
-
 from fastapi import FastAPI
 from telebot.async_telebot import AsyncTeleBot
+
+# ... (โค้ดส่วนที่เหลือของนายท่านเหมือนเดิมครับ) ...
 
 # 🔑 โหลดโทเค็น
 BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
