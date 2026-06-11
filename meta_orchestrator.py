@@ -35,7 +35,7 @@ class MetaOrchestrator:
                     return {
                         "status": "success",
                         "data": {
-                            "message": "ℹ️ **[BU_AI_Evolution_Hub]** ตรวจสอบแล้ว สถานะตลาดยังเสถียรดี ไม่จำเป็นต้องสลับโมเดลในรอบนี้ครับ"
+                            "message": "ℹ️ **[BU_AI_Evolution_Hub]** ตรวจสอบแล้ว สถานะตลาดยังเสถียรดี ไม่จำเป็นต้องสลับโมเดล in รอบนี้ครับ"
                         }
                     }
             except Exception as e:
@@ -43,11 +43,11 @@ class MetaOrchestrator:
                 
         return {
             "status": "error",
-            "message": "🤖 ขออภัยครับนายท่าน บอท Meta_Orchestrator ยังไม่เข้าใจคำสั่งนี้ (โปรดลองสั่ง 'รันระบบล่าของฟรี')"
+            "message": "🤖 ขออภัยครับนายท่าน บอท Meta_Orchestrator ยังไม่เข้าใจคำสั่งนี้"
         }
 
     async def run_morning_cron(self):
-        """ สคริปต์จำลองการทำงานตอน 09:00 น. เพื่อสุ่มโปรดักส์และสั่งวิเคราะห์อัตโนมัติ """
+        """ สคริปต์บอทรายงานยามเช้า 09:00 น. บังคับยิงข้อมูลเข้า Telegram """
         morning_ideas = [
             "เซรั่มลดริ้วรอยสูตรพรีเมียมจากเมือกหอยทากเกาหลีผสมทองคำ 24K",
             "คอลลาเจนไดเปปไทด์ชนิดผงชงดื่ม บำรุงข้อต่อและผิวพรรณเข้มข้น",
@@ -66,12 +66,15 @@ class MetaOrchestrator:
                 True
             )
             
-            from shared_knowledge import shared_knowledge
-            shared_knowledge.publish_insight(
-                author_team="Morning_Chronos_AI_Best",
-                topic=f"[Morning Report] {selected_product}",
-                insight_data={"best_tools": bu_result["best_tools"], "conclusion": bu_result["conclusion"]}
-            )
+            try:
+                from shared_knowledge import shared_knowledge
+                shared_knowledge.publish_insight(
+                    author_team="Morning_Chronos_AI_Best",
+                    topic=f"[Morning Report] {selected_product}",
+                    insight_data={"best_tools": bu_result["best_tools"], "conclusion": bu_result["conclusion"]}
+                )
+            except Exception as e_share:
+                print(f"⚠️ เตือน: อัปเดต shared_knowledge ขัดข้อง แต่ระบบจะรันส่งรายงานต่อ: {str(e_share)}")
 
             report_message = (
                 f"☀️ 📢 **[Morning Briefing Report - 09:00 AM]**\n"
@@ -83,50 +86,7 @@ class MetaOrchestrator:
             return {"status": "success", "data": {"message": report_message}}
             
         except Exception as e:
-            return {"status": "error", "message": f"สคริปต์ Cron ยามเช้าพัง: {str(e)}"}
+            return {"status": "error", "message": f"สคริปต์ Cron ยามเช้าพังเนื่องจาก: {str(e)}"}
 
-
-# ========================================================
-# 🚀 [Senior Dev Route] ท่อลัดพิเศษสำหรับ "นายท่าน" ใช้กดทดสอบยิงรายงาน Telegram ทันที
-# ========================================================
-# หมายเหตุ: เราเอามาแปะไว้ข้างนอกระดับล่างสุด เพื่อต่อเข้ากับตัวแปรแอปหลักของระบบครับ
-from fastapi import FastAPI
-# สมมติว่า api_app ถูกสร้างไว้ในระดับสถาปัตยกรรมหลัก ถ้าระบบเรียกไฟล์นี้จากภายนอก
-# เพื่อความปลอดภัยในการรันเทส เราจะเขียนดักตรวจสอบตัวแปรแอปไว้ให้ครับ
-api_app = FastAPI() if 'api_app' not in globals() else globals()['api_app']
-
-@api_app.get("/test-telegram-report")
-async def test_telegram_report():
-    import os
-    
-    try:
-        # 🔎 ดึงฟังก์ชันสร้างและส่งรายงานยามเช้าจากในคลาส MetaOrchestrator มาสั่งรันแมนนวล
-        orchestrator_instance = MetaOrchestrator()
-        
-        # ตรวจสอบตัวแปรสภาพแวดล้อมก่อนยิงจริงเพื่อดักจับบั๊กคีย์ถล่ม
-        bot_token = os.environ.get("TELEGRAM_BOT_TOKEN")
-        
-        if not bot_token:
-            return {
-                "status": "failed",
-                "reason": "❌ ระบบหาคีย์ 'TELEGRAM_BOT_TOKEN' บน Render ไม่เจอ! นายท่านกรุณาตรวจสอบการสะกดคำในหน้า Environment Variables ของ Render อีกครั้งนะครับ"
-            }
-            
-        # สั่งให้ระบบรันฟังก์ชันส่งรายงานประจำวันทันที (Manual Trigger)
-        report_result = await orchestrator_instance.run_morning_cron()
-        
-        return {
-            "status": "success",
-            "message": "🚀 ระบบสั่งยิงรายงานสำเร็จแล้วครับนายท่าน! บอทกำลังประมวลผลไอเดียและส่งเข้า Telegram ทันทีครับพ้ม",
-            "backend_response": report_result,
-            "using_token_prefix": bot_token[:10] + "..."
-        }
-        
-    except Exception as e:
-        # หากโค้ดส่วนไหนพังหรือเกิด KeyError ระบบจะพ่นสาเหตุจริงออกมาบนหน้าจอเบราว์เซอร์ทันที
-        return {
-            "status": "bug_detected",
-            "error_type": type(e).__name__,
-            "error_message": str(e),
-            "suggestion": "💥 เกิดข้อผิดพลาดขณะบอทพยายามรันคำสั่งรายงาน ข้อความเออร์เรอร์ด้านบนคือเบาะแสสำคัญที่จะบอกว่าคีย์หรือโค้ดส่วนไหนค้างอยู่ครับ!"
-        }
+# 📦 สร้าง Instance เพื่อให้ไฟล์อื่น (เช่น telegram_bot.py) อิมพอร์ตไปใช้งานได้ทันที
+meta_orchestrator = MetaOrchestrator()

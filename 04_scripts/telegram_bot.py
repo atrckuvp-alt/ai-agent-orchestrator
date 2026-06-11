@@ -91,6 +91,37 @@ async def health_check():
     }
 
 # =====================================================================
+# 🚀 [Senior Dev Route] ท่อลัดพิเศษสำหรับ "นายท่าน" ใช้กดทดสอบยิงรายงาน Telegram
+# =====================================================================
+@app.get("/test-telegram-report")
+async def test_telegram_report():
+    try:
+        # ดึงคลาส MetaOrchestrator มาสร้างตัวแปรเพื่อรันแมนนวลรวดเร็ว
+        from meta_orchestrator import MetaOrchestrator
+        orchestrator_instance = MetaOrchestrator()
+        cron_result = await orchestrator_instance.run_morning_cron()
+        
+        # ยิงข้อความสั้นทดสอบความฟิตของ Bot เข้า Telegram ของนายท่านตรง ๆ
+        if bot:
+            await bot.send_message(
+                chat_id=TARGET_CHAT_ID, 
+                text="🚀 **[Manual Test Trigger]**\nระบบทางลัดของนายท่านเชื่อมต่อเสร็จสมบูรณ์แล้วครับพ้ม บอทกำลังส่งรายงานยามเช้าให้ทำงานทันที!"
+            )
+            
+        return {
+            "status": "success",
+            "message": "🚀 ระบบสั่งยิงรายงานสำเร็จแล้วครับนายท่าน! ลองเปิดดูในแอป Telegram ได้เลยครับพ้ม",
+            "cron_log": cron_result
+        }
+    except Exception as e:
+        return {
+            "status": "bug_detected",
+            "error_type": type(e).__name__,
+            "error_message": str(e),
+            "suggestion": "ตรวจสอบความถูกต้องของพาร์ทโฟลเดอร์และการตั้งค่าคีย์บอทบนหน้า Render ครับ"
+        }
+
+# =====================================================================
 # 🎛️ [Section 2] ระบบ Traceability & สลับโมเดล (คุยกับหน้าเว็บ Base44)
 # =====================================================================
 
