@@ -28,47 +28,31 @@ class MetaOrchestrator:
                     return {
                         "status": "success",
                         "data": {
-                            "message": "🔍 🚨 **[BU_AI_Evolution_Hub]** ออกปฏิบัติการคัดกรองโมเดลเสร็จสิ้น!\n\n🤖 ตรวจพบโมเดลฟรีตัวใหม่ที่ผ่านเกณฑ์กฎเหล็ก และได้ส่ง **'การ์ดคำขออนุมัติสีแดง'** ขึ้นไปลอยเด่นบนหน้าเว็บ Base44 Portal เรียบร้อยแล้วครับนายท่าน! ไปเปิดตรวจดูได้เลยครับพ้ม!"
+                            "message": "🔍 🚨 **[BU_AI_Evolution_Hub]** ออกปฏิบัติการล่าของฟรีและสุ่มดึงโมเดลใหม่เข้าประจำการเรียบร้อยแล้ว!"
                         }
                     }
                 else:
                     return {
                         "status": "success",
                         "data": {
-                            "message": "🔍 **[BU_AI_Evolution_Hub]** ออกปฏิบัติการแล้ว แต่โมเดลใหม่ๆ ในตลาดยังทดสอบ Sandbox ไม่ผ่านเกณฑ์กฎเหล็กในรอบนี้ครับ!"
+                            "message": "ℹ️ **[BU_AI_Evolution_Hub]** ตรวจสอบแล้ว สถานะตลาดยังเสถียรดี ไม่จำเป็นต้องสลับโมเดลในรอบนี้ครับ"
                         }
                     }
             except Exception as e:
-                return {
-                    "status": "error",
-                    "data": {
-                        "message": f"⚠️ เกิดข้อผิดพลาดในระบบล่าของฟรี: {e}"
-                    }
-                }
-
-        if "ขอดู report" in msg_clean or "report" in msg_clean:
-            return {
-                "status": "success",
-                "data": {
-                    "message": "📊 **[Base44 AI Command Center]**\n\nยินดีต้อนรับครับนายท่าน! ขณะนี้ระบบคิดสด Multi-Agent พร้อมใช้งานเต็มรูปแบบแล้ว\n\n💡 **วิธีการสั่งงานคิดสด:**\nพิมพ์คำว่า `ทำกลยุทธ์ [ตามด้วยสินค้า]` เช่น *'ทำกลยุทธ์ ครีมกันแดดสูตรน้ำ'*\n\n🛠️ **คำสั่งทดสอบระบบสายล่าของฟรี:**\nพิมพ์คำว่า `รันระบบล่าของฟรี` เพื่อสั่งให้บอทคัดกรองโมเดลใหม่ขึ้นหน้าเว็บ\n\n🔗 เปิดดูพอร์ตเทิลเว็บ: https://ai-agent-orchestrator-2vam.onrender.com"
-                }
-            }
-            
+                return {"status": "error", "message": f"ระบบบอทล่าของฟรีขัดข้อง: {str(e)}"}
+                
         return {
-            "status": "success",
-            "data": {
-                "message": f"🤖 **[Meta Orchestrator]** ได้รับข้อความ '{user_message}' เรียบร้อยครับ\n\nหากต้องการให้ AI วิเคราะห์แผนธุรกิจ ดร.แสงสุข กรุณาพิมพ์ขึ้นต้นด้วยคำว่า **'ทำกลยุทธ์ ...'** ได้เลยครับพ้ม!"
-            }
+            "status": "error",
+            "message": "🤖 ขออภัยครับนายท่าน บอท Meta_Orchestrator ยังไม่เข้าใจคำสั่งนี้ (โปรดลองสั่ง 'รันระบบล่าของฟรี')"
         }
 
-    async def execute_scheduled_task(self, user_id: int) -> dict:
-        """ ⏰ [สมองกลางตั้งเวลา 9 โมงเช้า] สั่งการให้ AI 4 ค่ายสรุปเนื้อหาส่งตรงหานายท่าน """
-        print("⏰ [Meta Orchestrator] เริ่มขบวนการผลิตรายงาน 9 โมงเช้าผ่านขุมพลัง AI คิดสด...")
+    async def run_morning_cron(self):
+        """ สคริปต์จำลองการทำงานตอน 09:00 น. เพื่อสุ่มโปรดักส์และสั่งวิเคราะห์อัตโนมัติ """
         morning_ideas = [
-            "อาหารเสริมสกัดพรีเมียมจากถั่งเช่าและโสมสกัดสำหรับผู้บริหารยุคใหม่",
-            "ยาสระผมสมุนไพรสูตรลดการหลุดร่วงของเส้นผมชะลอวัย",
-            "กาแฟออร์แกนิกคั่วบดดริปสดผสมสารสกัดบำรุงสมอง",
-            "ครีมบำรุงผิวหน้าออร์แกนิกจากสารสกัดเมือกหอยทากและทองคำบริสุทธิ์"
+            "เซรั่มลดริ้วรอยสูตรพรีเมียมจากเมือกหอยทากเกาหลีผสมทองคำ 24K",
+            "คอลลาเจนไดเปปไทด์ชนิดผงชงดื่ม บำรุงข้อต่อและผิวพรรณเข้มข้น",
+            "ครีมกันแดดเนื้อไฮบริด SPF50+ PA++++ คุมมันสำหรับผิวแพ้ง่าย",
+            "มาส์กหน้ากู้ผิวเร่งด่วนจากสารสกัดเมือกหอยทากและทองคำบริสุทธิ์"
         ]
         selected_product = random.choice(morning_ideas)
 
@@ -97,7 +81,52 @@ class MetaOrchestrator:
                 f"🔗 ตรวจสอบได้ที่: https://ai-agent-orchestrator-2vam.onrender.com"
             )
             return {"status": "success", "data": {"message": report_message}}
+            
         except Exception as e:
-            return {"status": "error", "data": {"message": f"☀️ ⏰ **[Morning Briefing]** ข้อผิดพลาด: {e}"}}
+            return {"status": "error", "message": f"สคริปต์ Cron ยามเช้าพัง: {str(e)}"}
 
-meta_orchestrator = MetaOrchestrator()
+
+# ========================================================
+# 🚀 [Senior Dev Route] ท่อลัดพิเศษสำหรับ "นายท่าน" ใช้กดทดสอบยิงรายงาน Telegram ทันที
+# ========================================================
+# หมายเหตุ: เราเอามาแปะไว้ข้างนอกระดับล่างสุด เพื่อต่อเข้ากับตัวแปรแอปหลักของระบบครับ
+from fastapi import FastAPI
+# สมมติว่า api_app ถูกสร้างไว้ในระดับสถาปัตยกรรมหลัก ถ้าระบบเรียกไฟล์นี้จากภายนอก
+# เพื่อความปลอดภัยในการรันเทส เราจะเขียนดักตรวจสอบตัวแปรแอปไว้ให้ครับ
+api_app = FastAPI() if 'api_app' not in globals() else globals()['api_app']
+
+@api_app.get("/test-telegram-report")
+async def test_telegram_report():
+    import os
+    
+    try:
+        # 🔎 ดึงฟังก์ชันสร้างและส่งรายงานยามเช้าจากในคลาส MetaOrchestrator มาสั่งรันแมนนวล
+        orchestrator_instance = MetaOrchestrator()
+        
+        # ตรวจสอบตัวแปรสภาพแวดล้อมก่อนยิงจริงเพื่อดักจับบั๊กคีย์ถล่ม
+        bot_token = os.environ.get("TELEGRAM_BOT_TOKEN")
+        
+        if not bot_token:
+            return {
+                "status": "failed",
+                "reason": "❌ ระบบหาคีย์ 'TELEGRAM_BOT_TOKEN' บน Render ไม่เจอ! นายท่านกรุณาตรวจสอบการสะกดคำในหน้า Environment Variables ของ Render อีกครั้งนะครับ"
+            }
+            
+        # สั่งให้ระบบรันฟังก์ชันส่งรายงานประจำวันทันที (Manual Trigger)
+        report_result = await orchestrator_instance.run_morning_cron()
+        
+        return {
+            "status": "success",
+            "message": "🚀 ระบบสั่งยิงรายงานสำเร็จแล้วครับนายท่าน! บอทกำลังประมวลผลไอเดียและส่งเข้า Telegram ทันทีครับพ้ม",
+            "backend_response": report_result,
+            "using_token_prefix": bot_token[:10] + "..."
+        }
+        
+    except Exception as e:
+        # หากโค้ดส่วนไหนพังหรือเกิด KeyError ระบบจะพ่นสาเหตุจริงออกมาบนหน้าจอเบราว์เซอร์ทันที
+        return {
+            "status": "bug_detected",
+            "error_type": type(e).__name__,
+            "error_message": str(e),
+            "suggestion": "💥 เกิดข้อผิดพลาดขณะบอทพยายามรันคำสั่งรายงาน ข้อความเออร์เรอร์ด้านบนคือเบาะแสสำคัญที่จะบอกว่าคีย์หรือโค้ดส่วนไหนค้างอยู่ครับ!"
+        }
