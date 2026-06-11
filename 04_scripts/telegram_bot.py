@@ -76,7 +76,7 @@ class RollbackPayload(BaseModel):
 # =====================================================================
 # 🚨 [Section 1] ประตูหน้าบ้านสำหรับปลุก UptimeRobot (Health Check)
 # =====================================================================
-@app.get("/")
+@app.api_route("/", methods=["GET", "HEAD"])
 async def health_check():
     active_model = "Unknown"
     if MODEL_CONFIG_FILE.exists():
