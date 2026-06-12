@@ -1,3 +1,4 @@
+# Complete file: 04_scripts/telegram_bot.py
 import sys
 import os
 from pathlib import Path
@@ -76,7 +77,7 @@ class RollbackPayload(BaseModel):
 # =====================================================================
 # 🚨 [Section 1] ประตูหน้าบ้านสำหรับปลุก UptimeRobot (Health Check)
 # =====================================================================
-@app.api_route("/", methods=["GET", "HEAD"])
+@app.get("/")
 async def health_check():
     active_model = "Unknown"
     if MODEL_CONFIG_FILE.exists():
@@ -192,10 +193,49 @@ async def emergency_rollback(payload: RollbackPayload):
 # =====================================================================
 # ⏰ [Section 3] ลูปยุทธศาสตร์ 09:00 น. และระบบ Webhook / Polling
 # =====================================================================
-# (โค้ดส่วนของ daily_strategic_report_loop() และ Webhook ยังคงทำงานตามเดิม)
+
+# ตัวแปรโกลบอลนอก Loop สำหรับจำว่า "วันนี้" ส่งรายงานไปแล้วหรือยัง
+last_sent_date = None
+
+async def daily_strategic_report_loop():
+    global last_sent_date
+    while True:
+        try:
+            # 1. ดึงเวลาปัจจุบัน และปรับให้เป็นเวลาประเทศไทย (BKK GMT+7)
+            bkk_tz = timezone(timedelta(hours=7))
+            now_bkk = datetime.now(bkk_tz)
+            current_date = now_bkk.date()
+            
+            print(f"⏰ [Cron] ตรวจสอบเวลา... ขณะนี้ {now_bkk.strftime('%H:%M')} (BKK)")
+
+            # 2. 🛡️ ลอจิกกันพลาด: ถ้าเวลาล่วงเลยผ่าน 09:00 น. มาแล้ว และ "วันนี้ยังไม่ได้ส่งรายงาน"
+            if now_bkk.hour >= 9 and last_sent_date != current_date:
+                print("🚀 [Cron] ถึงเวลาส่งรายงานปั๊มเงิน! กำลังปลุกโมดูลรัน Pipeline BU 1...")
+                
+                # สั่งรันยุทธศาสตร์การตลาดผ่านท่อของ BU 1 (ดร.แสงสุข / คุณอนิศ / คุณสิทธินันท์)
+                from meta_orchestrator import MetaOrchestrator
+                orchestrator_instance = MetaOrchestrator()
+                result = await orchestrator_instance.run_morning_cron()
+                
+                # ทำการส่งไม้ต่อ ยิงข้อมูลรายงานทั้งหมดเข้ากลุ่ม Telegram ของบอสทันที
+                if bot and "data" in result and "message" in result["data"]:
+                    await bot.send_message(TARGET_CHAT_ID, result["data"]["message"], parse_mode='Markdown')
+                    
+                # 3. ประทับตราล็อกวันที่ไว้ เพื่อไม่ให้สคริปต์ส่งซ้ำในรอบชั่วโมงถัดไป
+                last_sent_date = current_date
+                print(f"✅ [Cron] ส่งรายงานสำเร็จเรียบร้อยสำหรับวันที่ {current_date}")
+            
+        except Exception as e:
+            print(f"❌ [Cron] พบข้อผิดพลาดในระบบลูปส่งรายงานยามเช้า: {e}")
+        
+        # 4. นอนพักผ่อน 60 วินาที แล้ววนรอบขึ้นมาตรวจสอบเวลาต่อ
+        await asyncio.sleep(60)
 
 @app.on_event("startup")
 async def on_startup():
+    # 🔥 ปลุกสคริปต์เช็กเวลายามเช้า (Cron Background Task) ให้ทำงานคู่ขนานทันทีที่โปรเจกต์ตื่น
+    asyncio.create_task(daily_strategic_report_loop())
+    
     if bot and WEBHOOK_URL:
         print(f"🧹 [System] กำลังสลับไปใช้ Webhook ที่ URL: {WEBHOOK_URL}")
         await bot.remove_webhook()
