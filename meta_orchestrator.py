@@ -1,5 +1,5 @@
 # =====================================================================
-# 🚀 BASE44 ENGINE V2: MASTER ORCHESTRATOR (FULLY INTEGRATED V2.1)
+# 🚀 BASE44 ENGINE V2: MASTER ORCHESTRATOR (FULLY INTEGRATED V2.2)
 # =====================================================================
 import os
 import json
@@ -16,12 +16,12 @@ class MetaOrchestrator:
 
     async def generate_daily_master_report(self, raw_market_data: List[Dict], raw_ai_models: List[Dict]) -> Dict[str, Any]:
         """
-        ฟังก์ชันหลักที่ทำงานตอน 09:00 น. รวบรวมรายงานจากทุก BU รวมข้อ 1 + ข้อ 2
-        แล้วสรุปส่งเข้า Telegram พร้อมแนบ Link อนุมัติย้อนกลับมาที่ Lovable Dashboard
+        ฟังก์ชันหลักทำงานตอน 09:00 น. รวบรวมรายงานจากทุก BU (รวมข้อ 1 + 2 + 3)
+        ส่งเข้า Telegram พร้อมแนบ Link อนุมัติย้อนกลับมาที่ Lovable Dashboard
         """
         print("⚡ [Meta Orchestrator] กำลังประมวลผลระบบเพื่อสร้างรายงานส่งท่านประธาน...")
         
-        # รันระบบทำเงินอัตโนมัติ BU 1 (ควบรวมงานสแกนสินค้า + ชั่วโมงทองคำเชิงลึก)
+        # รันระบบทำเงินอัตโนมัติ BU 1 (ผสานระบบคัดเลือก + ชั่วโมงทองคำ + นักล่าดีลฟรีไร้เงื่อนไขแฝง)
         bu1_report = await self.bu1_revenue_engine.run_pipeline(raw_market_data)
         
         # รันระบบล่า AI Open-Source Free 100% ของ BU 2
@@ -31,7 +31,7 @@ class MetaOrchestrator:
         approve_link = f"{self.dashboard_base_url}/approve-with-trace?trace_id={trace_id}"
         rollback_link = f"{self.dashboard_base_url}/emergency-rollback?trace_id={trace_id}"
         
-        # ประกอบร่างเป็นข้อความรายงานระดับ VIP สำหรับ Telegram (ดึงแผนแยกแพลตฟอร์มจากข้อ 2 มาแสดงผล)
+        # ประกอบร่างรายงานส่งเข้า Telegram ของบอส
         telegram_payload = self._compile_telegram_message(bu1_report, bu2_report, approve_link, rollback_link)
         
         return {
@@ -44,21 +44,30 @@ class MetaOrchestrator:
     def _compile_telegram_message(self, bu1: Dict, bu2: Dict, app_url: str, roll_url: str) -> str:
         """แปลงข้อมูลดิบทั้งหมดให้กลายเป็นฟอร์แมตรายงานสุดหรูบน Telegram"""
         msg = f"📊 **[รายงานยุทธศาสตร์ปั๊มเงินประจำวัน - Base44 Engine]** 📊\n"
-        msg += f"📅 วันที่: {datetime.date.today().isoformat()} | สถานะระบบ: PRO ACTIVE\n\n"
+        msg += f"📅 วันที่: {datetime.date.today().isoformat()} | สถานะระบบ: ULTRA PRO ACTIVE\n\n"
         
-        msg += f"💰 **[BU 1: Autonomous Revenue Engine]**\n"
+        msg += f"💰 **[BU 1: Autonomous Revenue Engine (Affiliate & Lead Magnet)]**\n"
+        
+        # แยกหมวดหมู่แสดงผลให้บอสอ่านง่ายตามสั่งในข้อ 3
+        if not bu1["validated_products"]:
+            msg += f"⚠️ วันนี้ระบบยังไม่พบดีลฟรีหรือสินค้าลดราคาที่ผ่านเกณฑ์ความปลอดภัยไร้เงื่อนไขแฝง\n\n"
+        
         for prod in bu1["validated_products"]:
-            msg += f"🔹 สินค้า: {prod['product_name']} (โอกาสทำเงิน: {prod['market_viability_score']})\n"
-            msg += f"   - สรุปดีล: {prod['deal_type']} (ลดแหลกแจกแถม >50% ไร้เงื่อนไข)\n"
-            msg += f"   - 💡 Market Gap (เกณฑ์ 4 ข้อ): {prod['market_gap_summary']}\n"
-            msg += f"   - 🎯 AIDA Framework (Hook เด่น): {prod['strategic_framework']['aida_framework']['Attention']}\n"
+            # ติดป้ายประเภทดีลให้ชัดเจนว่าเป็น ดีลฟรี หรือ ดีลลดราคาถล่มทลาย
+            badge = "🎁 [LEAD MAGNET - ของฟรี 100%]" if prod['is_pure_freebie'] else "💥 [DEEP DISCOUNT - ลดทะลุ 50%]"
             
-            # 🔥 ดึงข้อมูลแผนสับสคริปต์ชั่วโมงทองคำจากข้อ 2 มากระจายแสดงผลตรงนี้แบบละเอียด!
-            msg += f"   - ⏰ แผนเวลาทองคำ (100% Free Cost Organic):\n"
+            msg += f"{badge}\n"
+            msg += f"🔹 ชื่อรายการ: {prod['product_name']} (คะแนนความน่าเชื่อถือตลาด: {prod['market_viability_score']})\n"
+            msg += f"   - รูปแบบดีล: {prod['deal_details']}\n"
+            msg += f"   - 🛡️ สถานะกลลวง: ผ่านเกณฑ์การันตี ไร้เงื่อนไขแฝง หมกเม็ดชัวร์ 100%\n"
+            msg += f"   - 💡 Market Gap (วิเคราะห์ 3 Mastermind): {prod['market_gap_summary']}\n"
+            msg += f"   - 🎯 AIDA Hook (คุณอนิศ): {prod['strategic_framework']['aida_framework']['Attention']}\n"
+            
+            # ดึงชั่วโมงทองคำจากข้อ 2
+            msg += f"   - ⏰ แผนเวลาโพสต์ออแกนิก (100% Free Cost):\n"
             for platform, detail in prod["organic_blueprint"].items():
                 msg += f"     • {platform}: {detail['golden_hour']}\n"
-                msg += f"       [คอนเทนต์]: {detail['content_style']}\n"
-                msg += f"       [ทริกอัลโกฯ]: {detail['algorithm_hook']}\n"
+                msg += f"       [Hook/ทริก]: {detail['algorithm_hook']}\n"
             msg += f"\n"
             
         msg += f"🤖 **[BU 2: Free AI Model Hunter]**\n"
@@ -79,122 +88,105 @@ class MetaOrchestrator:
 
 
 # =====================================================================
-# 💰 BUSINESS UNIT 1: AUTONOMOUS REVENUE GENERATION ENGINE (ITEM 1 & 2)
+# 💰 BUSINESS UNIT 1: REVENUE ENGINE (INTEGRATED ITEMS 1, 2, & 3)
 # =====================================================================
 class BU1AutonomousRevenueEngine:
-    """ทำหน้าที่ปั๊มเงินเข้ากระเป๋าออโต้จาก Affiliate/โฆษณา คิดบนยุทธศาสตร์ระดับโลก"""
+    """ทำหน้าที่ล่าดีลทำเงิน คอร์สฟรี ของแจกฟรี และสินค้าลดราคา >50% ไร้เงื่อนไขแฝง"""
     def __init__(self):
-        self.core_logic_mastermind = "Dr. Sangsuk Pithayanukul (Smooth-E & Dentiste')"
+        self.core_logic_mastermind = "Dr. Sangsuk Pithayanukul"
 
     async def run_pipeline(self, raw_market_data: List[Dict]) -> Dict:
         validated_list = []
         
         for data in raw_market_data:
-            # [ข้อ 1] กลไกการตรวจหาช่องว่างตลาด (Market Gap) ตามเกณฑ์ 4 ข้อของนายท่าน
-            is_market_gap, gap_reason = self._check_market_gap_criteria(data)
+            # 🕵️‍♂️ [ข้อ 3 IMPLEMENTATION] ตัวสแกนกลลวงและเงื่อนไขแฝง (Transparency Guard)
+            # ดักจับทันทีหากมีการหมกเม็ดค่าส่ง หรือมีเงื่อนไขผูกมัดแฝง
+            has_hidden_catch = data.get("has_hidden_catches", False)
+            shipping_cost = data.get("shipping_fee", 0)
             
-            is_valid_deal = data.get("discount_percent", 0) >= 50 or data.get("is_free_tier", False)
+            if has_hidden_catch or shipping_cost > 0:
+                # ถ้ามีเงื่อนไขแฝง หรือแอบเก็บค่าส่งสำหรับของแจกฟรี -> สลัดทิ้งทันทีเพื่อเซฟชื่อเสียงระบบ
+                print(f"🚫 [Transparency Guard] สลัดดีล {data.get('name')} ทิ้งเนื่องจากพบเงื่อนไขหมกเม็ด!")
+                continue
+                
+            # ตรวจสอบว่าเข้าเงื่อนไข "ของแจกฟรี คอร์สเรียนฟรี" หรือ "สินค้าแบรนด์ลดราคาสูงกว่า 50%"
+            is_pure_freebie = data.get("is_free_tier", False) or data.get("is_giveaway", False)
+            is_deep_discount = data.get("discount_percent", 0) >= 50
             
-            if is_market_gap and is_valid_deal:
-                # [ข้อ 1] ส่งต่อให้ 3 Mastermind ตรวจเอกซเรย์ถ่วงน้ำหนักและเขียน Copywriting (AIDA/SWOT)
-                validation_result = self._apply_dream_team_matrix(data, gap_reason)
+            if is_pure_freebie or is_deep_discount:
+                # [ข้อ 1] วิ่งผ่านด่านตรวจ Market Gap เกณฑ์ 4 ข้อของ ดร.แสงสุข และ 3 Mastermind
+                is_market_gap, gap_reason = self._check_market_gap_criteria(data)
                 
-                # 🔥 [ข้อ 2 INTEGRATED] รันระบบวิเคราะห์ชั่วโมงทองคำและคายพล็อตแกะรอยอัลกอริทึม
-                target_audience = data.get("target_audience", "General")
-                product_cat = data.get("category", "General")
-                validation_result["organic_blueprint"] = self._generate_advanced_organic_blueprint(target_audience, product_cat)
-                
-                validated_list.append(validation_result)
+                if is_market_gap:
+                    validation_result = self._apply_dream_team_matrix(data, gap_reason, is_pure_freebie)
+                    
+                    # [ข้อ 2] คำนวณชั่วโมงทองคำแบบออแกนิกเจาะลึก 100% Free Cost
+                    target_audience = data.get("target_audience", "General")
+                    product_cat = data.get("category", "General")
+                    validation_result["organic_blueprint"] = self._generate_advanced_organic_blueprint(target_audience, product_cat)
+                    
+                    # บันทึกสถานะตัวชี้วัดของข้อ 3 เข้าไปใน Object หลัก
+                    validation_result["is_pure_freebie"] = is_pure_freebie
+                    validation_result["deal_details"] = "แจกฟรี 100% (คอร์สเรียน/ของรางวัล ไร้ค่าส่ง)" if is_pure_freebie else f"ลดราคากระหน่ำเคลียร์สต็อก {data.get('discount_percent')}%"
+                    
+                    validated_list.append(validation_result)
                 
         return {"validated_products": validated_list}
 
     def _check_market_gap_criteria(self, data: Dict) -> tuple:
-        """เกณฑ์ 4 ข้อของนายท่าน: คนเจอเยอะบ่นเยอะ, คนมองข้าม, ไม่มีคู่แข่ง, สรุปเป็นประเด็นชัดเจน"""
+        """เกณฑ์ 4 ข้อของนายท่าน: คนบ่นเยอะ, คนมองข้าม, ไม่มีคู่แข่ง, สรุปประเด็นชัดเจน"""
         c1 = data.get("pain_frequency_score", 0) >= 7    
         c2 = data.get("is_overlooked", False) == True    
         c3 = data.get("competitor_count", 10) <= 2       
         
         if c1 and c2 and c3:
-            reason = "สแกนพบคอขวดตลาดระยะยาว คนบ่นบ่อยแต่คู่แข่งเป็นศูนย์ เหมาะแก่การเข้ายึดหัวหาด"
+            reason = "พบช่องว่างตลาดออแกนิก ดีลตรงใจแก้ Pain Point คนทำงาน โดยคู่แข่งในพื้นที่ยังไม่รับรู้"
             return True, reason
         return False, ""
 
-    def _apply_dream_team_matrix(self, data: Dict, gap_reason: str) -> Dict:
-        """สกัด Cognitive DNA ของ ดร.แสงสุข, คุณอนิศ, คุณสิทธินันท์ มารวมกันเพื่อคัดเลือกโปรดักส์จริง"""
-        viability_score = 85 if data.get("brand_rating", 0) >= 4.5 else 70
+    def _apply_dream_team_matrix(self, data: Dict, gap_reason: str, is_free: bool) -> Dict:
+        """สกัดเอกซเรย์ความคิด 3 ผู้นำ เพื่อเขียนก็อปปี้เนื้อหาให้โดนใจกลุ่มเป้าหมาย"""
+        viability_score = 90 if is_free else 80  # ของฟรีไม่มีเงื่อนไขแฝง คะแนนทำตลาดจะพุ่งสูงมากเป็นพิเศษ
+        
+        # ปรับเปลี่ยน Hook ตามรูปแบบยุทธศาสตร์ข้อ 3 (Lead Magnet vs Flash Sale)
+        hook_text = f"🎁 ของดีแจกฟรีมีอยู่จริง! " if is_free else f"💥 ช็อกวงการลดเคลียร์สต็อกครั้งใหญ่เกิน 50%! "
+        hook_text += f"ขยี้ปัญหากวนใจที่คุณเจอทุกวัน: {data.get('pain_keyword')}"
         
         return {
             "product_name": data.get("name"),
-            "deal_type": "100% FREE Course" if data.get("is_free_tier") else f"Deep Discount {data.get('discount_percent')}% Off",
             "market_viability_score": f"{viability_score}%",
             "market_gap_summary": gap_reason,
             "strategic_framework": {
                 "swot_analysis": {
-                    "Strengths": "ต้นทุนสินค้า Free Cost 100% สามารถดึงคนเข้ากรวยการขายได้ง่าย",
-                    "Opportunities": "ใช้โมเดลแจกคอร์สฟรี/ดีลเด็ดเป็น Lead Magnet เพื่อเปลี่ยนคนดูเป็นคนซื้อตลบสอง"
+                    "Strengths": "ความโปร่งใส 100% ไม่มีเงื่อนไขหมกเม็ด ดึงดูดทราฟฟิกเข้าฟันเนลได้ง่ายที่สุด",
+                    "Opportunities": "ใช้สร้างยอดผู้ติดตามในกลุ่มเป้าหมาย เพื่อต่อยอดขายสินค้าหลักชิ้นถัดไป"
                 },
                 "aida_framework": {
-                    "Attention": f"💥 หยุดบ่นเรื่องนี้ได้เลย! ขยี้ Pain Point ที่แบรนด์อื่นมองข้าม: {data.get('pain_keyword')}",
-                    "Interest": "💡 มอบประโยชน์นำทาง (Value-First) ด้วยทางแก้ปัญหาที่สถิติรองรับ",
-                    "Desire": "🎁 พิเศษสุด! ไม่มีข้อผูกมัดแฝง ดีลตรงจากโรงงานลดราคาเกินครึ่ง!",
-                    "Action": "🛒 จิ้มลิงก์ด่วนก่อนโค้ดออแกนิกนี้จะหมดอายุภายในวันนี้เท่านั้น!"
+                    "Attention": hook_text,
+                    "Interest": "💡 มอบสาระความรู้เป็นตัวนำทาง (Value-First) ปลดล็อกปัญหาเชิงสถิติ",
+                    "Desire": "🔥 การันตีจากทีมงานหลังบ้าน ไม่มีเงื่อนไขผูกมัด ไม่มีเรียกเก็บเงินย้อนหลังใดๆ ทั้งสิ้น",
+                    "Action": "🛒 จิ้มลิงก์รับสิทธิ์ออแกนิกด่วน ของมีจำนวนจำกัดหมดแล้วหมดเลยครับ!"
                 }
             }
         }
 
     def _generate_advanced_organic_blueprint(self, target_audience: str, product_category: str) -> Dict[str, Any]:
-        """[ข้อ 2 FULL IMPLEMENTATION] เจาะลึกแผนคอนเทนต์และนาทีทองออแกนิกเอาชนะอัลกอริทึม"""
+        """[ข้อ 2] คำนวณช่วงเวลาทองคำเชิงลึกเอาชนะระบบฟีด"""
         blueprint = {}
-        
         if target_audience == "Office Worker":
             blueprint["TikTok"] = {
-                "golden_hour": "07:30 - 08:15 (โหนรถไฟฟ้า) & 20:00 - 22:00 (ก่อนนอน)",
-                "content_style": "วิดีโอ 15s ขยี้ใจคนทำงาน",
-                "algorithm_hook": "เปิดด้วยคำถามจี้ปมชีวิต แล้วเฉลยทางแก้อย่างเร็วเพื่อเพิ่ม Completion Rate"
+                "golden_hour": "07:30 - 08:15 (ช่วงโหนรถไฟฟ้า) & 20:00 (พักผ่อน)",
+                "algorithm_hook": "เปิดวิดีโอ 3 วินาทีแรกด้วยข้อความผลลัพธ์ของแจกฟรี ดึงดูด Retention Rate"
             }
             blueprint["Facebook Reels"] = {
-                "golden_hour": "12:15 - 13:15 (พักเที่ยง) & 18:30 (เดินทางกลับ)",
-                "content_style": "คลิปรีวิวเรียล ๆ สไตล์พนักงานใช้จริง",
-                "algorithm_hook": "ใช้แคปชันปลายเปิด ชวนให้คนกดแท็กเพื่อนร่วมงานมาคอมเมนต์"
-            }
-            blueprint["YouTube Shorts"] = {
-                "golden_hour": "11:30 & 17:00 (ช่วงก่อนเลิกงาน)",
-                "content_style": "สรุปทริกแบบด่วน (Insightful Sheet)",
-                "algorithm_hook": "ทำวิดีโอวนลูปไร้รอยต่อ (Seamless Loop) ดันยอด View Duration พุ่งทะลุ 100%"
-            }
-            blueprint["X (Twitter)"] = {
-                "golden_hour": "08:30 (เริ่มเปิดคอม) & 13:00 (เข้างานบ่าย)",
-                "content_style": "Text Thread เขียนเล่าเรื่องยาวผสานภาพกราฟิก",
-                "algorithm_hook": "ล่อให้คนกด Bookmark เพราะอัลโกฯ X ให้แต้มคูณฟีดจากปุ่มเซฟไว้ดูทีหลังสูงที่สุด"
-            }
-        elif target_audience == "Student":
-            blueprint["TikTok"] = {
-                "golden_hour": "15:45 (เลิกเรียน) & 21:00 - 23:30 (ช่วงดึก)",
-                "content_style": "ใช้เพลงกระแส (Trending Audio) ผสมมีมตลก",
-                "algorithm_hook": "ดึงให้อยู่ในคลิป 3 วินาทีแรกด้วยตัวอักษรพาดหัวตัวใหญ่พุ่งชนสายตา"
-            }
-            blueprint["Facebook Reels"] = {
-                "golden_hour": "20:00 - 21:30 (ช่วงรวมกลุ่มออนไลน์)",
-                "content_style": "มีมวิดีโอสั้นหรือประเด็นทอล์กออฟเดอะทาวน์",
-                "algorithm_hook": "เน้นตั้งคำถามโพลชวนคิดในใจ กระตุ้นยอดพิมพ์ในช่องคอมเมนต์"
-            }
-            blueprint["YouTube Shorts"] = {
-                "golden_hour": "18:00 - 20:00",
-                "content_style": "คอนเทนต์แนวทดลอง / เปรียบเทียบชัด ๆ",
-                "algorithm_hook": "เร่งสปีดเสียงพูดขึ้น 1.1x เพื่อเพิ่มความฉับไวโดนใจ Gen Z สมาธิสั้น"
-            }
-            blueprint["X (Twitter)"] = {
-                "golden_hour": "22:00 - 01:00 (ช่วงวัยรุ่นระบายอารมณ์)",
-                "content_style": "ภาษาเป็นกันเองมาก ๆ เกาะกระแสมีมประจำวัน",
-                "algorithm_hook": "ติดแฮชแท็กที่กำลังเป็นเทรนด์อันดับ 1-3 ณ วินาทีนั้นเพื่อปล้นทราฟฟิกฟรีเข้าสู่กรวย"
+                "golden_hour": "12:15 (ช่วงกินข้าวเที่ยง)",
+                "algorithm_hook": "ใช้แคปชันสั้น ชวนเพื่อนมาถล่มคอมเมนต์เอาของดีลเด็ด"
             }
         else:
             blueprint["General Plan"] = {
-                "golden_hour": "11:50 & 19:30 (เวลารับประทานอาหาร)",
-                "content_style": "แจกสูตรลับ / บอกพิกัดดีลลับราคาถูก",
-                "algorithm_hook": "เน้นการกดแชร์ส่งต่อให้กลุ่มเพื่อนหรือครอบครัว"
+                "golden_hour": "11:50 & 19:30 (เวลามาตรฐานทองคำ)",
+                "algorithm_hook": "กระตุ้นยอดแชร์อารมณ์บอกต่อเพื่อนพ้อง"
             }
-            
         return blueprint
 
 
@@ -229,7 +221,6 @@ class BU2OpenSourceAIHunter:
         return {"recommended_model": recommended}
 
     def _run_sandbox_benchmark(self, model_id: str) -> tuple:
-        """จำลองการรันโจทย์ทดสอบ 'แชมพู / ข้าวสาร' วัดความเป๊ะของภาษาไทยหลังบ้าน"""
         print(f"🧪 [Sandbox Testing] กำลังทดสอบโมเดล {model_id}...")
         simulated_speed = random.randint(83, 95)
         simulated_thai = random.randint(86, 98)
