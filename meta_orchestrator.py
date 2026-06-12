@@ -1,5 +1,5 @@
 # =====================================================================
-# 🚀 BASE44 ENGINE V2: MASTER ORCHESTRATOR (FULLY INTEGRATED V3.5 - LOG INJECTION)
+# 🚀 BASE44 ENGINE V2: MASTER ORCHESTRATOR (FULLY INTEGRATED V3.6 - PROXY EMPOWERED)
 # =====================================================================
 import os
 import json
@@ -10,17 +10,36 @@ import uvicorn
 from fastapi import FastAPI, HTTPException, Request, Response
 from fastapi.responses import HTMLResponse, JSONResponse
 
-# 🚨 [LOG INJECTION] พ่นข้อความนี้ทันทีที่สตาร์ทแอป เพื่อพิสูจน์ว่า Render ใช้โค้ดใหม่จริงไหม!
-print("\n\n🔥 💥 🚀 [BASE44 DIAGNOSTIC] CRITICAL LOG: ENGINE VERSION 3.5 IS RUNNING NOW! 🚀 💥 🔥\n\n")
-
 app = FastAPI(title="Base44 Engine V2 - Command Center")
 
+# 📊 [SYSTEM STATE] 
 SYSTEM_STATE = {
     "active_ai_model": "GPT-4o (Legacy Base Tier)",
     "bu1_pipeline_status": "PROACTIVE_RUNNING",
     "last_action": "SYSTEM_INITIALIZED",
-    "last_trace_id": "NONE"
+    "last_trace_id": "NONE",
+    "total_revenue_channels": 4
 }
+
+# =====================================================================
+# 🛡️ GLOBAL MIDDLEWARE: ดักคอ 405 จากการ REDIRECT ของ RENDER
+# =====================================================================
+@app.middleware("http")
+async def render_redirect_immunity_shield(request: Request, call_next):
+    # ดักจับทุกคำขอที่วิ่งเข้ามาที่หน้าแรกตรง ๆ ไม่ว่าจะพ่วง Slash หรือไม่ก็ตาม
+    if request.url.path in ["/", ""]:
+        # ถ้าบอทยิงคำขอเช็คสถานะแปลก ๆ หรือส่ง POST ที่โดนหลอมละลายมา
+        if request.method in ["POST", "PUT", "DELETE"]:
+            print(f"🚨 [Shield] บล็อกและแปลงสัญญาณคำขอ {request.method} ที่หน้าแรกสำเร็จ!")
+            return JSONResponse(status_code=200, content={
+                "status": "success",
+                "message": "Immunity shield bypass achieved.",
+                "system_state": SYSTEM_STATE
+            })
+    
+    # คำขออื่น ๆ ปล่อยผ่านไปตามปกติ
+    response = await call_next(request)
+    return response
 
 # =====================================================================
 # 👑 MASTER ORCHESTRATOR CLASS
@@ -38,7 +57,7 @@ class MetaOrchestrator:
         SYSTEM_STATE["last_trace_id"] = trace_id
         return {
             "trace_id": trace_id,
-            "telegram_message": f"📊 วันที่: {datetime.date.today().isoformat()} | โมเดล: {SYSTEM_STATE['active_ai_model']}\n🟢 LIVE 3.5",
+            "telegram_message": f"📊 วันที่: {datetime.date.today().isoformat()} | โมเดล: {SYSTEM_STATE['active_ai_model']}\n🟢 LIVE",
             "raw_payload_bu1": bu1_report,
             "raw_payload_bu2": bu2_report
         }
@@ -52,31 +71,23 @@ class BU2OpenSourceAIHunter:
         return {"recommended_model": {}}
 
 # =====================================================================
-# 🌐 FASTAPI CLEAN ROUTES (GET & POST SEPARATED)
+# 🌐 FASTAPI STANDARD PATHS
 # =====================================================================
 
-# 🟢 หน้าแรกสำหรับเบราว์เซอร์ (GET /)
 @app.get("/", response_class=HTMLResponse)
 async def homepage_get():
     return f"""
     <html>
         <body style="font-family: sans-serif; background-color: #0f172a; color: #e2e8f0; padding: 40px; text-align: center;">
             <h1 style="color: #38bdf8;">🏎️ Base44 Engine V2 Active</h1>
-            <p style="font-size: 1.2em; color: #4ade80;">สถานะระบบ: <b>🟢 LIVE (Diagnostic V3.5 Active)</b></p>
-            <p style="color: #64748b;">ถ้าบอสเห็นข้อความนี้ แปลว่าเว็บบิลด์ผ่านแล้วครับ</p>
+            <p style="font-size: 1.2em; color: #4ade80;">สถานะระบบ: <b>🟢 LIVE (Shield V3.6 Active)</b></p>
         </body>
     </html>
     """
 
-# 🟢 หน้าแรกสำหรับบอท/Dashboard ยิงมาเช็คสถานะ (POST /) -> ดักจับพ่น 200 OK แน่นอน
 @app.post("/")
 async def homepage_post():
-    print("📥 [FastAPI Internal Check] ได้รับ POST เข้ามาที่หน้าแรกจริง ๆ แล้ว!")
-    return JSONResponse(status_code=200, content={
-        "status": "success",
-        "message": "Base44 V3.5 explicitly handled this POST request.",
-        "system_state": SYSTEM_STATE
-    })
+    return JSONResponse(status_code=200, content={"status": "success", "system_state": SYSTEM_STATE})
 
 @app.head("/")
 async def homepage_head():
@@ -92,6 +103,20 @@ async def trigger_test_report():
     orchestrator = MetaOrchestrator()
     result = await orchestrator.generate_daily_master_report([], [])
     return HTMLResponse(content=f"<html><body><h2>{result['telegram_message']}</h2></body></html>")
+
+@app.get("/approve-with-trace")
+async def approve_webhook(trace_id: Optional[str] = None):
+    t_id = trace_id if trace_id else "MANUAL"
+    SYSTEM_STATE["active_ai_model"] = "DeepSeek-R1-Distill-Groq (ค่ายโอเพ่นซอร์ส $0.00)"
+    SYSTEM_STATE["last_action"] = f"APPROVED_SHIFT_VIA_{t_id}"
+    return HTMLResponse("<h1>🟢 APPROVED!</h1>")
+
+@app.get("/emergency-rollback")
+async def rollback_webhook(trace_id: Optional[str] = None):
+    t_id = trace_id if trace_id else "MANUAL"
+    SYSTEM_STATE["active_ai_model"] = "GPT-4o (Legacy Base Tier)"
+    SYSTEM_STATE["last_action"] = f"EMERGENCY_ROLLBACK_TRIGGERED_FOR_{t_id}"
+    return HTMLResponse("<h1>🚨 ROLLBACK EXECUTE!</h1>")
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8000))
