@@ -1,5 +1,5 @@
 # =====================================================================
-# 🚀 BASE44 ENGINE V2: MASTER ORCHESTRATOR (FULLY INTEGRATED V3.0 - 405 DESTRUCTION)
+# 🚀 BASE44 ENGINE V2: MASTER ORCHESTRATOR (FULLY INTEGRATED V3.1 - CLEAN METHOD FIX)
 # =====================================================================
 import os
 import json
@@ -86,7 +86,7 @@ class MetaOrchestrator:
 
 
 # =====================================================================
-# 💰 BUSINESS UNIT 1 & 2 (COMPACT LOGIC)
+# 💰 BUSINESS UNIT 1 & 2
 # =====================================================================
 class BU1AutonomousRevenueEngine:
     async def run_pipeline(self, raw_market_data: List[Dict]) -> Dict:
@@ -117,7 +117,7 @@ class BU2OpenSourceAIHunter:
 
 
 # =====================================================================
-# 🌐 FASTAPI WEB ROUTING SYSTEM (THE 405 IMMUNITY PATCH)
+# 🌐 FASTAPI WEB ROUTING SYSTEM (THE TRUE DIRECT FIX)
 # =====================================================================
 
 def get_shared_homepage_html() -> str:
@@ -126,43 +126,43 @@ def get_shared_homepage_html() -> str:
         <head><title>Base44 Engine Control Center</title></head>
         <body style="font-family: Arial, sans-serif; background-color: #0f172a; color: #e2e8f0; padding: 40px; text-align: center;">
             <h1 style="color: #38bdf8; font-size: 2.5em;">🏎️ Base44 Engine V2 Active</h1>
-            <p style="font-size: 1.2em; color: #4ade80;">สถานะระบบ: <b>🟢 LIVE (Ultimate Patched V3.0)</b></p>
+            <p style="font-size: 1.2em; color: #4ade80;">สถานะระบบ: <b>🟢 LIVE (Direct Clean Fixed V3.1)</b></p>
             <div style="background-color: #1e293b; padding: 25px; border-radius: 12px; display: inline-block; text-align: left; margin-top: 20px; border: 1px solid #334155;">
                 <p>🤖 <b>โมเดล AI ที่คุมระบบอยู่ตอนนี้:</b> <span style="color: #4ade80; font-weight: bold;">{SYSTEM_STATE['active_ai_model']}</span></p>
                 <p>💰 <b>ช่องทางปั๊มเงินออแกนิก (BU1):</b> <span style="color: #38bdf8;">{SYSTEM_STATE['bu1_pipeline_status']}</span></p>
                 <p>🛡️ <b>คำสั่งระบบล่าสุด:</b> {SYSTEM_STATE['last_action']}</p>
             </div>
-            <p style="margin-top: 30px; color: #64748b;">Senior Dev Partner System v3.0 | 405 Immunity Patched</p>
+            <p style="margin-top: 30px; color: #64748b;">Senior Dev Partner System v3.1 | Directed Patched</p>
         </body>
     </html>
     """
 
-# 🔥 [ไม้ตายก้นหีบ]: ดักจับคำขอทุกตัวในระดับ Middleware ก่อนที่มันจะโดนโยนเข้า Router ปกติ
-# ท่านี้จะช่วยการันตีว่าไม่ว่า UptimeRobot จะส่ง GET, POST, หรือ HEAD มาที่หน้าแรกแบบมีหรือไม่มี Slash มันจะถูกบังคับตอบ 200 เสมอ!
-@app.middleware("http")
-async def catch_all_method_and_trailing_slashes(request: Request, call_next):
-    path = request.url.path
-    # ถ้าคำขอวิ่งมาที่หน้าแรก (ทั้งแบบ / หรือแบบไม่มีอะไรเลย)
-    if path == "/" or path == "":
-        # สำหรับท่อ HEAD คืนแค่หัว 200 ว่าง ๆ กลับไป
-        if request.method == "HEAD":
-            return Response(status_code=200)
-        # สำหรับท่อ POST หรือ GET บังคับคาย HTML ตัวหน้าหลักออกไปทันที ป้องกันอาการ 405 ถาวร!
-        return HTMLResponse(content=get_shared_homepage_html(), status_code=200)
-    
-    # ถ้าเป็น Path อื่น ๆ ให้ปล่อยวิ่งไปตามเร้าเตอร์ปกติ
-    response = await call_next(request)
-    return response
-
-
-# 🛑 ลงทะเบียน Route พื้นฐานไว้สำรองระบบตามโครงสร้างหลัก
+# 🟢 ท่อ GET หน้าแรก: คืนค่า HTML สวยงามเวลาบอสเปิดดูผ่านเบราว์เซอร์
 @app.get("/", response_class=HTMLResponse)
 async def homepage_get():
     return get_shared_homepage_html()
 
-@app.post("/", response_class=HTMLResponse)
+# 🟢 ท่อ POST หน้าแรก: คืนค่าเป็น JSON เคลียร์คัตตามข้อสังเกตของบอส! 
+# เมื่อบอทหรือ Dashboard ยิง POST เข้ามารอบนี้ จะได้รับสถานะ 200 OK และ JSON สำเร็จทันที ไม่ติด 405 แน่นอน
+@app.post("/")
 async def homepage_post():
-    return get_shared_homepage_html()
+    return JSONResponse(status_code=200, content={
+        "status": "success",
+        "message": "Base44 Engine Control Center is online and receiving POST requests successfully.",
+        "system_state": SYSTEM_STATE
+    })
+
+# 🟢 ท่อ HEAD หน้าแรก: สำหรับบอทตรวจสอบสถานะแบบประหยัดแบนด์วิธ
+@app.head("/")
+async def homepage_head():
+    return Response(status_code=200)
+
+
+# 🛑 ช่องทางเว็บฮุคและฟังก์ชันเสริม (เปิดรับ GET/POST ขนานคู่กันไป)
+@app.get("/webhook")
+@app.post("/webhook")
+async def webhook_handler():
+    return JSONResponse(status_code=200, content={"status": "success", "message": "Webhook pipeline active"})
 
 @app.get("/test-telegram-report")
 async def trigger_test_report():
