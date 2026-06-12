@@ -1,5 +1,5 @@
 # =====================================================================
-# 🚀 BASE44 ENGINE V2: MASTER ORCHESTRATOR (FULLY INTEGRATED V2.7 - SEPARATED CHANNELS)
+# 🚀 BASE44 ENGINE V2: MASTER ORCHESTRATOR (FULLY INTEGRATED V2.8 - WEBHOOK FIX)
 # =====================================================================
 import os
 import json
@@ -8,12 +8,12 @@ import random
 from typing import List, Dict, Any
 import uvicorn
 from fastapi import FastAPI, HTTPException, Request, Response
-from fastapi.responses import HTMLResponse
+from fastapi.responses import HTMLResponse, JSONResponse
 
 # 🖥️ เปิดตัวระบบ Web Server สำหรับรันบน Render และเชื่อมต่อ Lovable Dashboard
 app = FastAPI(title="Base44 Engine V2 - Command Center")
 
-# 📊 [SYSTEM STATE] ระบบจดจำสถานะตัวกลางหลังบ้าน (ป้องกันบั๊ก ปรับเปลี่ยนค่าตามคำสั่งบอสจริง)
+# 📊 [SYSTEM STATE] ระบบจดจำสถานะตัวกลางหลังบ้าน
 SYSTEM_STATE = {
     "active_ai_model": "GPT-4o (Legacy Base Tier)",
     "bu1_pipeline_status": "PROACTIVE_RUNNING",
@@ -95,14 +95,14 @@ class MetaOrchestrator:
 
 
 # =====================================================================
-# 💰 BUSINESS UNIT 1: REVENUE ENGINE (ITEMS 1, 2, & 3 COMPLETE)
+# 💰 BUSINESS UNIT 1: REVENUE ENGINE
 # =====================================================================
 class BU1AutonomousRevenueEngine:
     async def run_pipeline(self, raw_market_data: List[Dict]) -> Dict:
         validated_list = []
         for data in raw_market_data:
             if data.get("has_hidden_catches", False) or data.get("shipping_fee", 0) > 0:
-                print(f"🚫 [Guard Filter] ดีล {data.get('name')} ตกรอบ! เนื่องจากตรวจพบเงื่อนไขตลบหลังผู้บริโภค")
+                print(f"🚫 [Guard Filter] ดีล {data.get('name')} ตกรอบ!")
                 continue
                 
             is_pure_freebie = data.get("is_free_tier", False) or data.get("is_giveaway", False)
@@ -148,15 +148,15 @@ class BU1AutonomousRevenueEngine:
     def _generate_advanced_organic_blueprint(self, target_audience: str) -> Dict:
         blueprint = {}
         if target_audience == "Office Worker":
-            blueprint["TikTok"] = {"golden_hour": "07:45 (ช่วงโหนรถไฟฟ้า)", "algorithm_hook": "เปิด 3 วินาทีแรกด้วยตัวอักษรใหญ่จี้ใจ"}
-            blueprint["FB Reels"] = {"golden_hour": "12:15 (ช่วงพักเที่ยงกินข้าว)", "algorithm_hook": "ชวนเพื่อนคอมเมนต์ใต้คลิปเพื่อเปิดฟีด"}
+            blueprint["TikTok"] = {"golden_hour": "07:45", "algorithm_hook": "เปิด 3 วินาทีแรกด้วยตัวอักษรใหญ่จี้ใจ"}
+            blueprint["FB Reels"] = {"golden_hour": "12:15", "algorithm_hook": "ชวนเพื่อนคอมเมนต์ใต้คลิปเพื่อเปิดฟีด"}
         else:
-            blueprint["General Plan"] = {"golden_hour": "19:30 (ช่วงพักผ่อนทานข้าวเย็น)", "algorithm_hook": "เน้นปุ่มแชร์ส่งต่อให้กลุ่มเพื่อน"}
+            blueprint["General Plan"] = {"golden_hour": "19:30", "algorithm_hook": "เน้นปุ่มแชร์ส่งต่อให้กลุ่มเพื่อน"}
         return blueprint
 
 
 # =====================================================================
-# 🤖 BUSINESS UNIT 2: AI MODEL HUNTER (ITEM 4 COMPLETE)
+# 🤖 BUSINESS UNIT 2: AI MODEL HUNTER
 # =====================================================================
 class BU2OpenSourceAIHunter:
     async def run_pipeline(self, raw_models: List[Dict]) -> Dict:
@@ -171,8 +171,8 @@ class BU2OpenSourceAIHunter:
                             "cross_check_summary": "ผ่านเกณฑ์ประเมินสถาปัตยกรรมคู่ขนาน JSON Schema ไม่บิดเบี้ยว",
                             "speed_score": speed,
                             "thai_accuracy_score": thai_score,
-                            "sandbox_verdict": "ผ่านการทดสอบคุกขังห้อง Sandbox 'โจทย์แชมพูแก้รังแค / ข้าวหอมมะลิออร์แกนิก' เรียบเรียงภาษาไทยบริบทธุรกิจสละสลวย ไม่เป็นหุ่นยนต์แปลกูเกิล ความเร็วดีเลย์ต่ำกว่ามาตรฐาน",
-                            "dev_recommendation": "แนะกดปุ่มอนุมัติสลับใช้โมเดลรุ่นนี้ เพื่อคว้าสิทธิ์ประมวลผลต้นทุน $0.00 ดึงเม็ดเงินออแกนิกได้คมขึ้น"
+                            "sandbox_verdict": "ผ่านการทดสอบคุกขังห้อง Sandbox เรียบเรียงภาษาไทยบริบทธุรกิจสละสลวย",
+                            "dev_recommendation": "แนะกดปุ่มอนุมัติสลับใช้โมเดลรุ่นนี้ เพื่อคว้าสิทธิ์ประมวลผลต้นทุน $0.00"
                         }
                         break
         return {"recommended_model": recommended}
@@ -182,43 +182,51 @@ class BU2OpenSourceAIHunter:
 
 
 # =====================================================================
-# 🌐 [ITEM 5] FASTAPI WEB ROUTING SYSTEM (EXPLICIT SEPARATED CHANNELS)
+# 🌐 FASTAPI WEB ROUTING SYSTEM (WITH TARGETED WEBHOOK CHANNEL)
 # =====================================================================
 
 def get_shared_homepage_html() -> str:
-    """ฟังก์ชันกลางเจนเนื้อหา HTML หน้าหลัก เพื่อลดโค้ดซ้ำซ้อนและป้องกันบั๊ก String Format"""
     return f"""
     <html>
         <head><title>Base44 Engine Control Center</title></head>
         <body style="font-family: Arial, sans-serif; background-color: #0f172a; color: #e2e8f0; padding: 40px; text-align: center;">
             <h1 style="color: #38bdf8; font-size: 2.5em;">🏎️ Base44 Engine V2 Active</h1>
-            <p style="font-size: 1.2em; color: #94a3b8;">สถานะการร้อยท่อระบบหลัก: <b>เสร็จสมบูรณ์ 100% ไร้บั๊ก (Explicit Channels Live)</b></p>
+            <p style="font-size: 1.2em; color: #94a3b8;">สถานะระบบ: <b>🟢 LIVE (Webhook V2.8 Fully Patched)</b></p>
             <div style="background-color: #1e293b; padding: 25px; border-radius: 12px; display: inline-block; text-align: left; margin-top: 20px; border: 1px solid #334155;">
                 <p>🤖 <b>โมเดล AI ที่คุมระบบอยู่ตอนนี้:</b> <span style="color: #4ade80; font-weight: bold;">{SYSTEM_STATE['active_ai_model']}</span></p>
                 <p>💰 <b>ช่องทางปั๊มเงินออแกนิก (BU1):</b> <span style="color: #38bdf8;">{SYSTEM_STATE['bu1_pipeline_status']}</span></p>
                 <p>🛡️ <b>คำสั่งระบบล่าสุด:</b> {SYSTEM_STATE['last_action']}</p>
                 <p>🆔 <b>รหัสประเมินผลล่าสุด:</b> {SYSTEM_STATE['last_trace_id']}</p>
             </div>
-            <p style="margin-top: 30px; color: #64748b;">Senior Dev Partner System v2.7 | 24 Hours Standby</p>
+            <p style="margin-top: 30px; color: #64748b;">Senior Dev Partner System v2.8 | Ready for 9:00 AM Meeting</p>
         </body>
     </html>
     """
 
-# 🛑 [แยกเลนที่ 1]: รองรับการยิงแบบ GET (เปิดผ่าน Browser ปกติ)
 @app.get("/", response_class=HTMLResponse)
 async def homepage_get():
     return get_shared_homepage_html()
 
-# 🛑 [แยกเลนที่ 2]: รองรับการยิงตรวจสอบแบบ HEAD (สำหรับ UptimeRobot ตัวแสบโดยเฉพาะ!)
 @app.head("/")
 async def homepage_head():
-    # คืนค่าหัวเปล่าสถานะ 200 OK กลับไปทันทีโดยไม่ต้องแนบเนื้อหา HTML บั๊กหายขาดแน่นอน
     return Response(status_code=200)
 
-# 🛑 [แยกเลนที่ 3]: รองรับการยิงแบบ POST (เผื่อไว้กรณี Dashboard ยิงทดสอบระบบเข้ามา)
 @app.post("/", response_class=HTMLResponse)
 async def homepage_post():
     return get_shared_homepage_html()
+
+# 🎯 [🎯 จุดตายที่ซ่อนอยู่ - ปลดล็อกท่อ WEBHOOK] 
+# เพิ่มเลนพิเศษสำหรับรองรับคำขอทั้ง POST, GET, HEAD ที่ยิงถล่มเข้า Path "/webhook" โดยตรง
+@app.api_route("/webhook", methods=["GET", "POST", "HEAD"])
+async def receive_external_webhook(request: Request):
+    """เปิดรับและตอบรับสัญญาณจากภายนอก/UptimeRobot ว่าเซิร์ฟเวอร์เราหัวใจยังเต้นปกติ 100%"""
+    print(f"📥 [Webhook Engine] ได้รับคำขอวิธี {request.method} จากระบบภายนอกเรียบร้อย")
+    # ตอบกลับเป็น JSON 200 ชัด ๆ เพื่อให้ UptimeRobot หรือบอทรู้ว่าคุยรู้เรื่อง ไม่ล่มแน่นอน
+    return JSONResponse(status_code=200, content={
+        "status": "success",
+        "message": "Base44 Engine Webhook is active and listening",
+        "system_time": datetime.datetime.now().isoformat()
+    })
 
 
 @app.get("/test-telegram-report")
@@ -228,20 +236,19 @@ async def trigger_test_report():
         {
             "name": "คอร์สอัปสกิลภาษาอังกฤษเพื่อออฟฟิศตัวมหาเทพ", "is_free_tier": True, "has_hidden_catches": False,
             "shipping_fee": 0, "pain_frequency_score": 9, "is_overlooked": True, "competitor_count": 1,
-            "target_audience": "Office Worker", "pain_keyword": "คุยงานกับต่างชาติไม่รู้เรื่องจนพลาดตำแหน่งโต", "brand_rating": 4.8
+            "target_audience": "Office Worker", "pain_keyword": "คุยงานกับต่างชาติไม่รู้เรื่อง", "brand_rating": 4.8
         }
     ]
     sample_models = [
-        {"model_id": "deepseek-r1-v2", "model_name": "DeepSeek-R1-Distill-Groq (ค่ายใหม่ท้าชิง)", "is_free_100": True, "base_research_capability": 92, "base_coding_capability": 94}
+        {"model_id": "deepseek-r1-v2", "model_name": "DeepSeek-R1-Distill-Groq", "is_free_100": True, "base_research_capability": 92, "base_coding_capability": 94}
     ]
     result = await orchestrator.generate_daily_master_report(sample_market, sample_models)
     
     html_output = f"""
     <html>
         <body style="font-family: sans-serif; background-color: #0b0f19; color: #f3f4f6; padding: 30px;">
-            <h2 style="color: #22c55e;">🚀 [Base44 Auto-Pilot] จำลองการส่งข้อมูลเข้าท่อ Telegram สำเร็จ!</h2>
-            <p>ระบบได้ทำการผูกมัด Trace ID: <b>{result['trace_id']}</b> เรียบร้อยแล้ว</p>
-            <pre style="background-color: #111827; padding: 20px; border-radius: 8px; border: 1px solid #374151; color: #38bdf8; white-space: pre-wrap;">{result['telegram_message']}</pre>
+            <h2 style="color: #22c55e;">🚀 [Base44] จำลองการส่งข้อมูลเข้าท่อ Telegram สำเร็จ!</h2>
+            <pre style="background-color: #111827; padding: 20px; color: #38bdf8; white-space: pre-wrap;">{result['telegram_message']}</pre>
             <br>
             <a href="/" style="color: #94a3b8; text-decoration: none;">← กลับไปหน้าควบคุมหลัก</a>
         </body>
@@ -253,35 +260,13 @@ async def trigger_test_report():
 async def approve_webhook(trace_id: str, request: Request):
     SYSTEM_STATE["active_ai_model"] = "DeepSeek-R1-Distill-Groq (ค่ายโอเพ่นซอร์ส $0.00)"
     SYSTEM_STATE["last_action"] = f"APPROVED_SHIFT_VIA_{trace_id}"
-    
-    success_html = f"""
-    <html>
-        <body style="font-family: sans-serif; background-color: #022c22; color: #34d399; padding: 50px; text-align: center;">
-            <h1 style="font-size: 3em;">🟢 COMMAND APPROVED SUCCESS!</h1>
-            <p style="color: #a7f3d0; font-size: 1.3em;">บอสสั่งอนุมัติรหัสยุทธศาสตร์ <b>{trace_id}</b> เรียบร้อยเต็มระบบ!</p>
-            <br><br>
-            <a href="/" style="color: #a7f3d0;">กลับหน้าแผงควบคุมหลัก</a>
-        </body>
-    </html>
-    """
-    return success_html
+    return "<html><body style='text-align:center;padding:50px;background:#022c22;color:#34d399;'><h1>🟢 APPROVED!</h1></body></html>"
 
 @app.get("/emergency-rollback", response_class=HTMLResponse)
 async def rollback_webhook(trace_id: str):
     SYSTEM_STATE["active_ai_model"] = "GPT-4o (Legacy Base Tier)"
     SYSTEM_STATE["last_action"] = f"EMERGENCY_ROLLBACK_TRIGGERED_FOR_{trace_id}"
-    
-    rollback_html = f"""
-    <html>
-        <body style="font-family: sans-serif; background-color: #450a0a; color: #fca5a5; padding: 50px; text-align: center;">
-            <h1 style="font-size: 3em;">🚨 EMERGENCY ROLLBACK EXECUTE!</h1>
-            <p style="color: #fecdd3; font-size: 1.3em;">สัญญาณไซเรนทำงาน! สั่งถอยทัพด่วนจากรหัสธุรกรรม <b>{trace_id}</b></p>
-            <br><br>
-            <a href="/" style="color: #fecdd3;">กลับหน้าแผงควบคุมหลัก</a>
-        </body>
-    </html>
-    """
-    return rollback_html
+    return "<html><body style='text-align:center;padding:50px;background:#450a0a;color:#fca5a5;'><h1>🚨 ROLLBACK EXECUTE!</h1></body></html>"
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8000))
