@@ -18,8 +18,14 @@ PROJECT_ROOT = Path(__file__).resolve().parent.parent
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
-from meta_orchestrator import meta_orchestrator
-from growth_marketing_orchestrator import growth_marketing_orchestrator
+# 🛠️ [Senior Fix] เปลี่ยนมาโหลด Class พิมพ์ใหญ่ แล้วสร้าง Instance ตรงนี้เพื่อตัดปัญหา ImportError ยกรัง
+from meta_orchestrator import MetaOrchestrator
+meta_orchestrator = MetaOrchestrator()
+
+try:
+    from growth_marketing_orchestrator import growth_marketing_orchestrator
+except ImportError:
+    growth_marketing_orchestrator = None
 
 # 🔑 ตั้งค่าระบบและ Env (ดึงจาก Render)
 BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
@@ -97,16 +103,13 @@ async def health_check():
 @app.get("/test-telegram-report")
 async def test_telegram_report():
     try:
-        # ดึงคลาส MetaOrchestrator มาสร้างตัวแปรเพื่อรันแมนนวลรวดเร็ว
-        from meta_orchestrator import MetaOrchestrator
-        orchestrator_instance = MetaOrchestrator()
-        cron_result = await orchestrator_instance.run_morning_cron()
+        # ดึงคำสั่งจาก Global Instance ที่เราแก้ไขด้านบนมารันได้ทันที
+        cron_result = await meta_orchestrator.run_morning_cron()
         
-        # ยิงข้อความสั้นทดสอบความฟิตของ Bot เข้า Telegram ของนายท่านตรง ๆ
         if bot:
             await bot.send_message(
                 chat_id=TARGET_CHAT_ID, 
-                text="🚀 **[Manual Test Trigger]**\nระบบทางลัดของนายท่านเชื่อมต่อเสร็จสมบูรณ์แล้วครับพ้ม บอทกำลังส่งรายงานยามเช้าให้ทำงานทันที!"
+                text="🚀 **[Manual Test Trigger]**\nระบบทางลัดของนายท่านทำงานเสร็จสมบูรณ์แล้วครับพ้ม บอทกำลังพ่นรายงานยุทธศาสตร์ให้ทันที!"
             )
             
         return {
@@ -128,20 +131,17 @@ async def test_telegram_report():
 
 @app.post("/api/v1/ai-research/approve-with-trace", dependencies=[Depends(verify_api_key)])
 async def approve_and_trace_model(payload: ApprovePayload):
-    """ท่อรับคำสั่ง APPROVE จากหน้าแดชบอร์ด พร้อมสลักรหัส Trace ID"""
     try:
         print(f"🔍 [Trace Workflow] Request ID: {payload.request_id} | Changing from {payload.old_model} ──> {payload.new_model}")
         
-        # 1. ทำการ Hot-Reload เปลี่ยนแปลงโครงสร้างโมเดลหลัก
         with open(MODEL_CONFIG_FILE, 'w', encoding='utf-8') as f:
             json.dump({
                 "active_ai_model": payload.new_model,
-                "previous_stable_model": payload.old_model, # สลักเกราะป้องกันไว้สำหรับทำ Rollback
+                "previous_stable_model": payload.old_model,
                 "last_action_id": payload.request_id,
                 "last_updated": str(datetime.now())
             }, f, ensure_ascii=False, indent=4)
         
-        # 2. (Optional) ยิงแจ้งเตือนเข้า Telegram ว่ามีการเปลี่ยนโมเดลแล้ว
         if bot:
             msg = f"🔄 **[System Shift]** นายท่านทำการอนุมัติสลับโมเดล\n✅ โมเดลปัจจุบัน: `{payload.new_model}`\n🆔 Trace ID: `{payload.request_id}`"
             await bot.send_message(chat_id=TARGET_CHAT_ID, text=msg, parse_mode="Markdown")
@@ -158,9 +158,7 @@ async def approve_and_trace_model(payload: ApprovePayload):
 
 @app.post("/api/v1/ai-research/emergency-rollback", dependencies=[Depends(verify_api_key)])
 async def emergency_rollback(payload: RollbackPayload):
-    """ปุ่มถอยทัพฉุกเฉิน (Emergency Rollback) เมื่อโมเดลใหม่รันแล้วพัง"""
     try:
-        # 1. โหลดข้อมูลเดิมเพื่อดูว่าก่อนหน้านี้ใช้โมเดลอะไร
         with open(MODEL_CONFIG_FILE, 'r', encoding='utf-8') as f:
             current_state = json.load(f)
             
@@ -169,11 +167,10 @@ async def emergency_rollback(payload: RollbackPayload):
         
         print(f"🚑 [Emergency Rollback] ถอยทัพจาก {broken_model} ──> กลับไปที่ {safe_model}")
         
-        # 2. สลับกลับทันที
         with open(MODEL_CONFIG_FILE, 'w', encoding='utf-8') as f:
             json.dump({
                 "active_ai_model": safe_model,
-                "previous_stable_model": safe_model, # รีเซ็ตกันพลาด
+                "previous_stable_model": safe_model,
                 "last_action_id": f"rollback_from_{payload.request_id}",
                 "last_updated": str(datetime.now())
             }, f, ensure_ascii=False, indent=4)
@@ -194,46 +191,37 @@ async def emergency_rollback(payload: RollbackPayload):
 # ⏰ [Section 3] ลูปยุทธศาสตร์ 09:00 น. และระบบ Webhook / Polling
 # =====================================================================
 
-# ตัวแปรโกลบอลนอก Loop สำหรับจำว่า "วันนี้" ส่งรายงานไปแล้วหรือยัง
 last_sent_date = None
 
 async def daily_strategic_report_loop():
     global last_sent_date
     while True:
         try:
-            # 1. ดึงเวลาปัจจุบัน และปรับให้เป็นเวลาประเทศไทย (BKK GMT+7)
             bkk_tz = timezone(timedelta(hours=7))
             now_bkk = datetime.now(bkk_tz)
             current_date = now_bkk.date()
             
             print(f"⏰ [Cron] ตรวจสอบเวลา... ขณะนี้ {now_bkk.strftime('%H:%M')} (BKK)")
 
-            # 2. 🛡️ ลอจิกกันพลาด: ถ้าเวลาล่วงเลยผ่าน 09:00 น. มาแล้ว และ "วันนี้ยังไม่ได้ส่งรายงาน"
+            # 🛡️ ลอจิกกันเหนียว: ถ้าเวลาล่วงเลยผ่าน 09:00 น. มาแล้ว และวันนี้ยังไม่ได้ส่งรายงาน
             if now_bkk.hour >= 9 and last_sent_date != current_date:
                 print("🚀 [Cron] ถึงเวลาส่งรายงานปั๊มเงิน! กำลังปลุกโมดูลรัน Pipeline BU 1...")
                 
-                # สั่งรันยุทธศาสตร์การตลาดผ่านท่อของ BU 1 (ดร.แสงสุข / คุณอนิศ / คุณสิทธินันท์)
-                from meta_orchestrator import MetaOrchestrator
-                orchestrator_instance = MetaOrchestrator()
-                result = await orchestrator_instance.run_morning_cron()
+                result = await meta_orchestrator.run_morning_cron()
                 
-                # ทำการส่งไม้ต่อ ยิงข้อมูลรายงานทั้งหมดเข้ากลุ่ม Telegram ของบอสทันที
                 if bot and "data" in result and "message" in result["data"]:
                     await bot.send_message(TARGET_CHAT_ID, result["data"]["message"], parse_mode='Markdown')
                     
-                # 3. ประทับตราล็อกวันที่ไว้ เพื่อไม่ให้สคริปต์ส่งซ้ำในรอบชั่วโมงถัดไป
                 last_sent_date = current_date
                 print(f"✅ [Cron] ส่งรายงานสำเร็จเรียบร้อยสำหรับวันที่ {current_date}")
             
         except Exception as e:
             print(f"❌ [Cron] พบข้อผิดพลาดในระบบลูปส่งรายงานยามเช้า: {e}")
         
-        # 4. นอนพักผ่อน 60 วินาที แล้ววนรอบขึ้นมาตรวจสอบเวลาต่อ
         await asyncio.sleep(60)
 
 @app.on_event("startup")
 async def on_startup():
-    # 🔥 ปลุกสคริปต์เช็กเวลายามเช้า (Cron Background Task) ให้ทำงานคู่ขนานทันทีที่โปรเจกต์ตื่น
     asyncio.create_task(daily_strategic_report_loop())
     
     if bot and WEBHOOK_URL:
