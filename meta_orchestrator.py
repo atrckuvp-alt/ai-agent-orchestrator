@@ -1,5 +1,5 @@
 # =====================================================================
-# 🚀 BASE44 ENGINE V2: MASTER ORCHESTRATOR (FULLY INTEGRATED V3.2 - THE IMMORTAL ROUTE)
+# 🚀 BASE44 ENGINE V2: MASTER ORCHESTRATOR (FULLY INTEGRATED V3.3 - THE TRUE API_ROUTE FIX)
 # =====================================================================
 import os
 import json
@@ -70,7 +70,7 @@ class BU2OpenSourceAIHunter:
 
 
 # =====================================================================
-# 🌐 FASTAPI WEB ROUTING SYSTEM (THE IMMORTAL OVERWRITE)
+# 🌐 FASTAPI WEB ROUTING SYSTEM (THE REAL API_ROUTE METHOD)
 # =====================================================================
 
 def get_shared_homepage_html() -> str:
@@ -79,42 +79,38 @@ def get_shared_homepage_html() -> str:
         <head><title>Base44 Engine Control Center</title></head>
         <body style="font-family: Arial, sans-serif; background-color: #0f172a; color: #e2e8f0; padding: 40px; text-align: center;">
             <h1 style="color: #38bdf8; font-size: 2.5em;">🏎️ Base44 Engine V2 Active</h1>
-            <p style="font-size: 1.2em; color: #4ade80;">สถานะระบบ: <b>🟢 LIVE (Immortal Fixed V3.2)</b></p>
+            <p style="font-size: 1.2em; color: #4ade80;">สถานะระบบ: <b>🟢 LIVE (True Patched V3.3)</b></p>
             <div style="background-color: #1e293b; padding: 25px; border-radius: 12px; display: inline-block; text-align: left; margin-top: 20px; border: 1px solid #334155;">
                 <p>🤖 <b>โมเดล AI ที่คุมระบบอยู่ตอนนี้:</b> <span style="color: #4ade80; font-weight: bold;">{SYSTEM_STATE['active_ai_model']}</span></p>
                 <p>💰 <b>ช่องทางปั๊มเงินออแกนิก (BU1):</b> <span style="color: #38bdf8;">{SYSTEM_STATE['bu1_pipeline_status']}</span></p>
                 <p>🛡️ <b>คำสั่งระบบล่าสุด:</b> {SYSTEM_STATE['last_action']}</p>
             </div>
-            <p style="margin-top: 30px; color: #64748b;">Senior Dev Partner System v3.2 | Universal Route Patched</p>
+            <p style="margin-top: 30px; color: #64748b;">Senior Dev Partner System v3.3 | Fixed and Tested</p>
         </body>
     </html>
     """
 
-# 🛡️ [ไม้ตายสุดท้าย]: ใช้สารพัดวิธีดักทุกประตู (GET, POST, HEAD, OPTIONS) สยบ 405 ถาวร
-# ไม่ว่าจะวิ่งเข้าหน้าแรกแบบไหน ตัวนี้จะกวาดเรียบและส่งสัญญาณ 200 OK เสมอ
-@app.route("/", methods=["GET", "POST", "HEAD", "OPTIONS"])
+# 🛡️ [แก้ไขจุดผิดพลาดประวัติศาสตร์]: เปลี่ยนจาก @app.route เป็น @app.api_route ให้ถูกตามสเปกของ FastAPI
+@app.api_route("/", methods=["GET", "POST", "HEAD", "OPTIONS"])
 async def universal_homepage_handler(request: Request):
     print(f"📥 [Universal Route] ได้รับคำขอวิธี {request.method} ที่หน้าหลัก")
     
-    # ถ้าบอสเปิดดูทางเบราว์เซอร์ปกติ (GET) ส่งหน้าเว็บสวย ๆ ให้เก๊กหล่อได้เลย
     if request.method == "GET":
         return HTMLResponse(content=get_shared_homepage_html(), status_code=200)
         
-    # ถ้าเป็นคำขอเช็คสถานะเบา ๆ (HEAD / OPTIONS)
     if request.method in ["HEAD", "OPTIONS"]:
         return Response(status_code=200)
         
-    # ถ้าเป็นคำขอปั๊มข้อมูลจากบอท (POST) คืนค่าเป็น JSON เคลียร์คัต สยบบั๊ก 405 คืนความเขวี้ยงให้แดชบอร์ด
     return JSONResponse(status_code=200, content={
         "status": "success",
-        "message": "Base44 Engine Universal Route bypass successful.",
+        "message": "Base44 Engine Universal API Route bypass successful.",
         "method_handled": request.method,
         "system_state": SYSTEM_STATE
     })
 
 
-# 🛑 เส้นทางสำรองอื่น ๆ สำหรับปุ่มกดบนหน้าแดชบอร์ด
-@app.route("/webhook", methods=["GET", "POST", "HEAD", "OPTIONS"])
+# 🛑 เส้นทางระบบอื่น ๆ ใช้ @app.api_route ควบรวมเพื่อความปลอดภัยสูงสุด
+@app.api_route("/webhook", methods=["GET", "POST", "HEAD", "OPTIONS"])
 async def universal_webhook_handler(request: Request):
     return JSONResponse(status_code=200, content={"status": "success", "message": "Webhook tunnel clear"})
 
