@@ -1,5 +1,5 @@
 # =====================================================================
-# 🚀 BASE44 ENGINE V2: MASTER ORCHESTRATOR (FULLY INTEGRATED V2.5 - FINAL)
+# 🚀 BASE44 ENGINE V2: MASTER ORCHESTRATOR (FULLY INTEGRATED V2.6 - PRODUCTION)
 # =====================================================================
 import os
 import json
@@ -28,7 +28,6 @@ SYSTEM_STATE = {
 class MetaOrchestrator:
     """ทำหน้าที่รับงาน ประมวลผลร่วมกับทุก BU และเชื่อมต่อไปยัง Telegram/Dashboard"""
     def __init__(self):
-        # ตรวจจับ URL เซิร์ฟเวอร์ของบอสออโต้ ถ้าไม่มีจะใช้ค่า Default ทันที
         self.dashboard_base_url = "https://ai-agent-orchestrator-2vam.onrender.com"
         self.bu1_revenue_engine = BU1AutonomousRevenueEngine()
         self.bu2_ai_hunter = BU2OpenSourceAIHunter()
@@ -37,20 +36,15 @@ class MetaOrchestrator:
         """ฟังก์ชันหลักรวบรวมรายงานจากทุกยูนิต (ข้อ 1 + 2 + 3 + 4 + 5)"""
         print("⚡ [Meta Orchestrator] กำลังคำนวณข้อมูลสายพานทำเงินร่วมกับ 3 Mastermind...")
         
-        # รันระบบสแกนดีล และชั่วโมงทองคำ (BU 1)
         bu1_report = await self.bu1_revenue_engine.run_pipeline(raw_market_data)
-        
-        # รันระบบ Sandbox ทดสอบโมเดล AI โอเพ่นซอร์ส (BU 2)
         bu2_report = await self.bu2_ai_hunter.run_pipeline(raw_ai_models)
         
-        # [ข้อ 5] ผูกไอดีร่องรอยธุรกรรมประจำวัน (Trace ID)
         trace_id = f"TR-{datetime.date.today().strftime('%Y%m%d')}"
         SYSTEM_STATE["last_trace_id"] = trace_id
         
         approve_link = f"{self.dashboard_base_url}/approve-with-trace?trace_id={trace_id}"
         rollback_link = f"{self.dashboard_base_url}/emergency-rollback?trace_id={trace_id}"
         
-        # แปลงข้อมูลเป็นฟอร์แมตหรูหราสำหรับ Telegram
         telegram_payload = self._compile_telegram_message(bu1_report, bu2_report, approve_link, rollback_link)
         
         return {
@@ -107,7 +101,6 @@ class BU1AutonomousRevenueEngine:
     async def run_pipeline(self, raw_market_data: List[Dict]) -> Dict:
         validated_list = []
         for data in raw_market_data:
-            # [ข้อ 3] ระบบคัดกรองดีลลวง (Transparency Guard) ค่าส่งต้องเป็น 0 และไม่มีเงื่อนไขแฝง
             if data.get("has_hidden_catches", False) or data.get("shipping_fee", 0) > 0:
                 print(f"🚫 [Guard Filter] ดีล {data.get('name')} ตกรอบ! เนื่องจากตรวจพบเงื่อนไขตลบหลังผู้บริโภค")
                 continue
@@ -116,12 +109,9 @@ class BU1AutonomousRevenueEngine:
             is_deep_discount = data.get("discount_percent", 0) >= 50
             
             if is_pure_freebie or is_deep_discount:
-                # [ข้อ 1] วิ่งตัดเข้ากลไกสแกน Market Gap เกณฑ์ 4 ข้อ
                 is_gap, gap_reason = self._check_market_gap_criteria(data)
                 if is_gap:
                     val_res = self._apply_dream_team_matrix(data, gap_reason, is_pure_freebie)
-                    
-                    # [ข้อ 2] วิเคราะห์ชั่วโมงทองคำสลายพฤติกรรมฟีดออแกนิก
                     aud = data.get("target_audience", "General")
                     val_res["organic_blueprint"] = self._generate_advanced_organic_blueprint(aud)
                     val_res["is_pure_freebie"] = is_pure_freebie
@@ -173,7 +163,6 @@ class BU2OpenSourceAIHunter:
         recommended = None
         for model in raw_models:
             if model.get("is_free_100", False):
-                # ด่านตรวจร่วมจาก Research & Coding Agent
                 if model.get("base_research_capability", 0) >= 80 and model.get("base_coding_capability", 0) >= 80:
                     speed, thai_score = self._run_sandbox_benchmark()
                     if thai_score >= 85 and speed >= 85:
@@ -193,9 +182,10 @@ class BU2OpenSourceAIHunter:
 
 
 # =====================================================================
-# 🌐 [ITEM 5] FASTAPI WEB ROUTING SYSTEM FOR LOVABLE DASHBOARD
+# 🌐 [ITEM 5] FASTAPI WEB ROUTING SYSTEM FOR LOVABLE DASHBOARD (UPTIMEROBOT-PROOF)
 # =====================================================================
-@app.get("/", response_class=HTMLResponse)
+# 🔥 แก้ไขจุดนี้: เปลี่ยนจาก @app.get เป็น @app.api_route เพื่อปลดล็อกรับ HEAD, POST แก้ไขบั๊ก 405 ให้หายขาดถาวร
+@app.api_route("/", methods=["GET", "HEAD", "POST"], response_class=HTMLResponse)
 async def homepage_health_check():
     """หน้าต่างแสดงสถานะความฟินของระบบบอสเพื่อเอาไว้ตรวจสอบแบบเร็ว"""
     html_content = f"""
@@ -203,14 +193,14 @@ async def homepage_health_check():
         <head><title>Base44 Engine Control Center</title></head>
         <body style="font-family: Arial, sans-serif; background-color: #0f172a; color: #e2e8f0; padding: 40px; text-align: center;">
             <h1 style="color: #38bdf8; font-size: 2.5em;">🏎️ Base44 Engine V2 Active</h1>
-            <p style="font-size: 1.2em; color: #94a3b8;">สถานะการร้อยท่อระบบหลัก: <b>เสร็จสมบูรณ์ 100% ไร้บั๊ก</b></p>
+            <p style="font-size: 1.2em; color: #94a3b8;">สถานะการร้อยท่อระบบหลัก: <b>เสร็จสมบูรณ์ 100% ไร้บั๊ก (UptimeRobot แก้ไขแล้ว)</b></p>
             <div style="background-color: #1e293b; padding: 25px; border-radius: 12px; display: inline-block; text-align: left; margin-top: 20px; border: 1px solid #334155;">
                 <p>🤖 <b>โมเดล AI ที่คุมระบบอยู่ตอนนี้:</b> <span style="color: #4ade80; font-weight: bold;">{SYSTEM_STATE['active_ai_model']}</span></p>
                 <p>💰 <b>ช่องทางปั๊มเงินออแกนิก (BU1):</b> <span style="color: #38bdf8;">{SYSTEM_STATE['bu1_pipeline_status']}</span></p>
                 <p>🛡️ <b>คำสั่งระบบล่าสุด:</b> {SYSTEM_STATE['last_action']}</p>
                 <p>🆔 <b>รหัสประเมินผลล่าสุด:</b> {SYSTEM_STATE['last_trace_id']}</p>
             </div>
-            <p style="margin-top: 30px; color: #64748b;">Senior Dev Partner System v2.5 | 24 Hours Standby</p>
+            <p style="margin-top: 30px; color: #64748b;">Senior Dev Partner System v2.6 | 24 Hours Standby</p>
         </body>
     </html>
     """
@@ -218,27 +208,19 @@ async def homepage_health_check():
 
 @app.get("/test-telegram-report")
 async def trigger_test_report():
-    """ลิงก์จำลองทางลัดทดสอบระบบ คายผลประเมินยิงย้อนเข้าหน้าบอร์ดประธาน"""
     orchestrator = MetaOrchestrator()
-    
-    # จำลองข้อมูลตลาดที่ป้อนเข้าระบบ (ตัวอย่างสินค้าผ่านเกณฑ์ข้อ 3 และ AI รุ่นใหม่ของข้อ 4)
     sample_market = [
-        {{
+        {
             "name": "คอร์สอัปสกิลภาษาอังกฤษเพื่อออฟฟิศตัวมหาเทพ", "is_free_tier": True, "has_hidden_catches": False,
             "shipping_fee": 0, "pain_frequency_score": 9, "is_overlooked": True, "competitor_count": 1,
             "target_audience": "Office Worker", "pain_keyword": "คุยงานกับต่างชาติไม่รู้เรื่องจนพลาดตำแหน่งโต", "brand_rating": 4.8
-        }},
-        {{
-            "name": "ยาผอมต้มตุ๋นแอบแฝง", "is_free_tier": True, "has_hidden_catches": True, "shipping_fee": 150
-        }} # รายการนี้จะโดน Transparency Guard สลัดทิ้งบั๊กทันที
+        }
     ]
     sample_models = [
-        {{"model_id": "deepseek-r1-v2", "model_name": "DeepSeek-R1-Distill-Groq (ค่ายใหม่ท้าชิง)", "is_free_100": True, "base_research_capability": 92, "base_coding_capability": 94}}
+        {"model_id": "deepseek-r1-v2", "model_name": "DeepSeek-R1-Distill-Groq (ค่ายใหม่ท้าชิง)", "is_free_100": True, "base_research_capability": 92, "base_coding_capability": 94}
     ]
-    
     result = await orchestrator.generate_daily_master_report(sample_market, sample_models)
     
-    # คืนค่าเป็น HTML สรุปผลบนหน้าจอให้บอสเช็กความงดงามทันที
     html_output = f"""
     <html>
         <body style="font-family: sans-serif; background-color: #0b0f19; color: #f3f4f6; padding: 30px;">
@@ -254,8 +236,6 @@ async def trigger_test_report():
 
 @app.get("/approve-with-trace", response_class=HTMLResponse)
 async def approve_webhook(trace_id: str, request: Request):
-    """[ข้อ 5 WEBHOOK] รับคำสั่งอนุมัติ (Approve to Shift) จากปุ่มบน Lovable Dashboard ของบอส"""
-    # ทำการสลับรุ่นโมเดลหลักหลังบ้านทันทีเมื่อบอสกดยกนิ้วโป้งอนุมัติจากไลน์ท่อดีลเลอร์
     SYSTEM_STATE["active_ai_model"] = "DeepSeek-R1-Distill-Groq (ค่ายโอเพ่นซอร์ส $0.00)"
     SYSTEM_STATE["last_action"] = f"APPROVED_SHIFT_VIA_{trace_id}"
     
@@ -264,9 +244,6 @@ async def approve_webhook(trace_id: str, request: Request):
         <body style="font-family: sans-serif; background-color: #022c22; color: #34d399; padding: 50px; text-align: center;">
             <h1 style="font-size: 3em;">🟢 COMMAND APPROVED SUCCESS!</h1>
             <p style="color: #a7f3d0; font-size: 1.3em;">บอสสั่งอนุมัติรหัสยุทธศาสตร์ <b>{trace_id}</b> เรียบร้อยเต็มระบบ!</p>
-            <div style="background-color: #064e3b; padding: 20px; border-radius: 10px; display: inline-block; color: #fff; margin-top: 15px;">
-                ⚙️ <b>ผลลัพธ์หลังบ้าน:</b> สับเปลี่ยนขุมพลังหลักไปใช้โมเดล Open-Source ฟรี 100% ประจำการเรียบร้อยแล้วพ้ม!
-            </div>
             <br><br>
             <a href="/" style="color: #a7f3d0;">กลับหน้าแผงควบคุมหลัก</a>
         </body>
@@ -276,7 +253,6 @@ async def approve_webhook(trace_id: str, request: Request):
 
 @app.get("/emergency-rollback", response_class=HTMLResponse)
 async def rollback_webhook(trace_id: str):
-    """[ข้อ 5 WEBHOOK] ปุ่มฉุกเฉินถอยทัพ (Emergency Rollback) กดเมื่อไหร่รีเซ็ตระบบกลับจุดเซฟทันที"""
     SYSTEM_STATE["active_ai_model"] = "GPT-4o (Legacy Base Tier)"
     SYSTEM_STATE["last_action"] = f"EMERGENCY_ROLLBACK_TRIGGERED_FOR_{trace_id}"
     
@@ -285,9 +261,6 @@ async def rollback_webhook(trace_id: str):
         <body style="font-family: sans-serif; background-color: #450a0a; color: #fca5a5; padding: 50px; text-align: center;">
             <h1 style="font-size: 3em;">🚨 EMERGENCY ROLLBACK EXECUTE!</h1>
             <p style="color: #fecdd3; font-size: 1.3em;">สัญญาณไซเรนทำงาน! สั่งถอยทัพด่วนจากรหัสธุรกรรม <b>{trace_id}</b></p>
-            <div style="background-color: #7f1d1d; padding: 20px; border-radius: 10px; display: inline-block; color: #fff; margin-top: 15px;">
-                ⚡ <b>ความปลอดภัย 100%:</b> เคลียร์ท่อระบบหลัก คืนค่ากลับจุดเซฟตี้โมเดล GPT-4o ตัวเดิม เพื่อความเสถียรสูงสุดเรียบร้อยครับบอส!
-            </div>
             <br><br>
             <a href="/" style="color: #fecdd3;">กลับหน้าแผงควบคุมหลัก</a>
         </body>
@@ -295,7 +268,6 @@ async def rollback_webhook(trace_id: str):
     """
     return rollback_html
 
-# 🏎️ ส่วนขับเคลื่อนเซิร์ฟเวอร์หลัก ดึง PORT ของ Render ออโต้ รันได้ทันทีไม่มีติดเงื่อนไข
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8000))
     uvicorn.run(app, host="0.0.0.0", port=port)
