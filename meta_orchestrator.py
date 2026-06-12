@@ -1,5 +1,5 @@
 # =====================================================================
-# 🚀 BASE44 ENGINE V2: MASTER ORCHESTRATOR (FULLY INTEGRATED V2.6 - PRODUCTION)
+# 🚀 BASE44 ENGINE V2: MASTER ORCHESTRATOR (FULLY INTEGRATED V2.7 - SEPARATED CHANNELS)
 # =====================================================================
 import os
 import json
@@ -7,7 +7,7 @@ import datetime
 import random
 from typing import List, Dict, Any
 import uvicorn
-from fastapi import FastAPI, HTTPException, Request
+from fastapi import FastAPI, HTTPException, Request, Response
 from fastapi.responses import HTMLResponse
 
 # 🖥️ เปิดตัวระบบ Web Server สำหรับรันบน Render และเชื่อมต่อ Lovable Dashboard
@@ -182,29 +182,44 @@ class BU2OpenSourceAIHunter:
 
 
 # =====================================================================
-# 🌐 [ITEM 5] FASTAPI WEB ROUTING SYSTEM FOR LOVABLE DASHBOARD (UPTIMEROBOT-PROOF)
+# 🌐 [ITEM 5] FASTAPI WEB ROUTING SYSTEM (EXPLICIT SEPARATED CHANNELS)
 # =====================================================================
-# 🔥 แก้ไขจุดนี้: เปลี่ยนจาก @app.get เป็น @app.api_route เพื่อปลดล็อกรับ HEAD, POST แก้ไขบั๊ก 405 ให้หายขาดถาวร
-@app.api_route("/", methods=["GET", "HEAD", "POST"], response_class=HTMLResponse)
-async def homepage_health_check():
-    """หน้าต่างแสดงสถานะความฟินของระบบบอสเพื่อเอาไว้ตรวจสอบแบบเร็ว"""
-    html_content = f"""
+
+def get_shared_homepage_html() -> str:
+    """ฟังก์ชันกลางเจนเนื้อหา HTML หน้าหลัก เพื่อลดโค้ดซ้ำซ้อนและป้องกันบั๊ก String Format"""
+    return f"""
     <html>
         <head><title>Base44 Engine Control Center</title></head>
         <body style="font-family: Arial, sans-serif; background-color: #0f172a; color: #e2e8f0; padding: 40px; text-align: center;">
             <h1 style="color: #38bdf8; font-size: 2.5em;">🏎️ Base44 Engine V2 Active</h1>
-            <p style="font-size: 1.2em; color: #94a3b8;">สถานะการร้อยท่อระบบหลัก: <b>เสร็จสมบูรณ์ 100% ไร้บั๊ก (UptimeRobot แก้ไขแล้ว)</b></p>
+            <p style="font-size: 1.2em; color: #94a3b8;">สถานะการร้อยท่อระบบหลัก: <b>เสร็จสมบูรณ์ 100% ไร้บั๊ก (Explicit Channels Live)</b></p>
             <div style="background-color: #1e293b; padding: 25px; border-radius: 12px; display: inline-block; text-align: left; margin-top: 20px; border: 1px solid #334155;">
                 <p>🤖 <b>โมเดล AI ที่คุมระบบอยู่ตอนนี้:</b> <span style="color: #4ade80; font-weight: bold;">{SYSTEM_STATE['active_ai_model']}</span></p>
                 <p>💰 <b>ช่องทางปั๊มเงินออแกนิก (BU1):</b> <span style="color: #38bdf8;">{SYSTEM_STATE['bu1_pipeline_status']}</span></p>
                 <p>🛡️ <b>คำสั่งระบบล่าสุด:</b> {SYSTEM_STATE['last_action']}</p>
                 <p>🆔 <b>รหัสประเมินผลล่าสุด:</b> {SYSTEM_STATE['last_trace_id']}</p>
             </div>
-            <p style="margin-top: 30px; color: #64748b;">Senior Dev Partner System v2.6 | 24 Hours Standby</p>
+            <p style="margin-top: 30px; color: #64748b;">Senior Dev Partner System v2.7 | 24 Hours Standby</p>
         </body>
     </html>
     """
-    return html_content
+
+# 🛑 [แยกเลนที่ 1]: รองรับการยิงแบบ GET (เปิดผ่าน Browser ปกติ)
+@app.get("/", response_class=HTMLResponse)
+async def homepage_get():
+    return get_shared_homepage_html()
+
+# 🛑 [แยกเลนที่ 2]: รองรับการยิงตรวจสอบแบบ HEAD (สำหรับ UptimeRobot ตัวแสบโดยเฉพาะ!)
+@app.head("/")
+async def homepage_head():
+    # คืนค่าหัวเปล่าสถานะ 200 OK กลับไปทันทีโดยไม่ต้องแนบเนื้อหา HTML บั๊กหายขาดแน่นอน
+    return Response(status_code=200)
+
+# 🛑 [แยกเลนที่ 3]: รองรับการยิงแบบ POST (เผื่อไว้กรณี Dashboard ยิงทดสอบระบบเข้ามา)
+@app.post("/", response_class=HTMLResponse)
+async def homepage_post():
+    return get_shared_homepage_html()
+
 
 @app.get("/test-telegram-report")
 async def trigger_test_report():
