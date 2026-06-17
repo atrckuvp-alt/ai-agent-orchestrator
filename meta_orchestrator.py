@@ -1,19 +1,19 @@
 # =====================================================================
-# 🚀 BASE44 ENGINE V5.3.5: BULLETPROOF CLOCK & MULTI-ROUTE PIPELINE
+# 🚀 BASE44 ENGINE V5.3.6: AUTOMATIC HEALTH-SHIELD & BULLETPROOF CLOCK
 # =====================================================================
 import os
 import sys
 import json
 import datetime
 import random
-import asyncio  # ⏰ [เพิ่มเข้ามา] ท่อระเบิดเวลาควบคุมระบบนาฬิกาปลุกบิวท์อินของห้องเครื่อง
+import asyncio  # ⏰ ท่อระเบิดเวลาควบคุมระบบนาฬิกาปลุกบิวท์อินของห้องเครื่อง
 from typing import List, Dict, Any, Optional
 import uvicorn
 import httpx  # 🔌 ท่อยิง API ความเร็วสูง รองรับการหมุนเวียนคีย์สำรอง 4 ชุด
 from fastapi import FastAPI, HTTPException, Request, Response
 from fastapi.responses import HTMLResponse, JSONResponse
 
-app = FastAPI(title="Base44 Engine V5.3.5 - Bulletproof Clock Edition")
+app = FastAPI(title="Base44 Engine V5.3.6 - Automatic Health-Shield Edition")
 
 # 📊 [SYSTEM STATE] แผงควบคุมสถานะระดับสากล และตัวเก็บหน่วยความจำรายงานล่าสุด
 SYSTEM_STATE = {
@@ -43,7 +43,7 @@ async def render_redirect_immunity_shield(request: Request, call_next):
     return response
 
 # =====================================================================
-# 💚 [UPTIME GUARD]: ประตูระบายความร้อนป้องกัน UptimeRobot เตือน DOWN
+# 💚 [UPTIME & HEALTH SHIELD]: ประตูระบายความร้อนป้องกันผี 404 บุกรุก Log
 # =====================================================================
 @app.get("/health")
 async def health_check_get():
@@ -52,17 +52,18 @@ async def health_check_get():
         "status": "healthy",
         "service": "AI Agent Orchestrator",
         "uptime_check": True,
-        "engine_version": "V5.3.5-ClockShield"
+        "engine_version": "V5.3.6-HealthShield"
     }
 
 @app.head("/health")
 async def health_check_head():
-    """ 🌟 จุดสำคัญ! ป้องกัน UptimeRobot หลอน แจก 200 OK ทันทีที่โดนทักทายด้วย HEAD """
+    """ 🌟 ป้องกัน UptimeRobot หลอน แจก 200 OK ทันทีที่โดนทักทายด้วย HEAD """
     return Response(status_code=200)
 
 @app.head("/")
 async def root_head():
-    """ ดักเผื่อไว้กรณี UptimeRobot วิ่งมายิงที่หน้าแรกสุด """
+    """ 🛑 [CRITICAL BUGFIX] ยันต์กันผี 404 บล็อกคำสั่ง HEAD จากระบบตรวจสุขภาพของ Render หน้าแรก """
+    print("🟢 [Health Shield] ดักจับคำสั่ง HEAD / จาก Render Internal Check สำเร็จ (แจกสถานะ 200)")
     return Response(status_code=200)
 
 # =====================================================================
@@ -154,10 +155,11 @@ class MetaOrchestrator:
         return data_payload
 
 # =====================================================================
-# ⏰ INTERNAL AUTOMATIC SCHEDULER (ระบบนาฬิกาปลุกบิวท์อินอัจฉริยะเวลาไทย)
+# ⏰ INTERNAL AUTOMATIC SCHEDULER (ระบบนาฬิกาปลุกบิวท์อินอัจฉริยะแบบกันกระแทก)
 # =====================================================================
 async def daily_report_built_in_clock():
-    """ ลูปลับคอยเช็กเวลาไทย (ICT) ทุกๆ 30 วินาที ถ้าถึงเวลา 09:00 น. จะดีดตัวขึ้นมายิงรายงานออโต้ทันที ป้องกันภัยเงียบภายนอกหลุด """
+    """ 🛡️ [BULLETPROOF CLOCK V2] ลูปลับคอยเช็กเวลาไทย (ICT) ทุกๆ 30 วินาที 
+    เพิ่มระบบกันกระแทก (Try-Except ครอบทั้งหมด) ป้องกันสัญญาณรบกวนภายนอกทำให้ลูปดับถาวร """
     print("⏰ [Clock Matrix] ระบบนาฬิกาปลุกบิวท์อินทำงานคู่ขนานแล้ว (เป้าหมาย 09:00 น. เวลาไทย)")
     last_sent_date = ""
     
@@ -175,9 +177,10 @@ async def daily_report_built_in_clock():
                 last_sent_date = current_date  # แปะแสตมป์วันที่ไว้ เพื่อป้องกันการส่งซ้ำซ้อนภายในชั่วโมง 9 โมง
                 print(f"✅ [Clock Matrix] ส่งรายงานเช้าวันใหม่เรียบร้อย ประจำวันที่ {current_date}")
         except Exception as e:
-            print(f"🚨 [Clock Matrix Error]: {str(e)}")
+            # 🚨 ดักจับ Error ทุกรูปแบบ ป้องกันไม่ให้ลูปใหญ่ขิต เพื่อให้พรุ่งนี้เช้ายังทำงานต่อได้
+            print(f"🚨 [Clock Matrix Bug-Shielded]: สัญญาณขัดข้องชั่วคราว -> {str(e)} แต่ระบบคอร์ยังคงทำงานต่อไป")
             
-        await asyncio.sleep(30)  # พักตรวจจับรอบละ 30 วินาทีเพื่อความแม่นยำสูงและไม่เปลืองทรัพยากรเครื่อง
+        await asyncio.sleep(30)  # พักตรวจจับรอบละ 30 วินาที
 
 @app.on_event("startup")
 async def startup_event_trigger():
@@ -193,8 +196,8 @@ async def homepage_get():
     return f"""
     <html>
         <body style="font-family: sans-serif; background-color: #0f172a; color: #e2e8f0; padding: 40px; text-align: center;">
-            <h1 style="color: #38bdf8;">🏎️ Base44 Engine V5.3.5 - Bulletproof Clock Edition</h1>
-            <p style="font-size: 1.2em; color: #4ade80;">สถานะระบบ: <b>🟢 LIVE (With Built-in Clock / Multi-Route Shield)</b></p>
+            <h1 style="color: #38bdf8;">🏎️ Base44 Engine V5.3.6 - Bulletproof Clock Edition</h1>
+            <p style="font-size: 1.2em; color: #4ade80;">สถานะระบบ: <b>🟢 LIVE (With Anti-404 Shield & Bulletproof Clock)</b></p>
             
             <div style="margin: 25px auto; background: #1e293b; padding: 25px; border-radius: 12px; display: inline-block; text-align: left; border: 1px solid #334155; max-width: 500px;">
                 <h3 style="color: #f59e0b; margin-top:0;">📊 แผงควบคุมระบบ (Control Center)</h3>
@@ -209,12 +212,12 @@ async def homepage_get():
                     <a href="/emergency-rollback" style="background: #ef4444; color: white; padding: 10px 15px; text-decoration: none; border-radius: 6px; font-weight:bold;">🚨 ปุ่มฉุกเฉิน (Rollback)</a>
                 </div>
             </div>
-            <p style="color:#64748b; font-size:0.9em;">ดักจับการ Redirect และป้องกันอาการหลอน 405 ด้วยเกราะคุ้มกัน V5.3.5 สมบูรณ์แบบ</p>
+            <p style="color:#64748b; font-size:0.9em;">ดักจับการ Redirect และป้องกันอาการหลอน 404/405 ด้วยเกราะคุ้มกัน V5.3.6 สมบูรณ์แบบ</p>
         </body>
     </html>
     """
 
-# 🔗 📦 [LOVABLE LIVE CONNECTOR TUBE]: ท่อดึงข้อมูลสดตัวจริงเพื่อให้ฝั่ง Lovable นำไปวาดกราฟและโชว์รายงานสด ไม่ใช่ม็อคอัพ!
+# 🔗 📦 [LOVABLE LIVE CONNECTOR TUBE]
 @app.get("/api/latest-report")
 async def get_latest_report_for_lovable():
     if not SYSTEM_STATE["latest_live_report"]:
@@ -222,12 +225,12 @@ async def get_latest_report_for_lovable():
         await orchestrator.generate_and_package_report()
     return JSONResponse(status_code=200, content={
         "status": "success",
-        "engine_version": "V5.3.5-Live",
+        "engine_version": "V5.3.6-Live",
         "active_ai_model": SYSTEM_STATE["active_ai_model"],
         "data": SYSTEM_STATE["latest_live_report"]
     })
 
-# 🔒 [ข้อ 4]: DUAL-AGENT SANDBOX - ระบบขังโมเดลทดสอบโจทย์ความสละสลวยภาษาไทย (แชมพู/ข้าวสาร)
+# 🔒 DUAL-AGENT SANDBOX
 @app.get("/sandbox-test")
 async def sandbox_test(topic: str = "แชมพู"):
     SYSTEM_STATE["sandbox_test_count"] += 1
@@ -240,13 +243,13 @@ async def sandbox_test(topic: str = "แชมพู"):
     
     return {
         "status": "success",
-        "sandbox_zone": "🔒 DUAL-AGENT ISOLATION SANDBOX V5.3.5",
+        "sandbox_zone": "🔒 DUAL-AGENT ISOLATION SANDBOX V5.3.6",
         "tested_topic": topic,
         "thai_fluency_score": "10/10 (Passed)",
         "generated_preview": test_output
     }
 
-# 🛡️ 👑 [🔥 MULTI-ROUTE MATRIX]: เพิ่ม Route ต้อนรับ ดักรับทุกประตูชื่อเก่าสากล ป้องกันอาการลิงก์เก่าจากโครนภายนอกยิงเข้ามาแล้วเจอ 404
+# 🛡️ 👑 [🔥 MULTI-ROUTE MATRIX]: ดักรับทุกประตูชื่อเก่าสากล ป้องกันลิงก์เก่าจากโครนภายนอกยิงเข้ามา
 @app.get("/test-telegram-report")
 @app.get("/cron")
 @app.get("/send-report")
@@ -257,11 +260,10 @@ async def test_telegram_report():
         orchestrator = MetaOrchestrator()
         data = await orchestrator.generate_and_package_report()
         
-        # 🔗 [ล็อกเป้าเรียบร้อย]: ลิงก์แดชบอร์ดโครงการจริงของบอสถูกคงไว้ครบถ้วน ไม่ต้องแก้ซ้ำครับบอส!
         lovable_dashboard_url = "https://lovable.dev/projects/54aea45a-46e2-4a88-9b91-96c95ee68e4b"
         
         report_text = (
-            f"🔥 📢 **[Morning Briefing Report - BASE44 ENGINE V5.3.5 💰]**\n"
+            f"🔥 📢 **[Morning Briefing Report - BASE44 ENGINE V5.3.6 💰]**\n"
             f"อรุณสวัสดิ์ครับบอส! ทีม Agent สแกนตลาดสดผ่าน Live API คลอดข้อมูลยุทธศาสตร์ ดร.แสงสุข เสร็จสมบูรณ์!\n\n"
             f"📦 **สินค้าทำเงินรอบนี้:** *{data['product_name']}*\n"
             f"📈 **พอร์ตโฟลิโอสายพานทำเงินสะสม:** {', '.join([f'่{x}่' for x in data['active_money_lines']])}\n\n"
@@ -322,7 +324,7 @@ async def test_telegram_report():
 
         return {
             "status": "success",
-            "message": "🚀 ระบบ V5.3.5 เจาะลึกแหล่งซัพพลายเออร์และฝังท่อส่งข้อมูลสดเรียบร้อย!",
+            "message": "🚀 ระบบ V5.3.6 เจาะลึกแหล่งซัพพลายเออร์และฝังท่อส่งข้อมูลสดเรียบร้อย!",
             "telegram_live_delivery": telegram_delivery_status,
             "active_key_sequence": f"ชุดที่ {used_key_sequence}" if used_key_sequence != -1 else "NONE",
             "lovable_data_stream_endpoint": "/api/latest-report"
