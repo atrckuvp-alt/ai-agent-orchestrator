@@ -1,6 +1,3 @@
-# =====================================================================
-# 🚀 BASE44 ENGINE V5.3.6: AUTOMATIC HEALTH-SHIELD & BULLETPROOF CLOCK
-# =====================================================================
 import os
 import sys
 import json
@@ -10,8 +7,8 @@ import asyncio  # ⏰ ท่อระเบิดเวลาควบคุม�
 from typing import List, Dict, Any, Optional
 import uvicorn
 import httpx  # 🔌 ท่อยิง API ความเร็วสูง รองรับการหมุนเวียนคีย์สำรอง 4 ชุด
-from fastapi import FastAPI, HTTPException, Request, Response
-from fastapi.responses import HTMLResponse, JSONResponse
+from fastapi import FastAPI, HTTPException, Request
+from fastapi.responses import HTMLResponse, JSONResponse, Response  # 🟢 [FIXED] เติม Response ตรงนี้ให้ครบถ้วนคอขวด!
 
 app = FastAPI(title="Base44 Engine V5.3.6 - Automatic Health-Shield Edition")
 
