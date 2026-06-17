@@ -1,5 +1,5 @@
 # =====================================================================
-# 🚀 BASE44 ENGINE V5.4.3: CONSOLE LOGGING & LIVE STREAM EDITION
+# 🚀 BASE44 ENGINE V5.4.4: OMNI-METHOD BULLETPROOF EDITION (GET/POST/HEAD)
 # =====================================================================
 import os
 import sys
@@ -13,7 +13,7 @@ import httpx
 from fastapi import FastAPI, HTTPException, Request, Response
 from fastapi.responses import HTMLResponse, JSONResponse
 
-app = FastAPI(title="Base44 Engine V5.4.3 - Console Logging")
+app = FastAPI(title="Base44 Engine V5.4.4 - Omni-Method")
 
 SYSTEM_STATE = {
     "active_ai_model": "GPT-4o (Legacy Base Tier)",
@@ -22,6 +22,7 @@ SYSTEM_STATE = {
     "latest_live_report": {}
 }
 
+# 🛡️ มิดเดิลแวร์เคลียร์ทาง ป้องกันการติดขัดของเมธอดแปลกๆ ในหน้าแรก
 @app.middleware("http")
 async def render_redirect_immunity_shield(request: Request, call_next):
     if request.url.path in ["/", ""]:
@@ -32,8 +33,12 @@ async def render_redirect_immunity_shield(request: Request, call_next):
             })
     return await call_next(request)
 
-@app.get("/health")
-async def health_check_get(): return {"status": "healthy", "engine_version": "V5.4.3-Log"}
+# 🟢 เส้นทางตรวจเช็คสุขภาพ รองรับหมดทุกรูปแบบ
+@app.api_route("/health", methods=["GET", "POST", "HEAD"])
+async def health_check(request: Request):
+    if request.method == "HEAD":
+        return Response(status_code=200)
+    return {"status": "healthy", "engine_version": "V5.4.4-Omni"}
 
 class BU1AutonomousRevenueEngine:
     async def run_pipeline(self) -> dict:
@@ -43,32 +48,41 @@ class BU1AutonomousRevenueEngine:
             "commission": "25% - 32%"
         }
 
-@app.get("/", response_class=HTMLResponse)
-async def homepage_get():
-    return f"""<html><body style="font-family:sans-serif;background:#0f172a;color:#e2e8f0;text-align:center;padding:50px;">
-    <h1 style="color:#38bdf8;">🏎️ Base44 Engine V5.4.3</h1>
-    <p style="color:#4ade80;">สถานะระบบ: ONLINE (ยิง Log ตรงเข้าคอนโซล Render แล้ว)</p>
+# 🏠 หน้าแรกเปิดรับทั้ง GET, POST และ HEAD เพื่อตัดปัญหา 405 ให้หมดสิ้น
+@app.api_route("/", methods=["GET", "POST", "HEAD"])
+async def homepage_handler(request: Request):
+    if request.method == "HEAD":
+        return Response(status_code=200)
+    if request.method == "POST":
+        return JSONResponse(status_code=200, content={"status": "success", "msg": "POST received on root"})
+        
+    return HTMLResponse(f"""<html><body style="font-family:sans-serif;background:#0f172a;color:#e2e8f0;text-align:center;padding:50px;">
+    <h1 style="color:#38bdf8;">🏎️ Base44 Engine V5.4.4</h1>
+    <p style="color:#4ade80;">สถานะระบบ: ONLINE (รองรับ GET, POST, HEAD เรียบร้อยแล้ว บอสสบายใจได้)</p>
     <a href="/test-telegram-report" style="background:#38bdf8;color:#0f172a;padding:10px 20px;text-decoration:none;border-radius:5px;font-weight:bold;">🔥 คลิกเพื่อทดสอบบังคับยิงทันที</a>
-    </body></html>"""
+    </body></html>""")
 
-@app.get("/api/latest-report")
-async def get_latest_report():
+@app.api_route("/api/latest-report", methods=["GET", "POST"])
+async def get_latest_report(request: Request):
     if not SYSTEM_STATE["latest_live_report"]:
         SYSTEM_STATE["latest_live_report"] = await BU1AutonomousRevenueEngine().run_pipeline()
     return {"status": "success", "data": SYSTEM_STATE["latest_live_report"]}
 
-# 🛡️ ท่อรองรับทราฟฟิกจากตัวตั้งเวลาภายนอกทุกๆ 5 นาที
-@app.get("/test-telegram-report")
-@app.get("/cron")
-@app.get("/send-report")
-@app.get("/api/cron")
-async def test_telegram_report():
+# ⚡ [ปลดล็อก 405] เปิดท่อรับคำสั่งตั้งเวลาและปุ่มรันเทสแบบ Omni-Method (รองรับทั้ง GET และ POST)
+@app.api_route("/test-telegram-report", methods=["GET", "POST", "HEAD"])
+@app.api_route("/cron", methods=["GET", "POST", "HEAD"])
+@app.api_route("/send-report", methods=["GET", "POST", "HEAD"])
+@app.api_route("/api/cron", methods=["GET", "POST", "HEAD"])
+async def test_telegram_report(request: Request):
+    if request.method == "HEAD":
+        return Response(status_code=200)
+        
     try:
         data = await BU1AutonomousRevenueEngine().run_pipeline()
         SYSTEM_STATE["latest_live_report"] = data
         
         report_text = (
-            f"[BASE44 V5.4.3 - Morning Briefing]\n"
+            f"[BASE44 V5.4.4 - Morning Briefing]\n"
             f"ระบบทำงานปกติครับบอส!\n"
             f"สินค้าหลัก: {data['product_name']}\n"
             f"ค่าคอมมิชชั่น: {data['commission']}\n"
@@ -79,11 +93,9 @@ async def test_telegram_report():
         chat_id = os.environ.get("TELEGRAM_CHAT_ID", "").strip().replace('"', '').replace("'", "")
         token_list = [t.strip().replace('"', '').replace("'", "") for t in raw_tokens.split(",") if t.strip()]
         
-        # 📢 [PRINT 1] พ่นค่า ENV ที่ระบบอ่านได้ออกหน้าจอ Log ทันที
         print(f"\n╔════════════════ TELEGRAM SYNC START ════════════════╗")
-        print(f"⏰ เวลาเปิดสเปก: {data['timestamp']}")
-        print(f"📊 จำนวนคีย์ที่พบ: {len(token_list)} ชุด")
-        print(f"🎯เป้าหมาย CHAT ID: {chat_id}")
+        print(f"📡 ถูกเรียกใช้งานผ่านเมธอด: {request.method}")
+        print(f"📊 จำนวนคีย์ที่พบ: {len(token_list)} ชุด | CHAT ID: {chat_id}")
         
         if not token_list or not chat_id:
             print("❌ [ERROR] ตรวจพบค่าว่างเปล่าใน ENV ของ Render!")
@@ -91,7 +103,8 @@ async def test_telegram_report():
             return {"status": "error", "reason": "ENV_EMPTY"}
 
         telegram_status = "❌ ล้มเหลวทั้งหมด"
-        
+        telegram_raw_response = "ไม่มีข้อมูล"
+
         async with httpx.AsyncClient() as client:
             for index, token in enumerate(token_list):
                 if token.lower().startswith("bot"):
@@ -100,15 +113,11 @@ async def test_telegram_report():
                 url = f"https://api.telegram.org/bot{token}/sendMessage"
                 payload = {"chat_id": chat_id, "text": report_text}
                 
-                print(f"🔄 กำลังยิงด้วยคีย์ชุดที่ {index+1} -> {url[:35]}...")
-                
                 try:
                     response = await client.post(url, json=payload, timeout=12.0)
+                    telegram_raw_response = response.text
                     
-                    # 📢 [PRINT 2] พ่นคำฟ้องตัวจริงจาก Telegram ลงหน้าคอนโซล Render ตรงๆ!
-                    print(f"📡 [TELEGRAM RESPONSE] ตัวจริงตอบกลับมาว่า:")
-                    print(f"   -> HTTP STATUS: {response.status_code}")
-                    print(f"   -> BODY: {response.text}")
+                    print(f"📡 [TELEGRAM RESPONSE] คีย์ชุดที่ {index+1} -> STATUS: {response.status_code} | BODY: {response.text}")
                     
                     if response.status_code == 200:
                         telegram_status = f"✅ สำเร็จด้วยคีย์ชุดที่ {index+1}"
@@ -119,8 +128,12 @@ async def test_telegram_report():
         print(f"🏁 บทสรุปการส่ง: {telegram_status}")
         print(f"╚═════════════════════════════════════════════════════╝\n")
         
-        # ตอบกลับ 200 เสมอเพื่อให้ระบบลื่นไหล แต่เราไปดูเนื้อหาจริงใน Log เอา
-        return {"status": "processed", "telegram_delivery": telegram_status}
+        return {
+            "status": "processed", 
+            "called_via_method": request.method,
+            "telegram_delivery": telegram_status,
+            "telegram_raw_reply": telegram_raw_response
+        }
         
     except Exception as e:
         print(f"🚨 [CRITICAL ERROR]: {str(e)}")
