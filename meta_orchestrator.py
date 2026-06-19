@@ -1,13 +1,26 @@
 # =====================================================================
-# 🚀 BASE44 ENGINE V6.3.0: FULL SERPER.DEV INTEGRATION
+# 🚀 BASE44 ENGINE V6.4.0: FINAL MASTERMIND + TELEGRAM INTEGRATED
 # =====================================================================
 import os, asyncio, uvicorn, httpx, datetime
 from fastapi import FastAPI, Request, Response
 from fastapi.responses import JSONResponse
 
-app = FastAPI(title="Base44 Engine V6.3.0")
+app = FastAPI(title="Base44 Engine V6.4.0")
 
-# --- 1. Search Engine (Serper.dev) ---
+# --- 1. Telegram Messenger (ระบบตอบกลับ) ---
+class TelegramMessenger:
+    def __init__(self):
+        # 🔑 ใส่ TOKEN ที่บอสให้มาเรียบร้อยครับ
+        self.token = "8929890944:AAHuJ1xcMjWskVfmH-Ny98Qjwf7kiXgb--4"
+        self.url = f"https://api.telegram.org/bot{self.token}/sendMessage"
+
+    async def send_message(self, chat_id, text):
+        async with httpx.AsyncClient() as client:
+            try:
+                await client.post(self.url, json={"chat_id": chat_id, "text": text}, timeout=5.0)
+            except: pass
+
+# --- 2. Search Engine & Logger ---
 class SearchEngine:
     def __init__(self):
         self.api_key = "930b04d1e25b79c0b4034fa9668eb961183ebcb6"
@@ -25,7 +38,6 @@ class SearchEngine:
             except:
                 return "ไม่สามารถเชื่อมต่อระบบค้นหาได้ในขณะนี้"
 
-# --- 2. Google Sheets Logger ---
 class SheetsManager:
     def __init__(self):
         self.url = "https://script.google.com/macros/s/AKfycbyZrK-DL36OINYJPjtZA0I1jDAv2hOwRQ0fJprBgIUqMvDUgK-bWpZ0lBHN-IlKDwuB/exec"
@@ -36,30 +48,24 @@ class SheetsManager:
                 await client.post(self.url, json={"viability": viability, "content": data}, timeout=3.0)
             except: pass
 
-# --- 3. Mastermind & Command Center ---
-class CommandCenter:
-    async def process_command(self, text: str):
+# --- 3. Orchestrator ---
+class MetaOrchestrator:
+    async def handle_request(self, data):
+        chat_id = data.get("message", {}).get("chat", {}).get("id")
+        text = data.get("message", {}).get("text", "")
+        if not chat_id: return
+        
+        # ค้นหา Command
         if text.startswith("/search"):
             query = text.replace("/search", "").strip()
-            search = SearchEngine()
-            results = await search.search(query)
-            return f"🔍 ผลการค้นหาสำหรับ '{query}':\n\n{results}"
-        return None
-
-class MetaOrchestrator:
-    async def run_ceo_workflow(self, text: str):
-        # 1. เช็ค Command ก่อน
-        cmd_result = await CommandCenter().process_command(text)
-        if cmd_result:
-            return {"viability": 100, "is_emotional": True, "data": cmd_result}
-            
-        # 2. ถ้าไม่ใช่ Command ให้รันระบบบริหารปกติ
-        bu1 = BU1_Manager()
-        result = await bu1.execute_strategy()
-        if result['viability'] >= 80:
-            await SheetsManager().log_success(result['viability'], result['data'])
-            return result
-        return "QC_FAILED"
+            results = await SearchEngine().search(query)
+            await TelegramMessenger().send_message(chat_id, f"🔍 ผลการค้นหาสำหรับ '{query}':\n\n{results}")
+        else:
+            # รันงานปกติ
+            result = await BU1_Manager().execute_strategy()
+            if result['viability'] >= 80:
+                await SheetsManager().log_success(result['viability'], result['data'])
+                await TelegramMessenger().send_message(chat_id, f"✅ วิเคราะห์เสร็จสิ้น: {result['data']}")
 
 class BU1_Manager:
     async def execute_strategy(self):
@@ -72,10 +78,7 @@ async def custom_404_handler(_, __): return Response(content="OK", status_code=2
 @app.post("/telegram-webhook")
 async def telegram_webhook(request: Request):
     data = await request.json()
-    text = data.get("message", {}).get("text", "")
-    meta = MetaOrchestrator()
-    # ดึงงานเข้าคิวรันแบบ Async
-    asyncio.create_task(meta.run_ceo_workflow(text))
+    asyncio.create_task(MetaOrchestrator().handle_request(data))
     return Response(content="OK", status_code=200)
 
 @app.api_route("/", methods=["GET", "POST", "HEAD", "OPTIONS"])
