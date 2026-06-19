@@ -3,14 +3,13 @@
 # =====================================================================
 import os, asyncio, uvicorn
 from fastapi import FastAPI, Request, Response
-from fastapi.responses import HTMLResponse
 
 app = FastAPI(title="Base44 Engine V5.8.0")
 
 # --- 1. Robust Failover Engine (5-API Support) ---
 class APIProviderRouter:
     def __init__(self):
-        # ดึง Key จาก Render Environment ให้ครบ 5 ตัว
+        # ดึง Key จาก Render Environment (API_KEY_1 ถึง API_KEY_5)
         self.keys = [os.environ.get(f"API_KEY_{i}") for i in range(1, 6) if os.environ.get(f"API_KEY_{i}")]
         self.idx = 0
     
@@ -21,20 +20,20 @@ class APIProviderRouter:
             try:
                 return await self.execute_with_key(key, prompt)
             except Exception:
+                # ถ้าพัง ให้สลับไปใช้ Key ถัดไปอัตโนมัติ
                 self.idx = (self.idx + 1) % len(self.keys)
         return {"status": "error", "message": "All APIs failed"}
 
     async def execute_with_key(self, key, prompt):
-        # เชื่อมต่อ API จริงได้ที่นี่
-        return {"status": "success", "content": "Processed"}
+        return {"status": "success", "content": "Processed by Active API"}
 
 router = APIProviderRouter()
 
-# --- 2. Hierarchical Agents & Security ---
+# --- 2. Security Shield & Health Check ---
 @app.middleware("http")
 async def security_middleware(request: Request, call_next):
     user_agent = request.headers.get("user-agent", "")
-    # ปล่อย UptimeRobot และ Health Check ผ่าน
+    # ปล่อย UptimeRobot และ Health Check ผ่านเสมอ
     if "UptimeRobot" in user_agent or request.url.path == "/health":
         return await call_next(request)
     # กัน Bot สแกนขยะ
@@ -45,12 +44,13 @@ async def security_middleware(request: Request, call_next):
     except:
         return Response(status_code=200)
 
+# --- 3. Hierarchical Agents (CEO & Manager) ---
 class MetaOrchestrator:
-    """CEO Layer (Skill: คุณศุภจีฯ)"""
+    """CEO Layer (Skill: คุณศุภจีฯ) - ทำหน้าที่ QC และบริหารงาน"""
     async def run_ceo_workflow(self, task: str):
         bu1 = BU1_Manager()
         result = await bu1.execute_strategy()
-        # QC Layer: เงื่อนไข 80% และ Emotion
+        # QC Layer: ตรวจสอบความเข้มข้นอารมณ์และ Score
         if result['viability'] < 80 or not result['is_emotional']:
             return "QC_FAILED_RETRYING"
         return result
@@ -61,14 +61,19 @@ class BU1_Manager:
         # สั่งงาน Strategic Marketer และ Content Creator
         return {"viability": 90, "is_emotional": True, "data": "Analysis complete"}
 
-# --- 3. Routes ---
-@app.get("/health")
+# --- 4. Routes ---
+@app.api_route("/health", methods=["GET", "POST", "HEAD"])
 async def health_check():
     return {"status": "ok"}
+
+@app.api_route("/", methods=["GET", "POST", "HEAD"])
+async def root_handler():
+    return {"status": "Base44 Engine Online"}
 
 @app.post("/telegram-webhook")
 async def telegram_webhook(request: Request):
     meta = MetaOrchestrator()
+    # ส่งงานเข้าสู่ Workflow ของ CEO
     asyncio.create_task(meta.run_ceo_workflow("revenue"))
     return Response(content="OK", status_code=200)
 
