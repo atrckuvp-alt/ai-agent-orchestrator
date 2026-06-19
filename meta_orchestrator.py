@@ -1,22 +1,29 @@
 # =====================================================================
-# 🚀 BASE44 ENGINE V6.2.0: COMMAND CENTER EDITION
+# 🚀 BASE44 ENGINE V6.3.0: FULL SERPER.DEV INTEGRATION
 # =====================================================================
 import os, asyncio, uvicorn, httpx, datetime
 from fastapi import FastAPI, Request, Response
 from fastapi.responses import JSONResponse
 
-app = FastAPI(title="Base44 Engine V6.2.0")
+app = FastAPI(title="Base44 Engine V6.3.0")
 
-# --- 1. Command Center (Search & Summarize) ---
-class CommandCenter:
-    async def process_command(self, text: str):
-        if text.startswith("/search"):
-            query = text.replace("/search", "").strip()
-            return f"🔍 กำลังค้นหายุทธศาสตร์เรื่อง: {query}... (กำลังพัฒนาระบบ Search API)"
-        elif text.startswith("/summarize"):
-            topic = text.replace("/summarize", "").strip()
-            return f"📝 กำลังสรุปข้อมูลเชิงลึกเรื่อง: {topic}... (กำลังประมวลผล Mastermind)"
-        return None
+# --- 1. Search Engine (Serper.dev) ---
+class SearchEngine:
+    def __init__(self):
+        self.api_key = "930b04d1e25b79c0b4034fa9668eb961183ebcb6"
+        self.url = "https://google.serper.dev/search"
+
+    async def search(self, query: str):
+        headers = {'X-API-KEY': self.api_key, 'Content-Type': 'application/json'}
+        payload = {"q": query}
+        async with httpx.AsyncClient() as client:
+            try:
+                resp = await client.post(self.url, headers=headers, json=payload, timeout=5.0)
+                data = resp.json()
+                results = data.get("organic", [])[:3]
+                return "\n".join([f"- {r.get('title')}: {r.get('link')}" for r in results])
+            except:
+                return "ไม่สามารถเชื่อมต่อระบบค้นหาได้ในขณะนี้"
 
 # --- 2. Google Sheets Logger ---
 class SheetsManager:
@@ -29,16 +36,24 @@ class SheetsManager:
                 await client.post(self.url, json={"viability": viability, "content": data}, timeout=3.0)
             except: pass
 
-# --- 3. Mastermind & Webhook ---
+# --- 3. Mastermind & Command Center ---
+class CommandCenter:
+    async def process_command(self, text: str):
+        if text.startswith("/search"):
+            query = text.replace("/search", "").strip()
+            search = SearchEngine()
+            results = await search.search(query)
+            return f"🔍 ผลการค้นหาสำหรับ '{query}':\n\n{results}"
+        return None
+
 class MetaOrchestrator:
-    async def run_ceo_workflow(self, task: str):
-        # ตรวจสอบก่อนว่าเป็น Command พิเศษไหม
-        cmd_center = CommandCenter()
-        cmd_result = await cmd_center.process_command(task)
+    async def run_ceo_workflow(self, text: str):
+        # 1. เช็ค Command ก่อน
+        cmd_result = await CommandCenter().process_command(text)
         if cmd_result:
             return {"viability": 100, "is_emotional": True, "data": cmd_result}
             
-        # ถ้าไม่ใช่ Command ให้รันงานปกติ
+        # 2. ถ้าไม่ใช่ Command ให้รันระบบบริหารปกติ
         bu1 = BU1_Manager()
         result = await bu1.execute_strategy()
         if result['viability'] >= 80:
@@ -57,11 +72,14 @@ async def custom_404_handler(_, __): return Response(content="OK", status_code=2
 @app.post("/telegram-webhook")
 async def telegram_webhook(request: Request):
     data = await request.json()
-    # ดึงข้อความจาก Telegram
     text = data.get("message", {}).get("text", "")
     meta = MetaOrchestrator()
+    # ดึงงานเข้าคิวรันแบบ Async
     asyncio.create_task(meta.run_ceo_workflow(text))
     return Response(content="OK", status_code=200)
+
+@app.api_route("/", methods=["GET", "POST", "HEAD", "OPTIONS"])
+async def root_handler(): return JSONResponse(status_code=200, content={"status": "online"})
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=int(os.environ.get("PORT", 8000)))
