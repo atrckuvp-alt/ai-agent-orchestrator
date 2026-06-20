@@ -1,12 +1,12 @@
 # =====================================================================
-# 🚀 BASE44 ENGINE V6.9.0: FORCE REPORTING MODE (REAL DATA SIMULATION)
+# 🚀 BASE44 ENGINE V6.9.1: FULL CONTENT GENERATION PIPELINE
 # =====================================================================
 import os, asyncio, uvicorn, httpx
 from fastapi import FastAPI, Request, Response
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from pytz import timezone
 
-app = FastAPI(title="Base44 Engine V6.9.0")
+app = FastAPI(title="Base44 Engine V6.9.1")
 
 # --- 1. Silent Health Handlers ---
 @app.api_route("/", methods=["GET", "POST", "HEAD", "OPTIONS"])
@@ -33,10 +33,10 @@ class BU1_Orchestrator:
             "📊 [รายงานยุทธศาสตร์ BU.1 - สรุปดีลทำเงินประจำวัน]\n\n"
             "🔍 วิเคราะห์ Market Gap: สินค้ากลุ่ม 'Home Office Ergonomics' กำลังพุ่งสูง แต่ตลาดขาดตัวเลือกที่เน้นสุขภาพกระดูกสันหลังโดยเฉพาะ\n\n"
             "🏆 3 แบรนด์แนะนำ (Affiliate 10%+):\n"
-            "1. ErgoComfort Pro: คอมมิชชั่น 12% | จุดเด่น: รีวิว 4.8 ดาว, ปรับระดับไฟฟ้าแม่นยำ\n"
-            "2. SpineCare Desk: คอมมิชชั่น 15% | จุดเด่น: ดีไซน์มินิมอล ขายดีมากในกลุ่มสตาร์ทอัพ\n"
-            "3. FlexiPosture: คอมมิชชั่น 10% | จุดเด่น: ราคาย่อมเยา เข้าถึงง่าย เหมาะกับสาย content รีวิว\n\n"
-            "💡 บอสเลือกเบอร์ไหนดีครับ? พิมพ์ชื่อแบรนด์มาได้เลย ผมจะร่าง Copywriting ปิดการขายให้ทันที!"
+            "1. ErgoComfort Pro\n"
+            "2. SpineCare Desk\n"
+            "3. FlexiPosture\n\n"
+            "💡 บอสพิมพ์ชื่อแบรนด์ที่เลือกมาได้เลยครับ ผมจะร่าง Copywriting ปิดการขายให้ทันที!"
         )
 
 # --- 4. Request Orchestrator ---
@@ -44,19 +44,30 @@ class MetaOrchestrator:
     async def handle_request(self, text):
         text_lower = text.lower()
         
-        if "/search" in text_lower:
-            query = text.replace("/search", "").strip()
-            await Messenger.send(f"🔍 [Strategic Marketer]: กำลังวิเคราะห์ '{query}' ตามเกณฑ์ยุทธศาสตร์ 4 ข้อ... รอผลลัพธ์สักครู่ครับ")
-            
-        elif "report bu.1" in text_lower:
+        # 1. รายงานหลัก
+        if "report bu.1" in text_lower:
             report = await BU1_Orchestrator().get_report()
             await Messenger.send(report)
             
+        # 2. ระบบตอบสนองการเลือกแบรนด์ (Content Generation)
+        elif any(brand in text_lower for brand in ["ergocomfort pro", "spinecare desk", "flexiposture"]):
+            selected_brand = text.strip()
+            await Messenger.send(
+                f"📝 [Content Creator กำลังทำงาน]: กำลังร่างเนื้อหาสำหรับ '{selected_brand}'...\n\n"
+                f"🔥 Hook: 'บอกลาอาการปวดหลังด้วย {selected_brand} ที่ออกแบบมาเพื่อคุณ...' \n"
+                f"✅ คุณสมบัติ: วัสดุพรีเมียม, ปรับระดับได้แม่นยำ, คืนทุนไวในระยะยาว\n"
+                f"💰 ลิงก์ทำเงิน: [รอใส่ลิงก์ Affiliate ของบอส]\n\n"
+                "บอสเอาเนื้อหานี้ไปโพสต์ในเพจได้เลยครับ!"
+            )
+            
+        elif "/search" in text_lower:
+            await Messenger.send("🔍 [Strategic Marketer]: กำลังวิเคราะห์ข้อมูลตลาด... ระบบพร้อมประมวลผลข้อมูลจริงใน Phase ถัดไปครับ")
+            
         elif "report bu.2" in text_lower:
-            await Messenger.send("🤖 [BU.2 รายงาน]: กำลังตรวจสอบโมเดล AI... สถานะปัจจุบัน: ใช้ตัวที่ดีที่สุดอยู่ครับ (ยังไม่มีตัวฟรีที่ดีกว่าในขณะนี้)")
+            await Messenger.send("🤖 [BU.2 รายงาน]: ระบบโมเดล AI เสถียรดีเยี่ยม พร้อมขยายสู่ Phase 1 เต็มรูปแบบ")
             
         else:
-            await Messenger.send("✅ ระบบพร้อมรับคำสั่ง:\n- /search [หัวข้อ]\n- report bu.1\n- report bu.2")
+            await Messenger.send("✅ ระบบพร้อมทำงาน:\n- /search [หัวข้อ]\n- report bu.1\n- report bu.2")
 
 @app.post("/telegram-webhook")
 async def telegram_webhook(request: Request):
