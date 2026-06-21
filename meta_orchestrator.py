@@ -1,5 +1,5 @@
 # =====================================================================
-# 🚀 BU.1 ENGINE V13.0.0: FULL INTEGRATED SYSTEM (CEO + EXPERT AGENTS)
+# 🚀 BU.1 ENGINE V13.1.0: STABLE INTEGRATED SYSTEM
 # =====================================================================
 import os, asyncio, uvicorn, httpx
 from fastapi import FastAPI, Request, Response
@@ -7,6 +7,13 @@ from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from pytz import timezone
 
 app = FastAPI(title="BU.1 Expert System")
+
+# --- เติม Route พื้นฐานกลับมาให้ Render ทำงานได้ปกติ ---
+@app.api_route("/", methods=["GET", "POST", "HEAD", "OPTIONS"])
+async def root(): return Response(content="OK", status_code=200)
+
+@app.api_route("/health", methods=["GET", "POST", "HEAD", "OPTIONS"])
+async def health(): return Response(content="OK", status_code=200)
 
 class Messenger:
     TOKEN = "8929890944:AAHuJ1xcMjWskVfmH-Ny98Qjwf7kiXgb--4"
