@@ -1,5 +1,5 @@
 # =====================================================================
-# 🚀 BU.1 ENGINE V14.0.0: REAL-DATA INTEGRATED PRODUCTION SYSTEM
+# 🚀 BU.1 ENGINE V15.0.0: FULL PROACTIVE & ANALYTIC PRODUCTION SYSTEM
 # =====================================================================
 import os, asyncio, uvicorn, httpx
 from fastapi import FastAPI, Request, Response
@@ -8,7 +8,7 @@ from pytz import timezone
 
 app = FastAPI(title="BU.1 Expert System")
 
-# --- Essential Routes for Render ---
+# --- Route สำหรับ Render เพื่อป้องกัน 404 ---
 @app.api_route("/", methods=["GET", "POST", "HEAD", "OPTIONS"])
 async def root(): return Response(content="OK", status_code=200)
 
@@ -44,43 +44,53 @@ class SearchEngine:
 class ExpertAgents:
     @staticmethod
     async def dr_sangsook_filter(brand):
-        data = await SearchEngine.search(f"รีวิวความน่าเชื่อถือ {brand} ผู้ใช้จริง")
-        return f"🔎 [ดร.แสงสุข - Consumer Insight]:\n{data}"
+        data = await SearchEngine.search(f"รีวิวความน่าเชื่อถือ {brand} ผู้ใช้จริง แบรนด์ยั่งยืน")
+        return f"🔎 [ดร.แสงสุข - Consumer Insight & Sustainability]:\n{data}"
     
     @staticmethod
     async def khun_anish_analysis(brand):
-        data = await SearchEngine.search(f"จุดเด่นและปัญหาการใช้งาน {brand}")
-        return f"🧠 [คุณอนิศ - Market Gap & Pain Points]:\n{data}"
+        data = await SearchEngine.search(f"วิเคราะห์ Market Gap และ Hidden Pain Points ของ {brand}")
+        return f"🧠 [คุณอนิศ - Strategic Analysis & Leverage]:\n{data}"
     
     @staticmethod
     async def khun_sittinan_growth(brand):
-        data = await SearchEngine.search(f"เทรนด์การค้นหาและยอดขาย {brand}")
-        return f"📊 [คุณสิทธินันท์ - Growth Analytics]:\n{data}"
+        data = await SearchEngine.search(f"เทรนด์การค้นหา สถิติยอดขาย Conversion Rate ของ {brand}")
+        return f"📊 [คุณสิทธินันท์ - Growth Marketing Analytics]:\n{data}"
 
 class BU1_Orchestrator:
     async def execute_bu1_cycle(self, product):
         credibility = await ExpertAgents.dr_sangsook_filter(product)
         analysis = await ExpertAgents.khun_anish_analysis(product)
         content = await ExpertAgents.khun_sittinan_growth(product)
-        return f"{credibility}\n\n{analysis}\n\n{content}\n\n✅ [สรุป]: ข้อมูลจริงสแกนเรียบร้อยครับบอส!"
+        return f"{credibility}\n\n{analysis}\n\n{content}\n\n✅ [สรุปจาก BU.1]: ข้อมูลเชิงลึกสแกนเรียบร้อยครับบอส!"
 
-class SupachaiCEO:
+class ProactiveSourcing:
     @staticmethod
-    def delegate_task(text):
-        if "analyze" in text.lower(): return "BU.1"
-        return "OTHER"
+    async def get_blue_ocean_deals():
+        deals = await SearchEngine.search("สินค้า Pet Care ขายดี Blue Ocean Affiliate 2026")
+        samples = await SearchEngine.search("สินค้าสัตว์เลี้ยง แจกฟรี ทดลองใช้ 2026")
+        return (
+            "🏢 [คุณศุภจี]: รายงานสรรหาสินค้าจากทีม BU.1 ครับ:\n\n"
+            "🌊 [Blue Ocean Opportunities]:\n" + deals + "\n\n"
+            "🎁 [Free Sample Alert]:\n" + samples + "\n\n"
+            "👉 บอสเลือกตัวที่ชอบแล้วพิมพ์ 'analyze [ชื่อสินค้า]' ให้ทีมงานเจาะลึกได้เลยครับ!"
+        )
 
 class MetaOrchestrator:
     async def handle_request(self, text):
-        target_bu = SupachaiCEO.delegate_task(text)
-        if target_bu == "BU.1":
+        text_lower = text.lower()
+        if "/findpets" in text_lower:
+            await Messenger.send("🏢 [คุณศุภจี]: รับทราบ! สั่งทีม BU.1 สแกนหาขุมทรัพย์ด่วนครับ...")
+            report = await ProactiveSourcing.get_blue_ocean_deals()
+            await Messenger.send(report)
+        elif text_lower.startswith("analyze"):
             brand = text.replace("analyze", "").strip()
             if not brand: brand = "สินค้าทั่วไป"
-            await Messenger.send(f"🏢 [คุณศุภจี]: รับทราบครับบอส งานนี้ผมจ่ายให้ทีม BU.1 ดำเนินการวิเคราะห์ข้อมูลจริงด่วน!")
+            await Messenger.send(f"🏢 [คุณศุภจี]: รับทราบ! จ่ายงานให้ทีม BU.1 เจาะลึกข้อมูลจริงของ {brand} ครับ")
             report = await BU1_Orchestrator().execute_bu1_cycle(brand)
             await Messenger.send(report)
         else:
-            await Messenger.send("✅ ระบบพร้อมใช้งาน:\n- พิมพ์ 'analyze [ชื่อสินค้า]' เพื่อส่งงานให้ทีม BU.1 วิเคราะห์เจาะลึกด้วยข้อมูลจริงครับ")
+            await Messenger.send("✅ ระบบพร้อม:\n- /findpets [สแกนหาของดี]\n- analyze [ชื่อสินค้า] [เจาะลึก]")
 
 @app.post("/telegram-webhook")
 async def telegram_webhook(request: Request):
