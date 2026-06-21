@@ -1,12 +1,12 @@
 # =====================================================================
-# 🚀 BASE44 ENGINE V8.0.0: FULL STRATEGIC PIPELINE
+# 🚀 BASE44 ENGINE V9.0.0: FULL STRATEGIC PIPELINE + CONTENT GENERATOR
 # =====================================================================
 import os, asyncio, uvicorn, httpx
 from fastapi import FastAPI, Request, Response
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from pytz import timezone
 
-app = FastAPI(title="Base44 Engine V8.0.0")
+app = FastAPI(title="Base44 Engine V9.0.0")
 
 @app.api_route("/", methods=["GET", "POST", "HEAD", "OPTIONS"])
 async def root_handler(): return Response(content="OK", status_code=200)
@@ -51,6 +51,23 @@ class AnalyzerAgent:
             "🎯 Recommendation: บอสควรเน้นทำ Content แบบ 'Before & After' เพื่อแก้ Pain point ของลูกค้าจะปิดการขายได้ไวที่สุดครับ"
         )
 
+class ContentGenerator:
+    @staticmethod
+    def generate(brand: str, style: str):
+        styles = {
+            "review": "🔥 รีวิวจัดเต็ม! เจาะลึกจุดเด่นแบบใช้จริง...",
+            "problem": "⚠️ ปัญหากวนใจคนเลี้ยงสัตว์จะหมดไป ด้วย...",
+            "urgent": "🚨 ดีลเด็ดมาไวไปไว! ไอเทมที่คนเลี้ยงสัตว์ต้องรีบมี..."
+        }
+        hook = styles.get(style, "มาดูกันว่าทำไมตัวนี้ถึงขายดี...")
+        return (
+            f"📝 [Content Draft: {brand} | Style: {style.upper()}]\n\n"
+            f"{hook}\n\n"
+            "✅ จุดเด่น: ใช้งานง่าย ปลอดภัย เห็นผลจริงใน 7 วัน\n"
+            "💰 พิกัดกดสั่งตรงนี้: [รอใส่ลิงก์ Affiliate ของบอส]\n\n"
+            "👉 แชร์เก็บไว้เลยครับ ก่อนดีลจะหมด!"
+        )
+
 class PetCareHunter:
     @staticmethod
     async def get_real_deals():
@@ -62,7 +79,7 @@ class PetCareHunter:
             f"{data}\n\n"
             "🎁 [Free Sample Alert: โอกาสทำคอนเทนต์รีวิวฟรี]:\n"
             f"{free_samples}\n\n"
-            "💡 บอสเลือกแบรนด์แล้วพิมพ์ 'analyze [ชื่อแบรนด์]' เพื่อให้ผมวิเคราะห์กลยุทธ์ให้ครับ!"
+            "💡 คำสั่งที่บอสใช้ได้:\n- analyze [ชื่อแบรนด์] (วิเคราะห์ SWOT)\n- write [ชื่อแบรนด์] [style] (ร่าง Content)"
         )
 
 class MetaOrchestrator:
@@ -75,10 +92,15 @@ class MetaOrchestrator:
         elif text_lower.startswith("analyze"):
             brand = text.replace("analyze", "").strip()
             await Messenger.send(AnalyzerAgent.run_swot(brand))
+        elif text_lower.startswith("write"):
+            parts = text.split()
+            brand = parts[1] if len(parts) > 1 else "สินค้า"
+            style = parts[2] if len(parts) > 2 else "review"
+            await Messenger.send(ContentGenerator.generate(brand, style))
         elif "report bu.1" in text_lower:
-            await Messenger.send("📊 [BU.1 รายงาน]: ระบบพร้อมสแกนดีลและวิเคราะห์ S.W.O.T. ครับ")
+            await Messenger.send("📊 [BU.1 รายงาน]: ระบบพร้อมสแกนดีล, วิเคราะห์ S.W.O.T. และร่าง Content ครับ")
         else:
-            await Messenger.send("✅ ระบบพร้อมทำงาน:\n- /findpets [สแกนดีล]\n- analyze [ชื่อแบรนด์] [วิเคราะห์ SWOT]\n- report bu.1")
+            await Messenger.send("✅ ระบบพร้อมทำงาน:\n- /findpets [สแกนดีล]\n- analyze [ชื่อแบรนด์] [วิเคราะห์]\n- write [แบรนด์] [style] [ร่าง Content]")
 
 @app.post("/telegram-webhook")
 async def telegram_webhook(request: Request):
