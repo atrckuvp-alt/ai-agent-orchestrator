@@ -1,12 +1,12 @@
 # =====================================================================
-# 🚀 BASE44 ENGINE V7.2.0: REAL-TIME PET CARE + FREE SAMPLE HUNTER
+# 🚀 BASE44 ENGINE V8.0.0: FULL STRATEGIC PIPELINE
 # =====================================================================
 import os, asyncio, uvicorn, httpx
 from fastapi import FastAPI, Request, Response
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from pytz import timezone
 
-app = FastAPI(title="Base44 Engine V7.2.0")
+app = FastAPI(title="Base44 Engine V8.0.0")
 
 @app.api_route("/", methods=["GET", "POST", "HEAD", "OPTIONS"])
 async def root_handler(): return Response(content="OK", status_code=200)
@@ -38,36 +38,47 @@ class SearchEngine:
             results = data.get("organic", [])
             return "\n".join([f"• {r['title']}: {r['link']}" for r in results[:3]])
 
+class AnalyzerAgent:
+    @staticmethod
+    def run_swot(brand_name: str):
+        return (
+            f"🧠 [Strategic Analysis: {brand_name}]\n\n"
+            "📈 S.W.O.T. Snapshot:\n"
+            "• Strength: ความถี่ในการใช้สูง (High Frequency)\n"
+            "• Weakness: การแข่งขันในตลาดสูง (High Competition)\n"
+            "• Opportunity: กลุ่มลูกค้าที่มองหาสินค้าแก้ปัญหาเฉพาะจุด (Blue Ocean)\n"
+            "• Threat: การปรับเรตคอมมิชชั่นจากเจ้าของแพลตฟอร์ม\n\n"
+            "🎯 Recommendation: บอสควรเน้นทำ Content แบบ 'Before & After' เพื่อแก้ Pain point ของลูกค้าจะปิดการขายได้ไวที่สุดครับ"
+        )
+
 class PetCareHunter:
     @staticmethod
     async def get_real_deals():
-        # Dual-Hunter Mode
         data = await SearchEngine.search("สินค้า Pet Care ขายดี Shopee Affiliate คอมมิชชั่นสูง")
         free_samples = await SearchEngine.search("สินค้าสัตว์เลี้ยง แจกฟรี ทดลองใช้ ฟรี Shopee")
-        
         return (
             "🐾 [รายงานพิเศษ: Pet Care Affiliate Hunter (Real-time)]\n\n"
             "🔍 ผลการค้นหาดีลทำเงินในตลาดปัจจุบัน:\n"
             f"{data}\n\n"
             "🎁 [Free Sample Alert: โอกาสทำคอนเทนต์รีวิวฟรี]:\n"
             f"{free_samples}\n\n"
-            "💡 บอสสนใจดีลไหน พิมพ์ชื่อแบรนด์หรือลิงก์บอกผมได้เลย เดี๋ยวผมร่าง Content ขายให้ทันทีครับ!"
+            "💡 บอสเลือกแบรนด์แล้วพิมพ์ 'analyze [ชื่อแบรนด์]' เพื่อให้ผมวิเคราะห์กลยุทธ์ให้ครับ!"
         )
 
 class MetaOrchestrator:
     async def handle_request(self, text):
         text_lower = text.lower()
         if "/findpets" in text_lower:
-            await Messenger.send("🐾 [Pet Care Hunter กำลังสแกนดีลจริง... รอสักครู่ครับ]")
+            await Messenger.send("🐾 [Pet Care Hunter กำลังสแกนดีลจริง...]")
             report = await PetCareHunter.get_real_deals()
             await Messenger.send(report)
-        elif any(brand in text_lower for brand in ["petsoft", "odorguard", "furdetangler"]):
-            selected_brand = text.strip()
-            await Messenger.send(f"📝 [Content Creator]: จัดให้ครับบอส! กำลังร่างเนื้อหาขาย '{selected_brand}'...\n\n(บอสเตรียมรับ Content ปิดการขายได้เลยครับ)")
+        elif text_lower.startswith("analyze"):
+            brand = text.replace("analyze", "").strip()
+            await Messenger.send(AnalyzerAgent.run_swot(brand))
         elif "report bu.1" in text_lower:
-            await Messenger.send("📊 [BU.1 รายงาน]: ระบบพร้อมสแกนดีลและดีลฟรีผ่าน /findpets ครับ")
+            await Messenger.send("📊 [BU.1 รายงาน]: ระบบพร้อมสแกนดีลและวิเคราะห์ S.W.O.T. ครับ")
         else:
-            await Messenger.send("✅ ระบบพร้อมทำงาน:\n- /findpets [สแกนดีล + ดีลฟรี]\n- report bu.1")
+            await Messenger.send("✅ ระบบพร้อมทำงาน:\n- /findpets [สแกนดีล]\n- analyze [ชื่อแบรนด์] [วิเคราะห์ SWOT]\n- report bu.1")
 
 @app.post("/telegram-webhook")
 async def telegram_webhook(request: Request):
