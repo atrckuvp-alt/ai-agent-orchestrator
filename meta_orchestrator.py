@@ -1,12 +1,12 @@
 # =====================================================================
-# 🚀 BASE44 ENGINE V7.1.0: REAL-TIME SERPER SEARCH INTEGRATION
+# 🚀 BASE44 ENGINE V7.2.0: REAL-TIME PET CARE + FREE SAMPLE HUNTER
 # =====================================================================
 import os, asyncio, uvicorn, httpx
 from fastapi import FastAPI, Request, Response
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from pytz import timezone
 
-app = FastAPI(title="Base44 Engine V7.1.0")
+app = FastAPI(title="Base44 Engine V7.2.0")
 
 @app.api_route("/", methods=["GET", "POST", "HEAD", "OPTIONS"])
 async def root_handler(): return Response(content="OK", status_code=200)
@@ -41,12 +41,17 @@ class SearchEngine:
 class PetCareHunter:
     @staticmethod
     async def get_real_deals():
+        # Dual-Hunter Mode
         data = await SearchEngine.search("สินค้า Pet Care ขายดี Shopee Affiliate คอมมิชชั่นสูง")
+        free_samples = await SearchEngine.search("สินค้าสัตว์เลี้ยง แจกฟรี ทดลองใช้ ฟรี Shopee")
+        
         return (
-            "🐾 [รายงานพิเศษ: Pet Care Hunter (Real-time)]\n\n"
+            "🐾 [รายงานพิเศษ: Pet Care Affiliate Hunter (Real-time)]\n\n"
             "🔍 ผลการค้นหาดีลทำเงินในตลาดปัจจุบัน:\n"
             f"{data}\n\n"
-            "💡 บอสเลือกจากลิงก์ข้างบน หรือพิมพ์ชื่อแบรนด์มาได้เลยครับ เดี๋ยวผมร่าง Content ให้!"
+            "🎁 [Free Sample Alert: โอกาสทำคอนเทนต์รีวิวฟรี]:\n"
+            f"{free_samples}\n\n"
+            "💡 บอสสนใจดีลไหน พิมพ์ชื่อแบรนด์หรือลิงก์บอกผมได้เลย เดี๋ยวผมร่าง Content ขายให้ทันทีครับ!"
         )
 
 class MetaOrchestrator:
@@ -58,11 +63,11 @@ class MetaOrchestrator:
             await Messenger.send(report)
         elif any(brand in text_lower for brand in ["petsoft", "odorguard", "furdetangler"]):
             selected_brand = text.strip()
-            await Messenger.send(f"📝 [Content Creator]: กำลังร่างเนื้อหาขาย '{selected_brand}'...\n\n(ระบบ Content พร้อมทำงานแล้วครับบอส)")
+            await Messenger.send(f"📝 [Content Creator]: จัดให้ครับบอส! กำลังร่างเนื้อหาขาย '{selected_brand}'...\n\n(บอสเตรียมรับ Content ปิดการขายได้เลยครับ)")
         elif "report bu.1" in text_lower:
-            await Messenger.send("📊 [BU.1 รายงาน]: ระบบพร้อมสแกนดีลจริงผ่าน /findpets ครับ")
+            await Messenger.send("📊 [BU.1 รายงาน]: ระบบพร้อมสแกนดีลและดีลฟรีผ่าน /findpets ครับ")
         else:
-            await Messenger.send("✅ ระบบพร้อมทำงาน:\n- /findpets [สแกนสินค้าสัตว์เลี้ยง]\n- report bu.1")
+            await Messenger.send("✅ ระบบพร้อมทำงาน:\n- /findpets [สแกนดีล + ดีลฟรี]\n- report bu.1")
 
 @app.post("/telegram-webhook")
 async def telegram_webhook(request: Request):
