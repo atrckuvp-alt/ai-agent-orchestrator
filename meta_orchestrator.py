@@ -1,5 +1,5 @@
 # =====================================================================
-# 🚀 V21.1.0: MASTER INTEGRATED SYSTEM (THE FINAL FORM - CLEAN LOG)
+# 🚀 V21.2.0: MASTER INTEGRATED SYSTEM (FULLY CLEAN LOGS)
 # =====================================================================
 import os, asyncio, uvicorn, httpx, json
 from fastapi import FastAPI, Request, Response
@@ -26,7 +26,6 @@ class HistoryEngine:
         with open(cls.DB, "w") as f: json.dump(h, f, indent=4)
 
 def validate_product(data):
-    # เกณฑ์การคัดกรอง: ต้องมีชื่อ และคะแนน >= 7.0
     if not data.get("name") or data.get("score", 0) < 7.0: return False
     return True
 
@@ -52,12 +51,10 @@ class MetaOrchestrator:
         cmd = text.lower()
         if cmd.startswith("analyze"):
             product = cmd.replace("analyze", "").strip()
-            # 1. เช็ค Memory
             memo = HistoryEngine.check(product)
             if memo:
                 await Messenger.send(f"🧠 [Memory Found]: ข้อมูลเดิมของ {product}\n\n{memo}")
             else:
-                # 2. จำลองการคัดกรอง (Validator)
                 mock_data = {"name": product, "score": 9.5}
                 if validate_product(mock_data):
                     brief = generate_brief(product, "น้องแมวขนร่วงและผิวแห้ง")
@@ -66,17 +63,14 @@ class MetaOrchestrator:
                 else:
                     await Messenger.send(f"❌ [Validator Fail]: สินค้า {product} ไม่ผ่านเกณฑ์คัดกรอง")
         else:
-            await Messenger.send("✅ ระบบพร้อม: พิมพ์ 'analyze [ชื่อสินค้า]' เพื่อให้ระบบคัดกรองและสร้าง Brief ให้บอสครับ!")
+            await Messenger.send("✅ ระบบพร้อม: พิมพ์ 'analyze [ชื่อสินค้า]' เพื่อเริ่มคัดกรองครับ!")
 
-# --- 4. Routes (Clean Log) ---
-@app.get("/")
+# --- 4. Routes (Support HEAD/GET) ---
+@app.api_route("/", methods=["GET", "HEAD"])
 async def root(): return Response(content="OK", status_code=200)
 
-@app.get("/health")
+@app.api_route("/health", methods=["GET", "HEAD"])
 async def health(): return Response(content="OK", status_code=200)
-
-@app.head("/health")
-async def health_head(): return Response(content="", status_code=200)
 
 @app.post("/telegram-webhook")
 async def webhook(request: Request):
