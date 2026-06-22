@@ -1,5 +1,5 @@
 # =====================================================================
-# 🚀 V21.0.0: MASTER INTEGRATED SYSTEM (THE FINAL FORM)
+# 🚀 V21.1.0: MASTER INTEGRATED SYSTEM (THE FINAL FORM - CLEAN LOG)
 # =====================================================================
 import os, asyncio, uvicorn, httpx, json
 from fastapi import FastAPI, Request, Response
@@ -12,16 +12,21 @@ class HistoryEngine:
     @classmethod
     def check(cls, p):
         if not os.path.exists(cls.DB): return None
-        with open(cls.DB, "r") as f: return json.load(f).get(p)
+        with open(cls.DB, "r") as f:
+            try: return json.load(f).get(p)
+            except: return None
     @classmethod
     def save(cls, p, data):
         h = {}
         if os.path.exists(cls.DB):
-            with open(cls.DB, "r") as f: h = json.load(f)
+            with open(cls.DB, "r") as f:
+                try: h = json.load(f)
+                except: h = {}
         h[p] = data
         with open(cls.DB, "w") as f: json.dump(h, f, indent=4)
 
 def validate_product(data):
+    # เกณฑ์การคัดกรอง: ต้องมีชื่อ และคะแนน >= 7.0
     if not data.get("name") or data.get("score", 0) < 7.0: return False
     return True
 
@@ -32,14 +37,14 @@ def generate_brief(name, pain):
             f"✅ [Solution]: แนะนำ {name} ตัวช่วยลับที่คนรักแมวบอกต่อ\n"
             f"👉 [CTA]: รับโปรพิเศษก่อนของหมดที่นี่ [Link]")
 
-# --- 3. Core Logic ---
+# --- 3. Core Logic & Communication ---
 class Messenger:
     TOKEN = "8929890944:AAHuJ1xcMjWskVfmH-Ny98Qjwf7kiXgb--4"
     CHAT_ID = "7238952711"
     @classmethod
     async def send(cls, text):
         async with httpx.AsyncClient() as client:
-            try: await client.post(f"https://api.telegram.org/bot{cls.TOKEN}/sendMessage", json={"chat_id": cls.CHAT_ID, "text": text})
+            try: await client.post(f"https://api.telegram.org/bot{cls.TOKEN}/sendMessage", json={"chat_id": cls.CHAT_ID, "text": text}, timeout=10.0)
             except: pass
 
 class MetaOrchestrator:
@@ -47,12 +52,12 @@ class MetaOrchestrator:
         cmd = text.lower()
         if cmd.startswith("analyze"):
             product = cmd.replace("analyze", "").strip()
-            # 1. Check Memory
+            # 1. เช็ค Memory
             memo = HistoryEngine.check(product)
             if memo:
-                await Messenger.send(f"🧠 [Memory Found]: {memo}")
+                await Messenger.send(f"🧠 [Memory Found]: ข้อมูลเดิมของ {product}\n\n{memo}")
             else:
-                # 2. Mock Validation & Creation
+                # 2. จำลองการคัดกรอง (Validator)
                 mock_data = {"name": product, "score": 9.5}
                 if validate_product(mock_data):
                     brief = generate_brief(product, "น้องแมวขนร่วงและผิวแห้ง")
@@ -63,8 +68,15 @@ class MetaOrchestrator:
         else:
             await Messenger.send("✅ ระบบพร้อม: พิมพ์ 'analyze [ชื่อสินค้า]' เพื่อให้ระบบคัดกรองและสร้าง Brief ให้บอสครับ!")
 
-@app.api_route("/", methods=["GET", "POST", "HEAD", "OPTIONS"])
+# --- 4. Routes (Clean Log) ---
+@app.get("/")
 async def root(): return Response(content="OK", status_code=200)
+
+@app.get("/health")
+async def health(): return Response(content="OK", status_code=200)
+
+@app.head("/health")
+async def health_head(): return Response(content="", status_code=200)
 
 @app.post("/telegram-webhook")
 async def webhook(request: Request):
@@ -74,4 +86,5 @@ async def webhook(request: Request):
     return Response(content="OK")
 
 if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=int(os.environ.get("PORT", 10000)))
+    port = int(os.environ.get("PORT", 10000))
+    uvicorn.run(app, host="0.0.0.0", port=port)
