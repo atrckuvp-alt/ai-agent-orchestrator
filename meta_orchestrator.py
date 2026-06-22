@@ -4,6 +4,13 @@ import uvicorn, httpx, asyncio
 
 app = FastAPI()
 
+# --- Route พิเศษสำหรับ Render/UptimeRobot (ป้องกัน 404) ---
+@app.api_route("/", methods=["GET", "POST", "HEAD", "OPTIONS"])
+async def root(): return Response(content="OK", status_code=200)
+
+@app.api_route("/health", methods=["GET", "POST", "HEAD", "OPTIONS"])
+async def health(): return Response(content="OK", status_code=200)
+
 # --- Memory System ---
 HISTORY_FILE = "product_history.json"
 def load_history():
@@ -30,12 +37,12 @@ async def handle(request: Request):
             save_history(product, "ข้อมูลวิเคราะห์ฉบับสมบูรณ์")
             msg = f"🧠 New Item! บันทึก {product} ลง Memory แล้วครับ"
         
-        # ส่งกลับไปที่ Telegram
         await httpx.AsyncClient().post(
             f"https://api.telegram.org/bot8929890944:AAHuJ1xcMjWskVfmH-Ny98Qjwf7kiXgb--4/sendMessage",
             json={"chat_id": "7238952711", "text": msg}
         )
-    return Response(content="OK")
+    return Response(content="OK", status_code=200)
 
 if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=10000)
+    port = int(os.environ.get("PORT", 10000))
+    uvicorn.run(app, host="0.0.0.0", port=port)
