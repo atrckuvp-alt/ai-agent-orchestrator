@@ -5,8 +5,16 @@ import google.generativeai as genai
 app = FastAPI()
 genai.configure(api_key=os.environ.get("GEMINI_API_KEY"))
 
-# [ข้อ ก: ใช้ gemini-1.0-pro ซึ่งเสถียรที่สุดสำหรับ API Key ทั่วไป]
-model = genai.GenerativeModel('gemini-1.0-pro')
+# แทนที่บรรทัด model = ... ด้วยชุดนี้ครับ
+try:
+    # สั่งให้ AI หาโมเดลที่พร้อมใช้งานที่สุดจาก Account ของบอส
+    models = [m for m in genai.list_models() if 'generateContent' in m.supported_generation_methods]
+    if models:
+        model = genai.GenerativeModel(models[0].name)
+    else:
+        model = genai.GenerativeModel('gemini-1.5-flash') # fallback
+except Exception as e:
+    model = genai.GenerativeModel('gemini-1.5-flash')
 
 class MetaOrchestrator:
     async def log_to_sheets(self, product, content):
