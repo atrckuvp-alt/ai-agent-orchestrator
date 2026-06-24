@@ -48,24 +48,23 @@ class MetaOrchestrator:
         # [BU.1 Workflow]: Content Agent ทำงาน
         elif len(msg) > 5 and "analyze" not in msg:
             await Messenger.send(f"✍️ คุณอนิศ (Content Agent) กำลังเขียนคอนเทนต์ปิดการขายสำหรับ: {msg}...")
-            await asyncio.sleep(1) # จำลองการทำงาน AI
+            await asyncio.sleep(1) 
             await Messenger.send(f"🚀 [สำเร็จ]: คอนเทนต์พร้อมสำหรับ {msg}!\n\n🔥 [Hook]: กำลังมองหา {msg} ที่ใช่กันอยู่ใช่ไหม?\n✅ [Solution]: แนะนำตัวนี้เลยที่ทาสแมวบอกต่อ!\n👉 [CTA]: สั่งซื้อได้ที่นี่ [Link]")
             
         else:
             await Messenger.send("✅ ระบบพร้อม: พิมพ์ 'analyze [หมวดสินค้า]' เพื่อเริ่มสแกนตลาดครับ")
 
-# --- 3. Routes (Stability Fixed) ---
-@app.get("/")
-async def root(): return {"status": "BU.1 Operational", "version": "V21.3.2"}
+# --- 3. Routes (Stability Fixed - Allowed all methods) ---
+@app.api_route("/", methods=["GET", "POST", "HEAD", "OPTIONS"])
+async def root(): return {"status": "BU.1 Operational", "version": "V21.3.3"}
 
-@app.get("/health")
+@app.api_route("/health", methods=["GET", "POST", "HEAD", "OPTIONS"])
 async def health(): return Response(content="OK", status_code=200)
 
 @app.post("/telegram-webhook")
 async def webhook(request: Request):
     data = await request.json()
     text = data.get("message", {}).get("text", "")
-    # ใช้ create_task เพื่อไม่ให้ Webhook ค้าง แต่ Logic ภายในมีความเสถียรแล้ว
     asyncio.create_task(MetaOrchestrator().handle_request(text))
     return Response(content="OK")
 
