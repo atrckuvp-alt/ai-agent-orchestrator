@@ -5,7 +5,7 @@ import google.generativeai as genai
 app = FastAPI()
 genai.configure(api_key=os.environ.get("GEMINI_API_KEY"))
 # แก้บรรทัดเดิมจาก model = ... เป็นตัวนี้ครับ
-model = genai.GenerativeModel('models/gemini-1.5-flash')
+model = genai.GenerativeModel(model_name="gemini-1.5-flash")
 
 class MetaOrchestrator:
     # ฟังก์ชันส่งข้อมูลเข้า Google Sheets (เชื่อมต่อ Apps Script)
