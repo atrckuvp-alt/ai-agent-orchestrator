@@ -5,23 +5,13 @@ import google.generativeai as genai
 app = FastAPI()
 genai.configure(api_key=os.environ.get("GEMINI_API_KEY"))
 
+# เลือกโมเดลที่ใช้งานได้จริงโดยอัตโนมัติ เพื่อป้องกัน error 404 Not Found
 try:
-    # ดึงรายการโมเดลที่ใช้งานได้จริงจาก Account ของบอสมาตรวจสอบ
-    models = genai.list_models()
-    # กรองเอาเฉพาะโมเดลที่รองรับ generateContent
-    available_models = [m for m in models if 'generateContent' in m.supported_generation_methods]
-    
-    if available_models:
-        # เลือกตัวแรกที่ใช้ได้เสมอ
-        model_name = available_models[0].name
-        print(f"Log: ระบบเลือกใช้โมเดล {model_name}")
-        model = genai.GenerativeModel(model_name)
-    else:
-        # กรณีหาไม่เจอจริงๆ ให้ใช้ค่าเริ่มต้น
-        model = genai.GenerativeModel('gemini-pro')
-except Exception as e:
-    print(f"Log: เกิดข้อผิดพลาดขณะเลือกโมเดล - {e}")
-    model = genai.GenerativeModel('gemini-pro')
+    models = [m for m in genai.list_models() if 'generateContent' in m.supported_generation_methods]
+    model = genai.GenerativeModel(models[0].name)
+    print(f"Log: ระบบเลือกใช้โมเดล {models[0].name}")
+except:
+    model = genai.GenerativeModel('gemini-1.5-flash')
 
 class MetaOrchestrator:
     async def log_to_sheets(self, product, content):
@@ -29,34 +19,22 @@ class MetaOrchestrator:
         if not sheet_url: return
         payload = {"product": product, "hook": "AI Generated", "solution": content}
         async with httpx.AsyncClient() as client:
-            try:
-                await client.post(sheet_url, json=payload, timeout=10.0)
-                print(f"Log: ข้อมูลถูกบันทึกลง Sheets สำหรับ {product}")
-            except Exception as e:
-                print(f"Log Error: บันทึก Sheets พลาด - {e}")
+            try: await client.post(sheet_url, json=payload, timeout=10.0)
+            except: pass
 
     async def process(self, text):
         msg = text.strip()
-        print(f"Log: ได้รับข้อความ '{msg}'") # เช็คว่าได้รับข้อความไหม
-
         if "analyze" in msg.lower():
-            # ... (ส่วนการสแกนสินค้าคงเดิม)
-            await self.send_telegram("✅ รายการสินค้า: 1. CAT PILLOW, 2. PET COLLAR, 3. SMART FEEDER")
-
+            await self.send_telegram("🔍 ดร.แสงสุข กำลังสแกนตลาด...\n\n1. สินค้า A\n2. สินค้า B\n3. สินค้า C\n\n(พิมพ์ชื่อสินค้าเพื่อเลือกทำ Content)")
         elif len(msg) > 2 and "analyze" not in msg.lower():
-            await self.send_telegram(f"✍️ คุณอนิศกำลังเขียนคอนเทนต์สำหรับ: {msg}...")
-            
+            await self.send_telegram(f"🚀 กำลังเขียนคอนเทนต์ให้: {msg}...")
             try:
-                print("Log: กำลังสั่งให้ Gemini เขียนคอนเทนต์...")
                 response = model.generate_content(f"เขียนคอนเทนต์ปิดการขายสั้นๆ สำหรับ: {msg}")
                 content = response.text
-                print(f"Log: ได้รับคอนเทนต์จาก Gemini ความยาว {len(content)} ตัวอักษร")
-                
                 await self.send_telegram(f"🚀 [สำเร็จ]:\n\n{content}")
                 await self.log_to_sheets(msg, content)
             except Exception as e:
-                print(f"Log Error: เกิดปัญหาตอนเขียนคอนเทนต์ - {str(e)}")
-                await self.send_telegram("❌ ขออภัยครับ คอนเทนต์มีปัญหา ติดต่อบอสเพื่อเช็ค Log ครับ")
+                await self.send_telegram(f"❌ ระบบมีปัญหาครับ: {e}")
 
     async def send_telegram(self, text):
         bot_token = os.environ.get("TELEGRAM_BOT_TOKEN")
@@ -64,8 +42,10 @@ class MetaOrchestrator:
         async with httpx.AsyncClient() as client:
             await client.post(f"https://api.telegram.org/bot{bot_token}/sendMessage", json={"chat_id": chat_id, "text": text})
 
-@app.api_route("/health", methods=["GET", "HEAD"])
-async def health(): return Response(status_code=200)
+# แก้ปัญหา 404 ที่ Root และ Health
+@app.api_route("/", methods=["GET", "HEAD", "OPTIONS"])
+@app.api_route("/health", methods=["GET", "HEAD", "OPTIONS"])
+async def root(): return Response(status_code=200, content="OK")
 
 @app.post("/telegram-webhook")
 async def webhook(request: Request):
