@@ -5,8 +5,23 @@ import google.generativeai as genai
 app = FastAPI()
 genai.configure(api_key=os.environ.get("GEMINI_API_KEY"))
 
-# ใช้โมเดล gemini-1.5-flash ที่เสถียรที่สุดตอนนี้
-model = genai.GenerativeModel('gemini-1.5-flash')
+try:
+    # ดึงรายการโมเดลที่ใช้งานได้จริงจาก Account ของบอสมาตรวจสอบ
+    models = genai.list_models()
+    # กรองเอาเฉพาะโมเดลที่รองรับ generateContent
+    available_models = [m for m in models if 'generateContent' in m.supported_generation_methods]
+    
+    if available_models:
+        # เลือกตัวแรกที่ใช้ได้เสมอ
+        model_name = available_models[0].name
+        print(f"Log: ระบบเลือกใช้โมเดล {model_name}")
+        model = genai.GenerativeModel(model_name)
+    else:
+        # กรณีหาไม่เจอจริงๆ ให้ใช้ค่าเริ่มต้น
+        model = genai.GenerativeModel('gemini-pro')
+except Exception as e:
+    print(f"Log: เกิดข้อผิดพลาดขณะเลือกโมเดล - {e}")
+    model = genai.GenerativeModel('gemini-pro')
 
 class MetaOrchestrator:
     async def log_to_sheets(self, product, content):
