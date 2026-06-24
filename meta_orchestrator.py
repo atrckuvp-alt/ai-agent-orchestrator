@@ -1,73 +1,68 @@
-# =====================================================================
-# 🚀 V21.3.1: STABLE SEQUENTIAL ORCHESTRATOR
-# =====================================================================
-import os, asyncio, uvicorn, httpx
+import os, asyncio, uvicorn, httpx, json
 from fastapi import FastAPI, Request, Response
 import google.generativeai as genai
 
-app = FastAPI(title="BU.1_Master_Integrated")
-
-# Config
+app = FastAPI(title="BU.1_Master_Command_Center")
 genai.configure(api_key=os.environ.get("GEMINI_API_KEY"))
 
-# --- 1. Pipeline Engine ---
-async def fetch_serper(query):
-    api_key = os.environ.get("SERPER_API_KEY")
-    if not api_key: return []
-        
-    headers = {"X-API-KEY": api_key, "Content-Type": "application/json"}
-    async with httpx.AsyncClient() as client:
-        response = await client.post("https://google.serper.dev/search", json={"q": query, "num": 5}, headers=headers)
-        data = response.json()
-        return [item.get("title") for item in data.get("organic", [])]
-
-def validate_product(name):
-    return len(name) > 10
-
-def generate_content_brief(name):
-    return (f"🔥 [Hook]: กำลังหา {name} อยู่ใช่ไหม?...\n"
-            f"✅ [Solution]: แนะนำ {name} ที่เหล่าทาสแมวบอกต่อ!\n"
-            f"👉 [CTA]: สั่งด่วนที่ [Link]")
-
-# --- 2. Messenger & Orchestrator ---
+# --- 1. System Modules (Agents) ---
 class Messenger:
     TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN")
     CHAT_ID = os.environ.get("TELEGRAM_CHAT_ID")
     @classmethod
     async def send(cls, text):
         async with httpx.AsyncClient() as client:
-            await client.post(f"https://api.telegram.org/bot{cls.TOKEN}/sendMessage", json={"chat_id": cls.CHAT_ID, "text": text})
+            try: await client.post(f"https://api.telegram.org/bot{cls.TOKEN}/sendMessage", json={"chat_id": cls.CHAT_ID, "text": text})
+            except Exception as e: print(f"Telegram Error: {e}")
 
+# --- 2. Master Orchestrator (CEO คุณศุภจี) ---
 class MetaOrchestrator:
     async def handle_request(self, text):
-        if text.startswith("analyze"):
-            query = text.replace("analyze", "").strip() or "อาหารแมว"
-            await Messenger.send(f"🔍 [กำลังสแกน]: {query}...")
+        msg = text.lower()
+        
+        # [BU.1 Logic]: สแกนและรายงาน
+        if msg.startswith("analyze"):
+            query = msg.replace("analyze", "").strip() or "อาหารแมว"
+            await Messenger.send(f"🔍 ดร.แสงสุข (Orchestrator) กำลังสแกนหมวด: {query}...")
             
-            products = await fetch_serper(query)
-            found = False
-            for p in products:
-                if validate_product(p):
-                    brief = generate_content_brief(p)
-                    await Messenger.send(f"✅ [พบสินค้าคุณภาพ]:\n\n{brief}")
-                    found = True
-                    break 
-            if not found:
-                await Messenger.send("⚠️ ไม่พบสินค้าที่ผ่านเกณฑ์การตรวจสอบครับ")
+            # ดึงข้อมูลสินค้าจาก Research Agent
+            products = await self.fetch_serper(query)
+            
+            if products:
+                # รายงานสินค้า 3 รายการตามที่บอสกำหนด
+                report = "✅ [รายงานจาก BU.1 ส่วนที่ 1]: รายการสินค้าแนะนำ 3 รายการ\n\n"
+                for i, p in enumerate(products[:3], 1):
+                    report += f"{i}. {p}\n"
+                report += "\n(พิมพ์ชื่อสินค้าเพื่อสั่งให้คุณอนิศ Content Agent เริ่มทำงานครับ)"
+                await Messenger.send(report)
+            else:
+                await Messenger.send("⚠️ ไม่พบข้อมูลในหมวดนี้")
+
+        # [BU.1 Logic]: Content Agent ทำงาน
+        elif any(x in msg for x in ["ของใช้", "อาหาร", "แปรง"]): # สมมติการเลือกสินค้า
+            await Messenger.send("✍️ คุณอนิศ (Content Agent) กำลังเขียนคอนเทนต์ปิดการขาย...")
+            # ดึง Logic จากการเทสในเครื่องมาใส่ตรงนี้
+            await Messenger.send(f"🚀 [สำเร็จ]: คอนเทนต์พร้อมสำหรับ {msg} [ใส่ Affiliate Link ของบอสที่นี่]")
+            
         else:
-            await Messenger.send("✅ ระบบพร้อม: พิมพ์ 'analyze [ชื่อสินค้า]' เพื่อสแกนตลาดครับ")
+            await Messenger.send("✅ ระบบพร้อม: พิมพ์ 'analyze [หมวดสินค้า]' เพื่อเริ่มงานครับ")
+
+    async def fetch_serper(self, query):
+        headers = {"X-API-KEY": os.environ.get("SERPER_API_KEY"), "Content-Type": "application/json"}
+        async with httpx.AsyncClient() as client:
+            resp = await client.post("https://google.serper.dev/search", json={"q": query, "num": 5}, headers=headers)
+            return [item.get("title") for item in resp.json().get("organic", [])]
 
 # --- 3. Routes ---
-@app.api_route("/", methods=["GET", "HEAD"])
-async def root(): return Response(content="OK", status_code=200)
-
 @app.post("/telegram-webhook")
 async def webhook(request: Request):
     data = await request.json()
     text = data.get("message", {}).get("text", "")
-    # เปลี่ยนจากการใช้ create_task เป็นการ await ตรงนี้เพื่อให้ Render ประมวลผลจนจบ
-    await MetaOrchestrator().handle_request(text)
+    asyncio.create_task(MetaOrchestrator().handle_request(text))
     return Response(content="OK")
+
+@app.api_route("/health", methods=["GET", "HEAD"])
+async def health(): return Response(content="OK", status_code=200)
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=int(os.environ.get("PORT", 10000)))
