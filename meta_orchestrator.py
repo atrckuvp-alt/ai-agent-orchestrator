@@ -5,16 +5,8 @@ import google.generativeai as genai
 app = FastAPI()
 genai.configure(api_key=os.environ.get("GEMINI_API_KEY"))
 
-# แทนที่บรรทัด model = ... ด้วยชุดนี้ครับ
-try:
-    # สั่งให้ AI หาโมเดลที่พร้อมใช้งานที่สุดจาก Account ของบอส
-    models = [m for m in genai.list_models() if 'generateContent' in m.supported_generation_methods]
-    if models:
-        model = genai.GenerativeModel(models[0].name)
-    else:
-        model = genai.GenerativeModel('gemini-1.5-flash') # fallback
-except Exception as e:
-    model = genai.GenerativeModel('gemini-1.5-flash')
+# ใช้โมเดล gemini-1.5-flash ที่เสถียรที่สุดตอนนี้
+model = genai.GenerativeModel('gemini-1.5-flash')
 
 class MetaOrchestrator:
     async def log_to_sheets(self, product, content):
@@ -22,23 +14,34 @@ class MetaOrchestrator:
         if not sheet_url: return
         payload = {"product": product, "hook": "AI Generated", "solution": content}
         async with httpx.AsyncClient() as client:
-            await client.post(sheet_url, json=payload, timeout=10.0)
+            try:
+                await client.post(sheet_url, json=payload, timeout=10.0)
+                print(f"Log: ข้อมูลถูกบันทึกลง Sheets สำหรับ {product}")
+            except Exception as e:
+                print(f"Log Error: บันทึก Sheets พลาด - {e}")
 
     async def process(self, text):
         msg = text.strip()
+        print(f"Log: ได้รับข้อความ '{msg}'") # เช็คว่าได้รับข้อความไหม
+
         if "analyze" in msg.lower():
-            query = msg.lower().replace("analyze", "").strip() or "ทั่วไป"
-            await self.send_telegram(f"🔍 ดร.แสงสุข กำลังสแกนหมวด: {query}...")
-            products = ["CAT PILLOW", "PET COLLAR", "SMART FEEDER"]
-            await self.send_telegram(f"✅ รายการสินค้า:\n1. {products[0]}\n2. {products[1]}\n3. {products[2]}\n\n(พิมพ์ชื่อสินค้าเพื่อรับคอนเทนต์)")
+            # ... (ส่วนการสแกนสินค้าคงเดิม)
+            await self.send_telegram("✅ รายการสินค้า: 1. CAT PILLOW, 2. PET COLLAR, 3. SMART FEEDER")
 
         elif len(msg) > 2 and "analyze" not in msg.lower():
             await self.send_telegram(f"✍️ คุณอนิศกำลังเขียนคอนเทนต์สำหรับ: {msg}...")
-            # บอทจะใช้โมเดล gemini-1.0-pro ที่ตั้งไว้ด้านบน
-            response = model.generate_content(f"เขียนคอนเทนต์ปิดการขายสำหรับ: {msg}")
-            content = response.text
-            await self.send_telegram(f"🚀 [สำเร็จ]:\n\n{content}")
-            await self.log_to_sheets(msg, content)
+            
+            try:
+                print("Log: กำลังสั่งให้ Gemini เขียนคอนเทนต์...")
+                response = model.generate_content(f"เขียนคอนเทนต์ปิดการขายสั้นๆ สำหรับ: {msg}")
+                content = response.text
+                print(f"Log: ได้รับคอนเทนต์จาก Gemini ความยาว {len(content)} ตัวอักษร")
+                
+                await self.send_telegram(f"🚀 [สำเร็จ]:\n\n{content}")
+                await self.log_to_sheets(msg, content)
+            except Exception as e:
+                print(f"Log Error: เกิดปัญหาตอนเขียนคอนเทนต์ - {str(e)}")
+                await self.send_telegram("❌ ขออภัยครับ คอนเทนต์มีปัญหา ติดต่อบอสเพื่อเช็ค Log ครับ")
 
     async def send_telegram(self, text):
         bot_token = os.environ.get("TELEGRAM_BOT_TOKEN")
@@ -46,12 +49,8 @@ class MetaOrchestrator:
         async with httpx.AsyncClient() as client:
             await client.post(f"https://api.telegram.org/bot{bot_token}/sendMessage", json={"chat_id": chat_id, "text": text})
 
-# [ข้อ ข: เพิ่ม Route /health เพื่อให้ Uptime Monitor ไม่ฟ้อง 404]
 @app.api_route("/health", methods=["GET", "HEAD"])
 async def health(): return Response(status_code=200)
-
-@app.api_route("/", methods=["GET", "POST", "HEAD", "OPTIONS"])
-async def root(): return {"status": "Enterprise Ready"}
 
 @app.post("/telegram-webhook")
 async def webhook(request: Request):
