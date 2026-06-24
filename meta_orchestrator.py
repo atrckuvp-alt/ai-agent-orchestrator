@@ -1,30 +1,27 @@
 # =====================================================================
-# 🚀 V21.3.0: MASTER INTEGRATED SYSTEM (Pipeline Included)
+# 🚀 V21.3.1: STABLE SEQUENTIAL ORCHESTRATOR
 # =====================================================================
-import os, asyncio, uvicorn, httpx, json
+import os, asyncio, uvicorn, httpx
 from fastapi import FastAPI, Request, Response
 import google.generativeai as genai
 
 app = FastAPI(title="BU.1_Master_Integrated")
 
-# Config (ดึงจาก Env Vars)
+# Config
 genai.configure(api_key=os.environ.get("GEMINI_API_KEY"))
-model = genai.GenerativeModel('gemini-2.5-flash')
 
 # --- 1. Pipeline Engine ---
 async def fetch_serper(query):
     api_key = os.environ.get("SERPER_API_KEY")
-    if not api_key:
-        print("❌ Error: SERPER_API_KEY ไม่พบใน Environment Variables!")
-        return [] # คืนค่าว่าง เพื่อไม่ให้บอทค้าง
+    if not api_key: return []
         
     headers = {"X-API-KEY": api_key, "Content-Type": "application/json"}
     async with httpx.AsyncClient() as client:
         response = await client.post("https://google.serper.dev/search", json={"q": query, "num": 5}, headers=headers)
-        return [item.get("title") for item in response.json().get("organic", [])]
+        data = response.json()
+        return [item.get("title") for item in data.get("organic", [])]
 
 def validate_product(name):
-    # รวม Logic การกรอง
     return len(name) > 10
 
 def generate_content_brief(name):
@@ -39,8 +36,7 @@ class Messenger:
     @classmethod
     async def send(cls, text):
         async with httpx.AsyncClient() as client:
-            try: await client.post(f"https://api.telegram.org/bot{cls.TOKEN}/sendMessage", json={"chat_id": cls.CHAT_ID, "text": text})
-            except: pass
+            await client.post(f"https://api.telegram.org/bot{cls.TOKEN}/sendMessage", json={"chat_id": cls.CHAT_ID, "text": text})
 
 class MetaOrchestrator:
     async def handle_request(self, text):
@@ -49,11 +45,15 @@ class MetaOrchestrator:
             await Messenger.send(f"🔍 [กำลังสแกน]: {query}...")
             
             products = await fetch_serper(query)
+            found = False
             for p in products:
                 if validate_product(p):
                     brief = generate_content_brief(p)
                     await Messenger.send(f"✅ [พบสินค้าคุณภาพ]:\n\n{brief}")
-                    break # เอาตัวแรกที่ผ่านเกณฑ์
+                    found = True
+                    break 
+            if not found:
+                await Messenger.send("⚠️ ไม่พบสินค้าที่ผ่านเกณฑ์การตรวจสอบครับ")
         else:
             await Messenger.send("✅ ระบบพร้อม: พิมพ์ 'analyze [ชื่อสินค้า]' เพื่อสแกนตลาดครับ")
 
@@ -61,14 +61,12 @@ class MetaOrchestrator:
 @app.api_route("/", methods=["GET", "HEAD"])
 async def root(): return Response(content="OK", status_code=200)
 
-@app.api_route("/health", methods=["GET", "HEAD"])
-async def health(): return Response(content="OK", status_code=200)
-
 @app.post("/telegram-webhook")
 async def webhook(request: Request):
     data = await request.json()
     text = data.get("message", {}).get("text", "")
-    asyncio.create_task(MetaOrchestrator().handle_request(text))
+    # เปลี่ยนจากการใช้ create_task เป็นการ await ตรงนี้เพื่อให้ Render ประมวลผลจนจบ
+    await MetaOrchestrator().handle_request(text)
     return Response(content="OK")
 
 if __name__ == "__main__":
