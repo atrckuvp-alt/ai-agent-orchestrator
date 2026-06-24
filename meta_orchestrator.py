@@ -13,7 +13,12 @@ model = genai.GenerativeModel('gemini-2.5-flash')
 
 # --- 1. Pipeline Engine ---
 async def fetch_serper(query):
-    headers = {"X-API-KEY": os.environ.get("SERPER_API_KEY"), "Content-Type": "application/json"}
+    api_key = os.environ.get("SERPER_API_KEY")
+    if not api_key:
+        print("❌ Error: SERPER_API_KEY ไม่พบใน Environment Variables!")
+        return [] # คืนค่าว่าง เพื่อไม่ให้บอทค้าง
+        
+    headers = {"X-API-KEY": api_key, "Content-Type": "application/json"}
     async with httpx.AsyncClient() as client:
         response = await client.post("https://google.serper.dev/search", json={"q": query, "num": 5}, headers=headers)
         return [item.get("title") for item in response.json().get("organic", [])]
