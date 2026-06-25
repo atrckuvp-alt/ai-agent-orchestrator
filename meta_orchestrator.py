@@ -4,15 +4,25 @@ import google.generativeai as genai
 
 app = FastAPI()
 genai.configure(api_key=os.environ.get("GEMINI_API_KEY"))
-model = genai.GenerativeModel('gemini-1.5-flash')
+
+# --- แก้ไขจุดนี้: ฟังก์ชันหาโมเดลที่ใช้งานได้จริง ---
+def get_available_model():
+    try:
+        # ดึงรายชื่อโมเดลทั้งหมดที่รองรับ generateContent
+        models = [m for m in genai.list_models() if 'generateContent' in m.supported_generation_methods]
+        # เลือกตัวแรกที่ใช้ได้ (เช่น gemini-1.5-flash หรือ gemini-pro)
+        return genai.GenerativeModel(models[0].name)
+    except Exception as e:
+        # Fallback หากดึงไม่ได้
+        return genai.GenerativeModel('gemini-1.5-flash')
+
+model = get_available_model()
 
 # --- BU.1 Agent System ---
 class BU1_Orchestrator:
     async def run_bu1_pipeline(self, query):
         url = "https://google.serper.dev/search"
         headers = {"X-API-KEY": os.environ.get("SERPER_API_KEY"), "Content-Type": "application/json"}
-        
-        # ดึงข้อมูลสินค้า + ของฟรีในหมวดเดียวกัน
         payload = {"q": f"best selling affiliate products for {query} and free alternatives", "num": 10}
         
         async with httpx.AsyncClient() as client:
@@ -20,16 +30,10 @@ class BU1_Orchestrator:
             results = resp.json().get("organic", [])
             raw_data = [item.get("title") for item in results if item.get("title")]
 
-        # ให้ AI สกัดรายชื่อสินค้า 3 ตัว + ของฟรี 1 ตัว (ตามเงื่อนไขรายงาน BU.1 ส่วน 1 และ 2)
-        prompt = f"""
-        วิเคราะห์ข้อมูล: {raw_data}
-        1. คัดเลือกชื่อสินค้าที่ทำ Affiliate ได้ดีที่สุดมา 3 รายการ
-        2. คัดเลือกของฟรีหรือเนื้อหาดึงดูดใจในหมวดเดียวกันมา 1 รายการ
-        ตอบเฉพาะชื่อเท่านั้นแยกบรรทัด
-        """
+        # สกัดรายชื่อสินค้า
+        prompt = f"วิเคราะห์ข้อมูล: {raw_data}. 1. คัดเลือกชื่อสินค้าทำเงิน 3 รายการ 2. คัดเลือกของฟรีดึงดูดใจ 1 รายการ. ตอบเฉพาะชื่อแยกบรรทัด"
         response = model.generate_content(prompt)
         items = [line.strip().lstrip('123456789. ') for line in response.text.split('\n') if line.strip()]
-        
         return {"products": items[:3], "free_item": items[3] if len(items) > 3 else "ไม่พบข้อมูลของฟรี"}
 
     async def create_content(self, product):
@@ -45,20 +49,16 @@ class MetaOrchestrator:
 
     async def process(self, text):
         msg = text.strip()
-        
         if "analyze" in msg.lower():
             query = msg.lower().replace("analyze", "").strip() or "pet care"
             await self.send_telegram(f"🏢 [CEO คุณศุภจี]: ส่งงานให้ ดร.แสงสุข และ คุณสิทธินันท์ ตรวจสอบตลาด...")
-            
             data = await self.bu1.run_bu1_pipeline(query)
             self.state["products"] = data["products"]
-            
-            reply = "✅ **[รายงานจาก BU.1 ส่วนที่ 1]**\nรายการสินค้าที่คัดสรรแล้ว:\n" + "\n".join([f"{i+1}. {p}" for i, p in enumerate(data["products"])])
-            reply += f"\n\n🎁 **[รายงานจาก BU.1 ส่วนที่ 2]**\nของฟรีที่สืบหามาได้: {data['free_item']}"
-            await self.send_telegram(f"{reply}\n\n👉 *พิมพ์ชื่อสินค้าที่ต้องการ เพื่อให้คุณอนิศดำเนินการต่อ*")
-
+            reply = "✅ **[รายงานจาก BU.1 ส่วนที่ 1]**\n" + "\n".join([f"{i+1}. {p}" for i, p in enumerate(data["products"])])
+            reply += f"\n\n🎁 **[รายงานจาก BU.1 ส่วนที่ 2]**\nของฟรี: {data['free_item']}"
+            await self.send_telegram(f"{reply}\n\n👉 *พิมพ์ชื่อสินค้าที่ต้องการ*")
         elif msg in self.state.get("products", []):
-            await self.send_telegram(f"✍️ [CEO คุณศุภจี]: ส่งให้คุณอนิศวิเคราะห์และเขียนคอนเทนต์สำหรับ {msg}...")
+            await self.send_telegram(f"✍️ [CEO คุณศุภจี]: ส่งให้คุณอนิศเขียนคอนเทนต์สำหรับ {msg}...")
             content = await self.bu1.create_content(msg)
             await self.send_telegram(f"🚀 **[รายงานจากคุณอนิศ]**\n\n{content}")
             await self.log_to_sheets(msg, content)
