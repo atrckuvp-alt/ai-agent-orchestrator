@@ -8,22 +8,36 @@ model = genai.GenerativeModel('gemini-1.5-flash')
 
 # --- BU.1 Agent System ---
 class BU1_Orchestrator:
-    async def analyze_market(self, query):
+    async def run_bu1_pipeline(self, query):
         url = "https://google.serper.dev/search"
         headers = {"X-API-KEY": os.environ.get("SERPER_API_KEY"), "Content-Type": "application/json"}
-        payload = {"q": f"trending products for {query} high conversion", "num": 5}
+        
+        # ดึงข้อมูลสินค้า + ของฟรีในหมวดเดียวกัน
+        payload = {"q": f"best selling affiliate products for {query} and free alternatives", "num": 10}
+        
         async with httpx.AsyncClient() as client:
             resp = await client.post(url, json=payload, headers=headers)
             results = resp.json().get("organic", [])
-            # Marketing Agent (คุณสิทธินันท์) คัดเลือก 3 รายการ
-            return [item.get("title") for item in results[:3]]
+            raw_data = [item.get("title") for item in results if item.get("title")]
+
+        # ให้ AI สกัดรายชื่อสินค้า 3 ตัว + ของฟรี 1 ตัว (ตามเงื่อนไขรายงาน BU.1 ส่วน 1 และ 2)
+        prompt = f"""
+        วิเคราะห์ข้อมูล: {raw_data}
+        1. คัดเลือกชื่อสินค้าที่ทำ Affiliate ได้ดีที่สุดมา 3 รายการ
+        2. คัดเลือกของฟรีหรือเนื้อหาดึงดูดใจในหมวดเดียวกันมา 1 รายการ
+        ตอบเฉพาะชื่อเท่านั้นแยกบรรทัด
+        """
+        response = model.generate_content(prompt)
+        items = [line.strip().lstrip('123456789. ') for line in response.text.split('\n') if line.strip()]
+        
+        return {"products": items[:3], "free_item": items[3] if len(items) > 3 else "ไม่พบข้อมูลของฟรี"}
 
     async def create_content(self, product):
-        prompt = f"เขียนคอนเทนต์ขายสินค้า: {product} โดยเน้น Hidden Pain Points และกลยุทธ์ปิดการขาย Affiliate"
+        prompt = f"เขียนคอนเทนต์ขายสินค้า {product} พร้อมกลยุทธ์ปิดการขาย Affiliate"
         response = model.generate_content(prompt)
         return response.text
 
-# --- CEO: Meta-Orchestrator (คุณศุภจี) ---
+# --- CEO: คุณศุภจี ---
 class MetaOrchestrator:
     def __init__(self):
         self.bu1 = BU1_Orchestrator()
@@ -32,33 +46,28 @@ class MetaOrchestrator:
     async def process(self, text):
         msg = text.strip()
         
-        # 1. รับคำสั่ง Analyze -> จ่ายงาน BU.1
         if "analyze" in msg.lower():
             query = msg.lower().replace("analyze", "").strip() or "pet care"
-            await self.send_telegram(f"🏢 [CEO คุณศุภจี]: รับคำสั่งแล้ว! ส่งต่อให้ดร.แสงสุขและทีม BU.1 เริ่มสแกน {query}...")
+            await self.send_telegram(f"🏢 [CEO คุณศุภจี]: ส่งงานให้ ดร.แสงสุข และ คุณสิทธินันท์ ตรวจสอบตลาด...")
             
-            products = await self.bu1.analyze_market(query)
-            self.state["products"] = products
+            data = await self.bu1.run_bu1_pipeline(query)
+            self.state["products"] = data["products"]
             
-            reply = "✅ **[รายงานจาก BU.1]**\nดร.แสงสุขและคุณสิทธินันท์คัดเลือกสินค้ามาให้ 3 รายการ:\n"
-            reply += "\n".join([f"{i+1}. {p}" for i, p in enumerate(products)])
+            reply = "✅ **[รายงานจาก BU.1 ส่วนที่ 1]**\nรายการสินค้าที่คัดสรรแล้ว:\n" + "\n".join([f"{i+1}. {p}" for i, p in enumerate(data["products"])])
+            reply += f"\n\n🎁 **[รายงานจาก BU.1 ส่วนที่ 2]**\nของฟรีที่สืบหามาได้: {data['free_item']}"
             await self.send_telegram(f"{reply}\n\n👉 *พิมพ์ชื่อสินค้าที่ต้องการ เพื่อให้คุณอนิศดำเนินการต่อ*")
 
-        # 2. รับสินค้าจากบอส -> จ่ายงานคุณอนิศ (Content Agent)
         elif msg in self.state.get("products", []):
-            await self.send_telegram(f"✍️ [CEO คุณศุภจี]: รับทราบครับ ส่งต่อให้คุณอนิศวิเคราะห์และเขียนคอนเทนต์สำหรับ {msg}...")
+            await self.send_telegram(f"✍️ [CEO คุณศุภจี]: ส่งให้คุณอนิศวิเคราะห์และเขียนคอนเทนต์สำหรับ {msg}...")
             content = await self.bu1.create_content(msg)
-            await self.send_telegram(f"🚀 **[รายงานความสำเร็จจากคุณอนิศ]**\n\n{content}")
-            
-            # บันทึกลง Sheets
+            await self.send_telegram(f"🚀 **[รายงานจากคุณอนิศ]**\n\n{content}")
             await self.log_to_sheets(msg, content)
 
     async def log_to_sheets(self, product, content):
         sheet_url = os.environ.get("APPS_SCRIPT_URL")
         if not sheet_url: return
-        payload = {"product": product, "hook": "AI Generated", "solution": content}
         async with httpx.AsyncClient() as client:
-            try: await client.post(sheet_url, json=payload, timeout=10.0)
+            try: await client.post(sheet_url, json={"product": product, "solution": content}, timeout=10.0)
             except: pass
 
     async def send_telegram(self, text):
@@ -67,7 +76,6 @@ class MetaOrchestrator:
         async with httpx.AsyncClient() as client:
             await client.post(f"https://api.telegram.org/bot{bot_token}/sendMessage", json={"chat_id": chat_id, "text": text})
 
-# --- Web Server Routes ---
 @app.api_route("/", methods=["GET", "HEAD", "OPTIONS"])
 @app.api_route("/health", methods=["GET", "HEAD", "OPTIONS"])
 async def root(): return Response(status_code=200, content="OK")
